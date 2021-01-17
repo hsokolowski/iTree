@@ -1,0 +1,50 @@
+$gainsboro: #d8dbe2ff;
+$light-steel-blue: #a9bcd0ff;
+$cadet-blue: #58a4b0ff;
+$charcoal: #373f51ff;
+$raisin-black: #1b1b1eff;
+//gradients https://coolors.co/d8dbe2-a9bcd0-58a4b0-373f51-1b1b1e
+$gradient-top: linear-gradient(0deg, #d8dbe2ff, #a9bcd0ff, #58a4b0ff, #373f51ff, #1b1b1eff);
+$gradient-right: linear-gradient(90deg, #d8dbe2ff, #a9bcd0ff, #58a4b0ff, #373f51ff, #1b1b1eff);
+$gradient-bottom: linear-gradient(180deg, #d8dbe2ff, #a9bcd0ff, #58a4b0ff, #373f51ff, #1b1b1eff);
+$gradient-left: linear-gradient(270deg, #d8dbe2ff, #a9bcd0ff, #58a4b0ff, #373f51ff, #1b1b1eff);
+$gradient-top-right: linear-gradient(45deg, #d8dbe2ff, #a9bcd0ff, #58a4b0ff, #373f51ff, #1b1b1eff);
+$gradient-bottom-right: linear-gradient(135deg, #d8dbe2ff, #a9bcd0ff, #58a4b0ff, #373f51ff, #1b1b1eff);
+$gradient-top-left: linear-gradient(225deg, #d8dbe2ff, #a9bcd0ff, #58a4b0ff, #373f51ff, #1b1b1eff);
+$gradient-bottom-left: linear-gradient(315deg, #d8dbe2ff, #a9bcd0ff, #58a4b0ff, #373f51ff, #1b1b1eff);
+$gradient-radial: radial-gradient(#d8dbe2ff, #a9bcd0ff, #58a4b0ff, #373f51ff, #1b1b1eff);
+
+.center-horizontal {
+  background-color: #09f;
+}
+.center-vertical {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.center-all {
+  @extend .center-horizontal, .center-vertical;
+}
+.main {
+  height: 100vh;
+  background-color: azure;
+}
+#navigation-navbar {
+  background-color: red;
+  width: 100%;
+  height: auto;
+}
+.node {
+  margin-left: 2em;
+  transition: all 0.5s;
+  background: white;
+  color: #333;
+}
+.node.highlight {
+  background: #09f;
+  color: white;
+}
+
+#tree {
+  text-align: left;
+}

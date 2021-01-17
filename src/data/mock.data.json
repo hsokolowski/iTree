@@ -1,0 +1,175 @@
+{
+    "attr2": "attribute223",
+    "pivot": "attribute2",
+    "predicateName": "<",
+    "match": {
+      "attr2": "attribute257",
+      "pivot": "attribute1",
+      "predicateName": "<",
+      "match": {
+        "category": "5",
+        "quality": "0.00",
+        "matchedCount": 0,
+        "notMatchedCount": 2
+      },
+      "notMatch": {
+        "category": "10",
+        "quality": "0.00",
+        "matchedCount": 0,
+        "notMatchedCount": 9
+      },
+      "matchedCount": 2,
+      "notMatchedCount": 9
+    },
+    "notMatch": {
+      "attr2": "attribute193",
+      "pivot": "attribute276",
+      "predicateName": "<",
+      "match": {
+        "attr2": "attribute148",
+        "pivot": "attribute32",
+        "predicateName": "<",
+        "match": {
+          "attr2": "attribute46",
+          "pivot": "attribute172",
+          "predicateName": "<",
+          "match": {
+            "category": "2",
+            "quality": "0.00",
+            "matchedCount": 0,
+            "notMatchedCount": 5
+          },
+          "notMatch": {
+            "attr2": "attribute44",
+            "pivot": "attribute1",
+            "predicateName": "<",
+            "match": {
+              "category": "1",
+              "quality": "0.00",
+              "matchedCount": 0,
+              "notMatchedCount": 3
+            },
+            "notMatch": {
+              "category": "9",
+              "quality": "0.00",
+              "matchedCount": 0,
+              "notMatchedCount": 3
+            },
+            "matchedCount": 3,
+            "notMatchedCount": 3
+          },
+          "matchedCount": 5,
+          "notMatchedCount": 6
+        },
+        "notMatch": {
+          "category": "4",
+          "quality": "0.00",
+          "matchedCount": 0,
+          "notMatchedCount": 4
+        },
+        "matchedCount": 11,
+        "notMatchedCount": 4
+      },
+      "notMatch": {
+        "attr2": "attribute14",
+        "pivot": "attribute136",
+        "predicateName": "<",
+        "match": {
+          "attr2": "attribute20",
+          "pivot": "attribute75",
+          "predicateName": "<",
+          "match": {
+            "attr2": "attribute179",
+            "pivot": "attribute175",
+            "predicateName": "<",
+            "match": {
+              "category": "6",
+              "quality": "0.00",
+              "matchedCount": 0,
+              "notMatchedCount": 5
+            },
+            "notMatch": {
+              "attr2": "attribute123",
+              "pivot": "attribute15",
+              "predicateName": "<",
+              "match": {
+                "category": "3",
+                "quality": "0.00",
+                "matchedCount": 0,
+                "notMatchedCount": 2
+              },
+              "notMatch": {
+                "attr2": "attribute42",
+                "pivot": "attribute101",
+                "predicateName": "<",
+                "match": {
+                  "category": "6",
+                  "quality": "0.00",
+                  "matchedCount": 0,
+                  "notMatchedCount": 1
+                },
+                "notMatch": {
+                  "attr2": "attribute238",
+                  "pivot": "attribute1",
+                  "predicateName": "<",
+                  "match": {
+                    "category": "5",
+                    "quality": "0.00",
+                    "matchedCount": 0,
+                    "notMatchedCount": 1
+                  },
+                  "notMatch": {
+                    "category": "1",
+                    "quality": "0.00",
+                    "matchedCount": 0,
+                    "notMatchedCount": 52
+                  },
+                  "matchedCount": 1,
+                  "notMatchedCount": 52
+                },
+                "matchedCount": 1,
+                "notMatchedCount": 53
+              },
+              "matchedCount": 2,
+              "notMatchedCount": 54
+            },
+            "matchedCount": 5,
+            "notMatchedCount": 56
+          },
+          "notMatch": {
+            "attr2": "attribute269",
+            "pivot": "attribute15",
+            "predicateName": "<",
+            "match": {
+              "category": "4",
+              "quality": "0.00",
+              "matchedCount": 0,
+              "notMatchedCount": 2
+            },
+            "notMatch": {
+              "category": "1",
+              "quality": "0.00",
+              "matchedCount": 0,
+              "notMatchedCount": 5
+            },
+            "matchedCount": 2,
+            "notMatchedCount": 5
+          },
+          "matchedCount": 61,
+          "notMatchedCount": 7
+        },
+        "notMatch": {
+          "category": "6",
+          "quality": "0.00",
+          "matchedCount": 0,
+          "notMatchedCount": 7
+        },
+        "matchedCount": 68,
+        "notMatchedCount": 7
+      },
+      "matchedCount": 15,
+      "notMatchedCount": 75
+    },
+    "matchedCount": 11,
+    "notMatchedCount": 90
+  }
