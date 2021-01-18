@@ -5,7 +5,7 @@ import { AddIcon, ArrowUpIcon } from "@chakra-ui/icons";
 import { readLocalFile } from "../utils/file-reader";
 import parseCsv from "csv-parse/lib/sync";
 
-function FileReader() {
+function FileReader(props) {
   const [dataSet, setDataSet] = useState(null);
   const [parameters, setParameters] = useState(null);
   const [ignoreParameters, setignoreParameters] = useState(null);
@@ -39,7 +39,7 @@ function FileReader() {
         fileTypes={[".csv"]}
         handleFiles={handleFiles}
       >
-        <Button leftIcon={<AddIcon />} size="md" colorScheme="teal" variant="outline" aria-label="Deploy set">
+        <Button leftIcon={<AddIcon />} size={props.size} colorScheme="teal" variant="outline" aria-label="Deploy set">
           Deploy
         </Button>
       </ReactFileReader>
