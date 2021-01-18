@@ -18,7 +18,7 @@ const Tree = ({options}) => {
   console.log(aaaaaa)
 
   function buildDecisionTree(builder, isChanged = false) {
-    debugger;
+    //debugger;
     var trainingSet = builder.trainingSet;
     var minItemsCount = builder.minItemsCount;
     var categoryAttr = builder.categoryAttr;

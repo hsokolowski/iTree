@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ReactFileReader from "react-file-reader";
-//import { IconButton, Button,Stack } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
+import { AddIcon, ArrowUpIcon } from "@chakra-ui/icons";
 import { readLocalFile } from "../utils/file-reader";
 import parseCsv from "csv-parse/lib/sync";
 
@@ -9,35 +10,6 @@ function FileReader() {
   const [parameters, setParameters] = useState(null);
   const [ignoreParameters, setignoreParameters] = useState(null);
 
-  // const handleFiles = files => {
-  //   console.log(files)
-  //   let reader = new FileReader();
-  //   reader.onload = () => {
-  //     // Use reader.result
-  //     console.log(reader.result);
-  //     //getting attribute parameters decison tree
-  //     // let firstLine = reader.result.split('\n').shift();
-  //     // console.log(firstLine);
-  //     // let clearVars = firstLine.replace(/['"]+/g, '');
-  //     // console.log(clearVars);
-  //     // let params = clearVars.split(',');
-  //     // ////console.log(params);
-  //     // let ignore = params.slice();
-  //     // ignore.unshift("-EMPTY-");
-  //     // ignore[ignore.length-1]=ignore[ignore.length-1].substring(0, ignore[ignore.length-1].length - 1);
-
-  //     // let jsonObj = csv.toObjects(reader.result);
-  //     // console.log(jsonObj);
-
-  //     // setDataSet(jsonObj)
-  //     // setParameters(params)
-  //     // setignoreParameters(ignore)
-
-  //   }
-  //   reader.readAsText(files[0]);
-  //   // console.log(parameters,ignoreParameters);
-  //   // console.log(dataSet);
-  // };
   const handleFiles = async (files) => {
     const file = await readLocalFile(files[0]);
     console.log(file);
@@ -67,9 +39,9 @@ function FileReader() {
         fileTypes={[".csv"]}
         handleFiles={handleFiles}
       >
-        <div className="btn" id="uploadBtn">
-          <i className="icon-upload-1"></i>Deploy
-        </div>
+        <Button leftIcon={<AddIcon />} size="md" colorScheme="teal" variant="outline" aria-label="Deploy set">
+          Deploy
+        </Button>
       </ReactFileReader>
     </div>
   );

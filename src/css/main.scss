@@ -15,7 +15,7 @@ $gradient-bottom-left: linear-gradient(315deg, #d8dbe2ff, #a9bcd0ff, #58a4b0ff, 
 $gradient-radial: radial-gradient(#d8dbe2ff, #a9bcd0ff, #58a4b0ff, #373f51ff, #1b1b1eff);
 
 .center-horizontal {
-  background-color: #09f;
+  background-color: $gainsboro;
 }
 .center-vertical {
   display: flex;
@@ -30,7 +30,7 @@ $gradient-radial: radial-gradient(#d8dbe2ff, #a9bcd0ff, #58a4b0ff, #373f51ff, #1
   background-color: azure;
 }
 #navigation-navbar {
-  background-color: red;
+  //background-color: red;
   width: 100%;
   height: auto;
 }
