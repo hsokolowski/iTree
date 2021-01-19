@@ -77,8 +77,8 @@ function Navigation() {
             <FileReader size={size} />
           </FormControl>
           <FormControl id="decisionAttr" width="auto">
+            <FormLabel>Decision attributessssss</FormLabel>
             <FormLabel>Decision attribute</FormLabel>
-            <FormHelperText>We'll never share your email.</FormHelperText>
             <SearchBar
               placeholder="Select decision attribute"
               onChange={null}
