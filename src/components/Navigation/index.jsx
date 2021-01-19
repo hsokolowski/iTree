@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../css/main.scss';
+import '../../css/main.scss';
 import { Icon, Textarea } from '@chakra-ui/react';
 import { GiLightningTree } from 'react-icons/gi';
 import {
@@ -77,7 +77,6 @@ function Navigation() {
             <FileReader size={size} />
           </FormControl>
           <FormControl id="decisionAttr" width="auto">
-            <FormLabel>Decision attributessssss</FormLabel>
             <FormLabel>Decision attribute</FormLabel>
             <SearchBar
               placeholder="Select decision attribute"
