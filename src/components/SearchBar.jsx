@@ -10,7 +10,7 @@ export const Search = props => (
     search
     multiple={props.multiple}
     printOptions="on-focus"
-    closeOnSelect={false}
+    closeOnSelect={props.closeOnSelect}
     placeholder={props.placeholder}
   />
 );

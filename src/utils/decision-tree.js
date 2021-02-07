@@ -42,7 +42,7 @@ export function buildDecisionTree(_builder, isChanged = false) {
     let _positiveCounter = 0;
     //console.log("KATEGORIA JAKO:", _category);
     trainingSet.forEach(element => {
-      if (element[categoryAttr] === _category) _positiveCounter++;
+      if (element[categoryAttr] == _category) _positiveCounter++;
     });
     let _negativeCounter = trainingSet.length - _positiveCounter;
     _quality = _positiveCounter / trainingSet.length;
@@ -149,7 +149,7 @@ export function buildDecisionTree(_builder, isChanged = false) {
     let _positiveCounter = 0;
     //console.log("KATEGORIA JAKO:", _category);
     trainingSet.forEach(element => {
-      if (element[categoryAttr] === _category) _positiveCounter++;
+      if (element[categoryAttr] == _category) _positiveCounter++;
     });
     let _negativeCounter = trainingSet.length - _positiveCounter;
     _quality = _positiveCounter / trainingSet.length;
@@ -172,7 +172,7 @@ export function buildDecisionTree(_builder, isChanged = false) {
     let _positiveCounter = 0;
     //console.log(_category);
     trainingSet.forEach(element => {
-      if (element[categoryAttr] === _category) _positiveCounter++;
+      if (element[categoryAttr] == _category) _positiveCounter++;
     });
     let _negativeCounter = trainingSet.length - _positiveCounter;
     _quality = _positiveCounter / trainingSet.length;
@@ -243,13 +243,4 @@ function mostFrequentValue(items, attr) {
   }
 
   return mostFrequentValue;
-}
-function getAllClasses(set, cattegoryAttr) {
-  let array = [];
-  set.forEach(element => {
-    let _class = element[cattegoryAttr];
-    if (!array.includes(_class)) array.push(_class);
-  });
-  console.log(array);
-  return array;
 }

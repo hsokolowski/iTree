@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../../css/main.scss';
-import { Icon, Textarea } from '@chakra-ui/react';
+import { Icon } from '@chakra-ui/react';
 import { GiLightningTree } from 'react-icons/gi';
 import {
   Button,
@@ -16,18 +16,27 @@ import {
 } from '@chakra-ui/react';
 import FileReader from '../FileReader';
 import { Search as SearchBar } from '../SearchBar';
+import { getAllClasses } from '../../utils/config-builder';
 import { builder } from '../../services/Playground';
 
 import IgnoredAttributes from './IgnoredAttributes';
 import Builder from './Builder';
 
-function Navigation() {
+/**
+ * @typedef {import('../../utils/decision-tree.js').DecisionTreeBuilder} DecisionTreeBuilder
+ */
+
+function Navigation({ onPrepareConfig }) {
   const [size, setSize] = useState('md');
+  const [dataSet, setDataSet] = useState(null);
   const [decisionAttribute, setDecisionAttribute] = useState(null);
   const [ignoredAttributes, setIgnoredAttributes] = useState([]);
   const [minItems, setMinItems] = useState(4);
   const [entropy, setEntropy] = useState(0.1);
   const [maxDepth, setMaxDepth] = useState(15);
+  const [allAttrs, setAllAttributes] = useState([]);
+  const [allClazz, setAllClasses] = useState([]);
+  const [config, setConfig] = useState({});
   const [options, setOptions] = useState([
     { value: 'hamburger', name: 'Hamburger' },
     { value: 'fries', name: 'Fries' },
@@ -35,9 +44,9 @@ function Navigation() {
   ]);
 
   useEffect(() => {
-    setOptions(handleSetAttributes());
-    window.addEventListener('resize', () => handleResize());
+    window.addEventListener('resize', () => handleResizeButtonsStyle());
   }, []);
+
   const handleSetAttributes = () => {
     let array = [];
     builder.allAttributes.forEach(element => {
@@ -47,7 +56,7 @@ function Navigation() {
     });
     return array;
   };
-  const handleResize = () => {
+  const handleResizeButtonsStyle = () => {
     const windowSize = window.innerWidth;
     if (windowSize < 6000) setSize('xl');
     if (windowSize < 3000) setSize('lg');
@@ -55,17 +64,61 @@ function Navigation() {
     if (windowSize < 1200) setSize('sm');
     if (windowSize < 530) setSize('xs');
   };
+
+  function handleSelectDecision(value) {
+    //console.log(value);
+    setDecisionAttribute(value);
+    setAllClasses(getAllClasses(dataSet, value));
+  }
   function handleSelectIgnore(value) {
+    //console.log(value);
     setIgnoredAttributes(value);
   }
   function handleSetMinItems(value) {
+    //console.log(value);
     setMinItems(value);
   }
   function handleSetEntropy(value) {
+    //console.log(value);
     setEntropy(value);
   }
   function handleSetMaxDepth(value) {
+    //console.log(value);
     setMaxDepth(value);
+  }
+  /**
+   * @param {Object<Array,Array>} allAttributes
+   *
+   */
+  function handleGetAllAttributes({ allAttributes, data }) {
+    //console.log(allAttributes, data);
+    let array = [];
+    allAttributes.forEach(element => {
+      array.push({ value: element, name: element });
+    });
+    setAllAttributes(allAttributes);
+    setOptions(array);
+    setDataSet(data);
+  }
+  /**
+   * @returns {DecisionTreeBuilder}
+   */
+  function prepareConfig() {
+    return {
+      allAttributes: allAttrs,
+      allClasses: allClazz || [],
+      categoryAttr: decisionAttribute,
+      ignoredAttributes: ignoredAttributes,
+      entropyThrehold: entropy,
+      maxTreeDepth: maxDepth,
+      minItemsCount: minItems,
+      trainingSet: dataSet || [],
+    };
+  }
+
+  function handleDrawTree() {
+    setConfig(prepareConfig());
+    onPrepareConfig(prepareConfig());
   }
 
   return (
@@ -74,18 +127,19 @@ function Navigation() {
         <Stack spacing={4} direction="row" align="center" alignContent="center" justify="center">
           <FormControl id="deploySet" width="auto">
             <FormLabel>Deploy Set</FormLabel>
-            <FileReader size={size} />
+            <FileReader size={size} onChange={handleGetAllAttributes} isHeaders={false} />
           </FormControl>
           <FormControl id="decisionAttr" width="auto">
             <FormLabel>Decision attribute</FormLabel>
             <SearchBar
               placeholder="Select decision attribute"
-              onChange={null}
+              onChange={handleSelectDecision}
               options={options}
               multiple={false}
+              closeOnSelect={true}
             />
             <FormHelperText width={size}>
-              <Builder size={size} builder={builder} />
+              <Builder size={size} builder={prepareConfig()} />
             </FormHelperText>
           </FormControl>
           <FormControl id="ignoreAttr" width="auto">
@@ -95,6 +149,7 @@ function Navigation() {
               onChange={handleSelectIgnore}
               options={options}
               multiple={true}
+              closeOnSelect={false}
             />
             {ignoredAttributes.length != 0 ? (
               <FormHelperText width={size}>
@@ -165,6 +220,7 @@ function Navigation() {
               colorScheme="teal"
               variant="outline"
               aria-label="Deploy set"
+              onClick={handleDrawTree}
             >
               Draw
             </Button>

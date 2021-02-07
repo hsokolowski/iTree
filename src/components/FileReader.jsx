@@ -1,45 +1,52 @@
-import React, { useState } from "react";
-import ReactFileReader from "react-file-reader";
-import { Button } from "@chakra-ui/react";
-import { AddIcon, ArrowUpIcon } from "@chakra-ui/icons";
-import { readLocalFile } from "../utils/file-reader";
-import parseCsv from "csv-parse/lib/sync";
+import React, { useState } from 'react';
+import ReactFileReader from 'react-file-reader';
+import { Button } from '@chakra-ui/react';
+import { AddIcon, ArrowUpIcon } from '@chakra-ui/icons';
+import { readLocalFile } from '../utils/file-reader';
+import parseCsv from 'csv-parse/lib/sync';
 
 function FileReader(props) {
-  const [dataSet, setDataSet] = useState(null);
   const [parameters, setParameters] = useState(null);
-  const [ignoreParameters, setignoreParameters] = useState(null);
 
-  const handleFiles = async (files) => {
+  const handleFiles = async files => {
     const file = await readLocalFile(files[0]);
-    console.log(file);
+    //console.log(file);
     const clean = file
-      .split("\n")
-      .map((line) => {
-        return line.replace(/(^"|"$)/g, "");
+      .split('\n')
+      .map(line => {
+        return line.replace(/(^"|"$)/g, '');
       })
-      .join("\n");
+      .join('\n');
+    let allAttributes = [];
     const data = parseCsv(clean, {
-      columns: (h) => {
-        //console.log(h);
-        return h.map((v, i) => v || `attr${i}`);
+      columns: h => {
+        // let header = h.map((v, i) => v || `attr${i}`);
+        // allAttributes.push(header);
+        // return header;
+        if (props.isHeaders) return h.map((v, i) => v);
+        else return h.map((v, i) => `attr${i}`);
       },
-      comment: "#",
+      comment: '#',
       skipEmptyLines: true,
-      delimiter: [",", "\t"],
+      delimiter: [',', '\t'],
     });
     //const data = parseCsv(file,{columns: true, comment: "#",skipEmptyLines: true,})
     console.log(data);
+    allAttributes = Object.keys(data[0]);
+    props.onChange({ allAttributes, data });
+    allAttributes = [];
   };
 
   return (
     <div>
-      <ReactFileReader
-        multipleFiles={false}
-        fileTypes={[".csv"]}
-        handleFiles={handleFiles}
-      >
-        <Button leftIcon={<AddIcon />} size={props.size} colorScheme="teal" variant="outline" aria-label="Deploy set">
+      <ReactFileReader multipleFiles={false} fileTypes={['.csv']} handleFiles={handleFiles}>
+        <Button
+          leftIcon={<AddIcon />}
+          size={props.size}
+          colorScheme="teal"
+          variant="outline"
+          aria-label="Deploy set"
+        >
           Deploy
         </Button>
       </ReactFileReader>

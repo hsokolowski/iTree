@@ -1,5 +1,5 @@
 /**
- * @param {File} file 
+ * @param {File} file
  * @returns {Promise<string>}
  */
 export function readLocalFile(file) {
@@ -8,5 +8,5 @@ export function readLocalFile(file) {
     reader.onload = () => resolve(reader.result.toString());
     reader.onerror = reject;
     reader.readAsText(file);
-  })
+  });
 }

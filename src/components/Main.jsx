@@ -1,21 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import '../css/main.scss';
 import Tree from './Tree';
-//import {start} from '../services/Playground.js'
-import * as model from '../data/mock.data.json';
 import Navigation from './Navigation';
-import { builder } from '../services/Playground';
+import { builder as _builder_ } from '../services/Playground';
 
 function Main() {
-  //console.log(builder);
+  const [builder, setBuilder] = useState({});
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    console.log('UseEffetc');
+  }, [builder, isReady]);
+
+  function StartDrawing(value) {
+    //console.log(value);
+    setBuilder(value);
+    setIsReady(true);
+  }
+
   return (
     <div id="main" className="main">
-      <Navigation />
+      <Navigation onPrepareConfig={StartDrawing} />
       {/* <Button onClick={start}>Drzewo</Button> */}
       <br></br>
-      <div>
-        <Tree options={builder} />
-      </div>
+      <div>{isReady ? <Tree options={builder} /> : <div>czekam na ciebie</div>}</div>
     </div>
   );
 }

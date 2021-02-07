@@ -6,6 +6,14 @@ function Joint({ children, attr2, predicateName, pivot, match, notMatch, onChang
       <p>
         {attr2} <b>{predicateName}</b> {pivot}
       </p>
+      <div>
+        Match
+        {/* {JSON.stringify(match)} */}
+      </div>
+      <div>
+        notMatch
+        {/* {JSON.stringify(notMatch)} */}
+      </div>
       {children}
     </div>
   );
