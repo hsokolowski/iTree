@@ -46,28 +46,7 @@ function Navigation({ onPrepareConfig }) {
     { value: 'fries', name: 'Fries' },
     { value: 'milkshake', name: 'Milkshake' },
   ]);
-
-  // useEffect(() => {
-  //   //window.addEventListener('resize', () => handleResizeButtonsStyle());
-  // }, []);
-
-  const handleSetAttributes = () => {
-    let array = [];
-    builder.allAttributes.forEach(element => {
-      if (decisionAttribute != null && element === decisionAttribute)
-        array.push({ value: element, name: element, disabled: true });
-      else array.push({ value: element, name: element });
-    });
-    return array;
-  };
-  // const handleResizeButtonsStyle = () => {
-  //   const windowSize = window.innerWidth;
-  //   if (windowSize < 6000) setSize('xl');
-  //   if (windowSize < 3000) setSize('lg');
-  //   if (windowSize < 1900) setSize('md');
-  //   if (windowSize < 1200) setSize('sm');
-  //   if (windowSize < 530) setSize('xs');
-  // };
+  const [isLoad, setIsLoad] = useState(false);
 
   function handleSelectDecision(value) {
     //console.log(value);
@@ -95,7 +74,7 @@ function Navigation({ onPrepareConfig }) {
    *
    */
   function handleGetAllAttributes({ allAttributes, data }) {
-    //console.log(allAttributes, data);
+    console.log(allAttributes, data);
     let array = [];
     allAttributes.forEach(element => {
       array.push({ value: element, name: element });
@@ -123,6 +102,8 @@ function Navigation({ onPrepareConfig }) {
   function handleDrawTree() {
     setConfig(prepareConfig());
     onPrepareConfig(prepareConfig());
+    setIsLoad(true);
+    setTimeout(() => setIsLoad(false), 500);
   }
 
   return (
@@ -135,7 +116,7 @@ function Navigation({ onPrepareConfig }) {
       backgroundColor={'#a9bcd0ff'}
       fontSize={['xs', 'xs', 'sm', 'sm', 'md']}
     >
-      <Collapse in={isOpen} animateOpacity>
+      <Collapse in={isOpen} animateOpacity style={{ overflow: 'visible' }}>
         <Stack
           spacing={2}
           direction={['column', 'column', 'row']}
@@ -144,6 +125,7 @@ function Navigation({ onPrepareConfig }) {
           justify="center"
           px={2}
           py={3}
+          zIndex={2}
         >
           <Box w={'100%'}>
             <FormControl id="deploySet" width="auto">
@@ -152,7 +134,7 @@ function Navigation({ onPrepareConfig }) {
             </FormControl>
           </Box>
           <Box w={'100%'}>
-            <FormControl id="decisionAttr" width="auto">
+            <FormControl id="decisionAttr" width="auto" zIndex={2}>
               <FormLabel fontSize={['md', 'md', 'xs', 'sm', 'md']}>Decision attribute</FormLabel>
               <SearchBar
                 placeholder="Select decision attribute"
@@ -218,6 +200,7 @@ function Navigation({ onPrepareConfig }) {
                 onClick={handleDrawTree}
                 w="100%"
                 h={10}
+                isLoading={isLoad}
               >
                 Draw
               </Button>
@@ -230,85 +213,6 @@ function Navigation({ onPrepareConfig }) {
         <DrawerRoll />
       </Stack>
     </Box>
-    // <div id="navigation-navbar" className="center-horizontal">
-    //   <div style={{ padding: '10px' }}>
-    //     <Stack spacing={4} direction="row" align="center" alignContent="center" justify="center">
-    //       <FormControl id="deploySet" width="auto">
-    //         <FormLabel>Deploy Set</FormLabel>
-    //         <FileReader size={size} onChange={handleGetAllAttributes} isHeaders={false} />
-    //       </FormControl>
-    //       <FormControl id="decisionAttr" width="auto">
-    //         <FormLabel>Decision attribute</FormLabel>
-    //         <SearchBar
-    //           placeholder="Select decision attribute"
-    //           onChange={handleSelectDecision}
-    //           options={options}
-    //           multiple={false}
-    //           closeOnSelect={true}
-    //         />
-    //         <FormHelperText width={size}>
-    //           <Builder size={size} builder={prepareConfig()} />
-    //         </FormHelperText>
-    //       </FormControl>
-    //       <FormControl id="ignoreAttr" width="auto">
-    //         <FormLabel>Ignore attributes</FormLabel>
-    //         <SearchBar
-    //           placeholder="Select ignore attributes"
-    //           onChange={handleSelectIgnore}
-    //           options={options}
-    //           multiple={true}
-    //           closeOnSelect={false}
-    //         />
-    //         {ignoredAttributes.length != 0 ? (
-    //           <FormHelperText width={size}>
-    //             <IgnoredAttributes size={size} ignoredAttributes={ignoredAttributes} />
-    //           </FormHelperText>
-    //         ) : (
-    //           <div></div>
-    //         )}
-    //       </FormControl>
-    //       <FormControlNumberInput
-    //         size={size}
-    //         htmlId="minItemsCount"
-    //         label="Min items count"
-    //         defaultValue={minItems}
-    //         min={1}
-    //         onChange={handleSetMinItems}
-    //       />
-    //       <FormControlNumberInput
-    //         size={size}
-    //         htmlId="maxDepth"
-    //         label="Max tree depth"
-    //         defaultValue={maxDepth}
-    //         min={1}
-    //         onChange={handleSetMaxDepth}
-    //       />
-    //       <FormControlNumberInput
-    //         size={size}
-    //         htmlId="entropy"
-    //         label="Entropy threshold"
-    //         defaultValue={entropy}
-    //         min={0}
-    //         max={1}
-    //         step={0.1}
-    //         onChange={handleSetEntropy}
-    //       />
-    //       <FormControl id="drawTree" width="auto">
-    //         <FormLabel>Draw tree</FormLabel>
-    //         <Button
-    //           leftIcon={<Icon as={GiLightningTree} />}
-    //           size={size}
-    //           colorScheme="teal"
-    //           variant="outline"
-    //           aria-label="Deploy set"
-    //           onClick={handleDrawTree}
-    //         >
-    //           Draw
-    //         </Button>
-    //       </FormControl>
-    //     </Stack>
-    //   </div>
-    // </div>
   );
 }
 

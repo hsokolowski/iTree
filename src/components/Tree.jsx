@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
+import { Box } from '@chakra-ui/react';
 import { buildDecisionTree } from '../utils/decision-tree';
 // import { start } from '../services/Playground';
 // import { dt } from '../services/TSP';
@@ -29,10 +30,11 @@ const Tree = ({ options }) => {
         <button onClick={logTree}>Log tree</button>
       </p>
       <h2>Nodes:</h2>
-      <Node node={root} onChange={() => {}} />
+      <Box>
+        <Node node={root} onChange={() => {}} />
+      </Box>
     </div>
   );
 };
-//{/*  */}
 
 export default Tree;

@@ -53,6 +53,7 @@ $gradient-radial: radial-gradient(#d8dbe2ff, #a9bcd0ff, #58a4b0ff, #373f51ff, #1
   transition: all 0.5s;
   background: white;
   color: #333;
+  // width: 50%;
 }
 .node.highlight {
   background: #09f;
@@ -61,4 +62,5 @@ $gradient-radial: radial-gradient(#d8dbe2ff, #a9bcd0ff, #58a4b0ff, #373f51ff, #1
 
 #tree {
   text-align: left;
+  //background-color: green;
 }
