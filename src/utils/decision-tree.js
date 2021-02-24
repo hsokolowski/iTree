@@ -16,7 +16,13 @@
  * @param {DecisionTreeBuilder} _builder
  * @param {boolean} isChanged
  */
-export function buildDecisionTree(_builder, isChanged = false) {
+//TSP
+export function buildDecisionTree(
+  _builder,
+  isChanged = false,
+  changedAttribute1 = null,
+  changedAttribute2 = null
+) {
   //debugger;
   const builder = { ..._builder };
   const {
@@ -80,64 +86,118 @@ export function buildDecisionTree(_builder, isChanged = false) {
     ],
     match = [],
     notMatch = [];
-  for (let i = 0; i < attributes.length; i++) {
-    let attr1 = attributes[i];
-    for (let j = 0; j < attributes.length; j++) {
-      let attr2 = attributes[j];
-      if (attr1 !== attr2) {
-        right = left = 0;
-        leftList = [];
-        rightList = [];
-        classMatrix = [
-          new Array(builder.allClasses.length).fill(0),
-          new Array(builder.allClasses.length).fill(0),
-        ];
+  if (isChanged) {
+    right = left = 0;
+    leftList = [];
+    rightList = [];
+    classMatrix = [
+      new Array(builder.allClasses.length).fill(0),
+      new Array(builder.allClasses.length).fill(0),
+    ];
 
-        for (let index = 0; index < trainingSet.length; index++) {
-          const element = trainingSet[index];
+    for (let index = 0; index < trainingSet.length; index++) {
+      const element = trainingSet[index];
 
-          if (element[attr1] < element[attr2]) {
-            left++;
-            leftList.push(element);
-            classMatrix[0][builder.allClasses.indexOf(element[categoryAttr])]++;
-          } else {
-            right++;
-            rightList.push(element);
-            classMatrix[1][builder.allClasses.indexOf(element[categoryAttr])]++;
+      if (element[changedAttribute1] < element[changedAttribute2]) {
+        left++;
+        leftList.push(element);
+        classMatrix[0][builder.allClasses.indexOf(element[categoryAttr])]++;
+      } else {
+        right++;
+        rightList.push(element);
+        classMatrix[1][builder.allClasses.indexOf(element[categoryAttr])]++;
+      }
+    }
+    //console.log(classMatrix);
+    var probR = 0,
+      probL = 0,
+      rankL = 0,
+      rankR = 0;
+    for (let k = 0; k < builder.allClasses.length; k++) {
+      probL = left === 0 ? 0 : classMatrix[0][k] / left;
+      probR = right === 0 ? 0 : classMatrix[1][k] / right;
+
+      rankL += probL * probL;
+      rankR += probR * probR;
+    }
+    //console.log("Rank Lewy",rankL,"Rank Prawy",rankR);
+
+    var currentDif =
+      (right / trainingSet.length) * (1 - rankR) + (left / trainingSet.length) * (1 - rankL);
+    if (currentDif < maxDif) {
+      //console.log("------Zapisanie maxDif-------");
+      //console.log(attr1,attr2);
+      //console.log("R/L ", right + ":" + left);
+      //console.log("cur/mD",currentDif + ":" + maxDif);
+      maxDif = currentDif;
+      attribute1 = changedAttribute1;
+      attribute2 = changedAttribute2;
+      match = leftList;
+      notMatch = rightList;
+      podzial = classMatrix;
+      //console.log("-----------------------------");
+    }
+  } else {
+    for (let i = 0; i < attributes.length; i++) {
+      let attr1 = attributes[i];
+      for (let j = 0; j < attributes.length; j++) {
+        let attr2 = attributes[j];
+        if (attr1 !== attr2) {
+          right = left = 0;
+          leftList = [];
+          rightList = [];
+          classMatrix = [
+            new Array(builder.allClasses.length).fill(0),
+            new Array(builder.allClasses.length).fill(0),
+          ];
+
+          for (let index = 0; index < trainingSet.length; index++) {
+            const element = trainingSet[index];
+
+            if (element[attr1] < element[attr2]) {
+              left++;
+              leftList.push(element);
+              classMatrix[0][builder.allClasses.indexOf(element[categoryAttr])]++;
+            } else {
+              right++;
+              rightList.push(element);
+              classMatrix[1][builder.allClasses.indexOf(element[categoryAttr])]++;
+            }
           }
-        }
-        //console.log(classMatrix);
-        var probR = 0,
-          probL = 0,
-          rankL = 0,
-          rankR = 0;
-        for (let k = 0; k < builder.allClasses.length; k++) {
-          probL = left === 0 ? 0 : classMatrix[0][k] / left;
-          probR = right === 0 ? 0 : classMatrix[1][k] / right;
+          //console.log(classMatrix);
+          var probR = 0,
+            probL = 0,
+            rankL = 0,
+            rankR = 0;
+          for (let k = 0; k < builder.allClasses.length; k++) {
+            probL = left === 0 ? 0 : classMatrix[0][k] / left;
+            probR = right === 0 ? 0 : classMatrix[1][k] / right;
 
-          rankL += probL * probL;
-          rankR += probR * probR;
-        }
-        //console.log("Rank Lewy",rankL,"Rank Prawy",rankR);
+            rankL += probL * probL;
+            rankR += probR * probR;
+          }
+          //console.log("Rank Lewy",rankL,"Rank Prawy",rankR);
 
-        var currentDif =
-          (right / trainingSet.length) * (1 - rankR) + (left / trainingSet.length) * (1 - rankL);
-        if (currentDif < maxDif) {
-          //console.log("------Zapisanie maxDif-------");
-          //console.log(attr1,attr2);
-          //console.log("R/L ", right + ":" + left);
-          //console.log("cur/mD",currentDif + ":" + maxDif);
-          maxDif = currentDif;
-          attribute1 = attr1;
-          attribute2 = attr2;
-          match = leftList;
-          notMatch = rightList;
-          podzial = classMatrix;
-          //console.log("-----------------------------");
+          var currentDif =
+            (right / trainingSet.length) * (1 - rankR) + (left / trainingSet.length) * (1 - rankL);
+          if (currentDif < maxDif) {
+            //console.log("------Zapisanie maxDif-------");
+            //console.log(attr1,attr2);
+            //console.log("R/L ", right + ":" + left);
+            //console.log("cur/mD",currentDif + ":" + maxDif);
+            maxDif = currentDif;
+            attribute1 = attr1;
+            attribute2 = attr2;
+            match = leftList;
+            notMatch = rightList;
+            podzial = classMatrix;
+            //console.log("-----------------------------");
+          }
         }
       }
     }
   }
+
   //console.log("PO WYLICZENIU NAJLEPSZEGO");
   //console.log(attribute1, attribute2);
   //console.log("L/R ", match.length + ":" + notMatch.length);

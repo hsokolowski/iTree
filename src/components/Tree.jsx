@@ -18,7 +18,11 @@ const logTree = root => console.log(root);
 const Tree = ({ options }) => {
   const root = useMemo(() => {
     //return dt.TSPDecisionTree(options)
-    return buildDecisionTree(options);
+    var t0 = performance.now();
+    var r = buildDecisionTree(options);
+    var t1 = performance.now();
+    console.log('Call to doSomething took ' + (t1 - t0) + ' milliseconds.');
+    return r;
   }, [options]);
 
   useEffect(() => logTree(root), [root]);
