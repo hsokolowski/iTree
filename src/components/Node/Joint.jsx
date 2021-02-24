@@ -17,12 +17,12 @@ function Joint({ children, attr2, predicateName, pivot, match, notMatch, onChang
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [size, setSize] = useState('lg');
 
-  const handleSizeClick = () => {
+  const handleOpenModalClick = () => {
     onOpen();
   };
   return (
-    <Box onClick={handleSizeClick}>
-      <Badge borderRadius="full" px="2" py="1" colorScheme="teal">
+    <Box>
+      <Badge borderRadius="full" px="2" py="1" colorScheme="teal" onClick={handleOpenModalClick}>
         {attr2} <b>{predicateName}</b> {pivot}
       </Badge>
       <Modal onClose={onClose} size={size} isOpen={isOpen}>
