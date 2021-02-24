@@ -205,6 +205,7 @@ export function buildDecisionTree(_builder, isChanged = false) {
     notMatch: notMatchSubTree, //{category: ...}
     matchedCount: match.length,
     notMatchedCount: notMatch.length,
+    nodeSet: match.concat(notMatch),
   };
   //console.log(attributes);
 }
