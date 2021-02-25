@@ -17,32 +17,15 @@
  * @param {boolean} isChanged
  */
 //TSP
-export function buildDecisionTree(
-  _builder,
-  isChanged = false,
-  changedAttribute1 = null,
-  changedAttribute2 = null
-) {
+export function buildDecisionTree(_builder, isChanged = false, changedAttribute1 = null, changedAttribute2 = null) {
   //debugger;
   const builder = { ..._builder };
-  const {
-    trainingSet,
-    minItemsCount,
-    categoryAttr,
-    entropyThrehold,
-    maxTreeDepth,
-    ignoredAttributes,
-  } = builder;
+  const { trainingSet, minItemsCount, categoryAttr, entropyThrehold, maxTreeDepth, ignoredAttributes } = builder;
   //console.log("########## NOWY WEZEL ########", trainingSet.length);
   /** @type {string | number} */
   var _quality = 0;
   if (maxTreeDepth === 0 || trainingSet.length <= minItemsCount) {
-    //console.log(
-    //  "LISC BO MAX TREE DEPTH",
-    //  maxTreeDepth,
-    //  "LISC ILOSC",
-    //  trainingSet.length
-    //);
+    console.log('LISC BO MAX TREE DEPTH', maxTreeDepth, 'LISC ILOSC', trainingSet.length);
     //gger;
     let _category = mostFrequentValue(trainingSet, categoryAttr);
     let _positiveCounter = 0;
@@ -80,20 +63,14 @@ export function buildDecisionTree(
   var directrion = '<';
   var leftList = [],
     rightList = [],
-    classMatrix = [
-      new Array(builder.allClasses.length).fill(0),
-      new Array(builder.allClasses.length).fill(0),
-    ],
+    classMatrix = [new Array(builder.allClasses.length).fill(0), new Array(builder.allClasses.length).fill(0)],
     match = [],
     notMatch = [];
   if (isChanged) {
     right = left = 0;
     leftList = [];
     rightList = [];
-    classMatrix = [
-      new Array(builder.allClasses.length).fill(0),
-      new Array(builder.allClasses.length).fill(0),
-    ];
+    classMatrix = [new Array(builder.allClasses.length).fill(0), new Array(builder.allClasses.length).fill(0)];
 
     for (let index = 0; index < trainingSet.length; index++) {
       const element = trainingSet[index];
@@ -122,8 +99,7 @@ export function buildDecisionTree(
     }
     //console.log("Rank Lewy",rankL,"Rank Prawy",rankR);
 
-    var currentDif =
-      (right / trainingSet.length) * (1 - rankR) + (left / trainingSet.length) * (1 - rankL);
+    var currentDif = (right / trainingSet.length) * (1 - rankR) + (left / trainingSet.length) * (1 - rankL);
     if (currentDif < maxDif) {
       //console.log("------Zapisanie maxDif-------");
       //console.log(attr1,attr2);
@@ -146,10 +122,7 @@ export function buildDecisionTree(
           right = left = 0;
           leftList = [];
           rightList = [];
-          classMatrix = [
-            new Array(builder.allClasses.length).fill(0),
-            new Array(builder.allClasses.length).fill(0),
-          ];
+          classMatrix = [new Array(builder.allClasses.length).fill(0), new Array(builder.allClasses.length).fill(0)];
 
           for (let index = 0; index < trainingSet.length; index++) {
             const element = trainingSet[index];
@@ -178,8 +151,7 @@ export function buildDecisionTree(
           }
           //console.log("Rank Lewy",rankL,"Rank Prawy",rankR);
 
-          var currentDif =
-            (right / trainingSet.length) * (1 - rankR) + (left / trainingSet.length) * (1 - rankL);
+          var currentDif = (right / trainingSet.length) * (1 - rankR) + (left / trainingSet.length) * (1 - rankL);
           if (currentDif < maxDif) {
             //console.log("------Zapisanie maxDif-------");
             //console.log(attr1,attr2);
@@ -202,7 +174,7 @@ export function buildDecisionTree(
   //console.log(attribute1, attribute2);
   //console.log("L/R ", match.length + ":" + notMatch.length);
   //console.log(podzial);
-  //console.log("MaxDifference:", maxDif);
+  console.log('MaxDifference:', maxDif);
   if (!maxDif) {
     //console.log("LISC BO MAX DIF ZERO", trainingSet.length);
     let _category = mostFrequentValue(trainingSet, categoryAttr);
@@ -227,7 +199,7 @@ export function buildDecisionTree(
   // sprawdzic
   // wssytskies stringi do ignored
   if (match.length === 0 || notMatch.length === 0) {
-    //console.log("LISC BO JEDNA ZE STRON MA 0");
+    console.log('LISC BO JEDNA ZE STRON MA 0');
     let _category = mostFrequentValue(trainingSet, categoryAttr);
     let _positiveCounter = 0;
     //console.log(_category);
