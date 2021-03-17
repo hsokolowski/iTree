@@ -9,7 +9,18 @@ const Node = props => {
   const [highlighted, setHighlighted] = useState(false);
   const [node, setNode] = useState(props.node || {});
   useEffect(() => setNode(props.node || {}), [props.node, setNode]);
-  const { category, quality, matchedCount, notMatchedCount, match, notMatch, attr2, predicateName, pivot } = node;
+  const {
+    category,
+    quality,
+    matchedCount,
+    notMatchedCount,
+    match,
+    notMatch,
+    attr2,
+    predicateName,
+    pivot,
+    nodeSet,
+  } = node;
 
   const onNodeClicked = e => {
     //console.log(e);
@@ -40,7 +51,12 @@ const Node = props => {
   return (
     <div className={`node ${highlighted ? 'highlight' : ''}`} onClick={onNodeClicked}>
       {category ? (
-        <Leaf category={category} matchedCount={matchedCount} notMatchedCount={notMatchedCount} quality={quality} />
+        <Leaf
+          category={category}
+          matchedCount={matchedCount}
+          notMatchedCount={notMatchedCount}
+          quality={quality}
+        />
       ) : (
         <Joint
           attr2={attr2}
@@ -49,6 +65,7 @@ const Node = props => {
           match={match}
           notMatch={notMatch}
           onChange={onChange}
+          nodeSet={nodeSet}
         >
           <Node node={match} onChange={onChange} />
           <Node node={notMatch} onChange={onChange} />

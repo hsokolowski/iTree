@@ -27,7 +27,7 @@ function ModalPopup({ attr2, predicateName, pivot }) {
         {attr2} <b>{predicateName}</b> {pivot}
       </ModalHeader>
       <ModalCloseButton />
-      <ModalBody>Text ( kolejny komponent z konfiguratorem)</ModalBody>
+      <ModalBody>Text ( kolejny komponent z konfiguratorem) attr3 attr4 </ModalBody>
       <ModalFooter>
         <Button onClick={onClose}>Close</Button>
       </ModalFooter>

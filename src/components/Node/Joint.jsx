@@ -14,12 +14,12 @@ import {
 import React, { useState } from 'react';
 import Configurator from './Configurator';
 
-function Joint({ children, attr2, predicateName, pivot, match, notMatch, onChange }) {
+function Joint({ children, attr2, predicateName, pivot, match, notMatch, onChange, nodeSet }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [size, setSize] = useState('lg');
 
   const handleOpenModalClick = () => {
-    buildNewNode();
+    buildNewNode(); // to na inny guzik i o
     onOpen();
   };
   const buildNewNode = () => {
@@ -45,7 +45,12 @@ function Joint({ children, attr2, predicateName, pivot, match, notMatch, onChang
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            Text ( kolejny komponent z konfiguratorem)
+            Text ( kolejny komponent z konfiguratorem){' '}
+            {nodeSet.map(x => (
+              <div>
+                {x.attr1001} {x[attr2]}-{x[pivot]} {x[attr2] < x[pivot] ? 'Match' : 'NotMatch'}
+              </div>
+            ))}
             <Configurator />
           </ModalBody>
           <ModalFooter>

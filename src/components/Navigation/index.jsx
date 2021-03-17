@@ -25,6 +25,7 @@ import IgnoredAttributes from './IgnoredAttributes';
 import Builder from './Builder';
 import FormControlNumberInput from './FormControlNumberInput';
 import DrawerRoll from './DrawerRoll';
+import { useLoadingContext } from '../../contexts/LoadingContext';
 
 /**
  * @typedef {import('../../utils/decision-tree.js').DecisionTreeBuilder} DecisionTreeBuilder
@@ -46,7 +47,7 @@ function Navigation({ onPrepareConfig }) {
     { value: 'fries', name: 'Fries' },
     { value: 'milkshake', name: 'Milkshake' },
   ]);
-  const [isLoad, setIsLoad] = useState(false);
+  const { isLoading } = useLoadingContext();
 
   function handleSelectDecision(value) {
     //console.log(value);
@@ -102,8 +103,6 @@ function Navigation({ onPrepareConfig }) {
   function handleDrawTree() {
     setConfig(prepareConfig());
     onPrepareConfig(prepareConfig());
-    setIsLoad(true);
-    setTimeout(() => setIsLoad(false), 500);
   }
 
   return (
@@ -200,7 +199,7 @@ function Navigation({ onPrepareConfig }) {
                 onClick={handleDrawTree}
                 w="100%"
                 h={10}
-                isLoading={isLoad}
+                isLoading={isLoading}
               >
                 Draw
               </Button>

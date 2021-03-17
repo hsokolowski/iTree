@@ -17,10 +17,17 @@
  * @param {boolean} isChanged
  */
 //TSP
-export function buildDecisionTree(_builder, isChanged = false, changedAttribute1 = null, changedAttribute2 = null) {
+function buildDecisionTree(_builder, isChanged = false, changedAttribute1 = null, changedAttribute2 = null) {
   //debugger;
   const builder = { ..._builder };
-  const { trainingSet, minItemsCount, categoryAttr, entropyThrehold, maxTreeDepth, ignoredAttributes } = builder;
+  const {
+    trainingSet,
+    minItemsCount,
+    categoryAttr,
+    entropyThrehold,
+    maxTreeDepth,
+    ignoredAttributes,
+  } = builder;
   //console.log("########## NOWY WEZEL ########", trainingSet.length);
   /** @type {string | number} */
   var _quality = 0;
@@ -63,14 +70,24 @@ export function buildDecisionTree(_builder, isChanged = false, changedAttribute1
   var directrion = '<';
   var leftList = [],
     rightList = [],
-    classMatrix = [new Array(builder.allClasses.length).fill(0), new Array(builder.allClasses.length).fill(0)],
+    classMatrix = [
+      new Array(builder.allClasses.length).fill(0),
+      new Array(builder.allClasses.length).fill(0),
+    ],
     match = [],
     notMatch = [];
+
+  //#########################
+  //#   tu gdy zmieniamy    #
+  //#########################
   if (isChanged) {
     right = left = 0;
     leftList = [];
     rightList = [];
-    classMatrix = [new Array(builder.allClasses.length).fill(0), new Array(builder.allClasses.length).fill(0)];
+    classMatrix = [
+      new Array(builder.allClasses.length).fill(0),
+      new Array(builder.allClasses.length).fill(0),
+    ];
 
     for (let index = 0; index < trainingSet.length; index++) {
       const element = trainingSet[index];
@@ -122,7 +139,10 @@ export function buildDecisionTree(_builder, isChanged = false, changedAttribute1
           right = left = 0;
           leftList = [];
           rightList = [];
-          classMatrix = [new Array(builder.allClasses.length).fill(0), new Array(builder.allClasses.length).fill(0)];
+          classMatrix = [
+            new Array(builder.allClasses.length).fill(0),
+            new Array(builder.allClasses.length).fill(0),
+          ];
 
           for (let index = 0; index < trainingSet.length; index++) {
             const element = trainingSet[index];
@@ -151,7 +171,8 @@ export function buildDecisionTree(_builder, isChanged = false, changedAttribute1
           }
           //console.log("Rank Lewy",rankL,"Rank Prawy",rankR);
 
-          var currentDif = (right / trainingSet.length) * (1 - rankR) + (left / trainingSet.length) * (1 - rankL);
+          var currentDif =
+            (right / trainingSet.length) * (1 - rankR) + (left / trainingSet.length) * (1 - rankL);
           if (currentDif < maxDif) {
             //console.log("------Zapisanie maxDif-------");
             //console.log(attr1,attr2);
@@ -277,3 +298,15 @@ function mostFrequentValue(items, attr) {
 
   return mostFrequentValue;
 }
+
+/** @type {Worker} */
+// @ts-ignore
+const context = self; //eslint-disable-line
+context.onmessage = function (event) {
+  console.log('received message', event);
+  const {
+    data: { _builder, isChanged = false, changedAttribute1 = null, changedAttribute2 = null },
+  } = event;
+  const result = buildDecisionTree(_builder, isChanged, changedAttribute1, changedAttribute2);
+  context.postMessage(result);
+};
