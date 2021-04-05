@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Badge,
-  Box,
   Button,
   Modal,
   ModalBody,
@@ -10,29 +8,38 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  useDisclosure,
 } from '@chakra-ui/react';
+import Configurator from './Configurator';
 
-function ModalPopup({ attr2, predicateName, pivot }) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+function ModalPopup({ attr2, predicateName, pivot, isOpen, nodeSet, onOpen, onClose }) {
+  function handleChange(value) {
+    console.log(value);
+    onClose();
+  }
 
-  const handleOpenModalClick = () => {
-    onOpen();
-  };
-
-  <Modal onClose={onClose} size={'lg'} isOpen={isOpen}>
-    <ModalOverlay />
-    <ModalContent>
-      <ModalHeader>
-        {attr2} <b>{predicateName}</b> {pivot}
-      </ModalHeader>
-      <ModalCloseButton />
-      <ModalBody>Text ( kolejny komponent z konfiguratorem) attr3 attr4 </ModalBody>
-      <ModalFooter>
-        <Button onClick={onClose}>Close</Button>
-      </ModalFooter>
-    </ModalContent>
-  </Modal>;
+  return (
+    <Modal onClose={onClose} size="lg" isOpen={isOpen}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>
+          {attr2} <b>{predicateName}</b> {pivot}
+        </ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          Text ( kolejny komponent z konfiguratorem){' '}
+          {nodeSet.map(x => (
+            <div>
+              {x.attr1001} {x[attr2]}-{x[pivot]} {x[attr2] < x[pivot] ? 'Match' : 'NotMatch'}
+            </div>
+          ))}
+          <Configurator onChange={handleChange} />
+        </ModalBody>
+        <ModalFooter>
+          <Button onClick={onClose}>Close</Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  );
 }
 
 export default ModalPopup;

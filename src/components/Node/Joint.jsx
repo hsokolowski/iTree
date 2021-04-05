@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import Configurator from './Configurator';
+import ModalPopup from './ModalPopup';
 
 function Joint({ children, attr2, predicateName, pivot, match, notMatch, onChange, nodeSet }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -37,7 +38,16 @@ function Joint({ children, attr2, predicateName, pivot, match, notMatch, onChang
       >
         {attr2} <b>{predicateName}</b> {pivot}
       </Badge>
-      <Modal onClose={onClose} size={size} isOpen={isOpen}>
+      <ModalPopup
+        isOpen={isOpen}
+        nodeSet={nodeSet}
+        attr2={attr2}
+        predicateName={predicateName}
+        pivot={pivot}
+        onClose={onClose}
+        onOpen={onOpen}
+      />
+      {/* <Modal onClose={onClose} size={size} isOpen={isOpen}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
@@ -57,7 +67,7 @@ function Joint({ children, attr2, predicateName, pivot, match, notMatch, onChang
             <Button onClick={onClose}>Close</Button>
           </ModalFooter>
         </ModalContent>
-      </Modal>
+      </Modal> */}
       {/* <div>
         Match
         {JSON.stringify(match)}

@@ -62,7 +62,8 @@ export function buildDecisionTreeTSPW(
     left = 0,
     weight = 0,
     sum1 = 0,
-    sum2 = 0;
+    sum2 = 0,
+    L_weight = 0;
   var maxDif = 100;
   /** @type {string | number} */ var attribute1 = -1;
   /** @type {string | number} */ var attribute2 = -1;
@@ -122,7 +123,7 @@ export function buildDecisionTreeTSPW(
       attribute2 = changedAttribute2;
       match = leftList;
       notMatch = rightList;
-      podzial = classMatrix;
+      L_weight = weight;
       //console.log("-----------------------------");
     }
   } else {
@@ -149,7 +150,7 @@ export function buildDecisionTreeTSPW(
           for (let index = 0; index < trainingSet.length; index++) {
             const element = trainingSet[index];
 
-            if (element[attr1] < element[attr2]) {
+            if (element[attr1] < weight * element[attr2]) {
               left++;
               leftList.push(element);
               classMatrix[0][builder.allClasses.indexOf(element[categoryAttr])]++;
@@ -185,7 +186,7 @@ export function buildDecisionTreeTSPW(
             attribute2 = attr2;
             match = leftList;
             notMatch = rightList;
-            podzial = classMatrix;
+            L_weight = weight;
             //console.log("-----------------------------");
           }
         }
@@ -261,6 +262,7 @@ export function buildDecisionTreeTSPW(
     matchedCount: match.length,
     notMatchedCount: notMatch.length,
     nodeSet: match.concat(notMatch),
+    weight: weight,
   };
   //console.log(attributes);
 }
