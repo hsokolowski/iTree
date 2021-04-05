@@ -27,8 +27,8 @@ function ModalPopup({ attr2, predicateName, pivot, isOpen, nodeSet, onOpen, onCl
         <ModalCloseButton />
         <ModalBody>
           Text ( kolejny komponent z konfiguratorem){' '}
-          {nodeSet.map(x => (
-            <div>
+          {nodeSet.map((x, index) => (
+            <div key={index}>
               {x.attr1001} {x[attr2]}-{x[pivot]} {x[attr2] < x[pivot] ? 'Match' : 'NotMatch'}
             </div>
           ))}
