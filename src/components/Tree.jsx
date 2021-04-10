@@ -4,12 +4,13 @@ import { Box, Spinner } from '@chakra-ui/react';
 // import { dt } from '../services/TSP';
 import Node from './Node';
 import { useLoadingContext } from '../contexts/LoadingContext';
+import { executeAlgorithm } from '../utils/algorithm-executor';
 
 /**
  * @typedef {import('../utils/decision-tree.js').DecisionTreeBuilder} DecisionTreeBuilder
  */
 
-const logTree = root => console.log(root);
+const logTree = root => console.log('ROOT', root);
 
 /**
  * @param {Object} props
@@ -32,36 +33,45 @@ const Tree = ({ options }) => {
     setRoot(null);
     setIsLoading(true);
     let terminated = false;
-    const worker = new Worker('decision-tree.js');
-    worker.onmessage = ({ data }) => {
-      console.log('got a result', data);
-      if (terminated) return;
-      setRoot(data);
-      worker.terminate();
-      terminated = true;
-      setIsLoading(false);
-    };
-    worker.postMessage({ _builder: { ...options } });
+    executeAlgorithm(options)
+      .then(value => {
+        if (terminated) {
+          return;
+        }
+        setRoot(value);
+      })
+      .catch(e => console.error(e))
+      .finally(() => {
+        if (!terminated) setIsLoading(false);
+        terminated = true;
+      });
     return () => {
       if (terminated) {
         return;
       }
-      worker.terminate();
       terminated = true;
     };
-  }, [options]);
+  }, [options, setIsLoading]);
 
   useEffect(() => logTree(root), [root]);
+
+  const requestChildChange = newRoot => setRoot(newRoot);
 
   return (
     <div id="tree">
       <h1>Tree</h1>
       <p>
-        <button onClick={logTree}>Log tree</button>
+        <button onClick={() => logTree(root)}>Log tree</button>
       </p>
       {isLoading && <Spinner size="xl" />}
       <h2>Nodes:</h2>
-      <Box>{!root ? <p>No tree to show</p> : <Node node={root} onChange={() => {}} />}</Box>
+      <Box>
+        {!root ? (
+          <p>No tree to show</p>
+        ) : (
+          <Node node={root} onChange={() => {}} requestChildChange={requestChildChange} />
+        )}
+      </Box>
     </div>
   );
 };

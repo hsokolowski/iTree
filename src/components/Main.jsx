@@ -3,6 +3,8 @@ import '../css/main.scss';
 import Tree from './Tree';
 import Navigation from './Navigation';
 import { builder as _builder_ } from '../services/Playground';
+import { AttributesProvider } from '../contexts/AttributesContext';
+import { BuilderConfigProvider } from '../contexts/BuilderConfigContext';
 
 function Main() {
   const [builder, setBuilder] = useState({});
@@ -19,12 +21,16 @@ function Main() {
   }
 
   return (
-    <div id="main" className="main">
-      <Navigation onPrepareConfig={StartDrawing} />
-      {/* <Button onClick={start}>Drzewo</Button> */}
-      <br></br>
-      <div>{isReady ? <Tree options={builder} /> : <div>czekam na ciebie</div>}</div>
-    </div>
+    <BuilderConfigProvider>
+      <AttributesProvider>
+        <div id="main" className="main">
+          <Navigation onPrepareConfig={StartDrawing} />
+          {/* <Button onClick={start}>Drzewo</Button> */}
+          <br></br>
+          <div>{isReady ? <Tree options={builder} /> : <div>czekam na ciebie</div>}</div>
+        </div>
+      </AttributesProvider>
+    </BuilderConfigProvider>
   );
 }
 

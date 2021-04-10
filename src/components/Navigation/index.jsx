@@ -26,14 +26,18 @@ import Builder from './Builder';
 import FormControlNumberInput from './FormControlNumberInput';
 import DrawerRoll from './DrawerRoll';
 import { useLoadingContext } from '../../contexts/LoadingContext';
+import { useAttributesContext } from '../../contexts/AttributesContext';
+import { useBuilderConfigContext } from '../../contexts/BuilderConfigContext';
 
 /**
  * @typedef {import('../../utils/decision-tree.js').DecisionTreeBuilder} DecisionTreeBuilder
  */
 
 function Navigation({ onPrepareConfig }) {
+  const { setBuilderConfig } = useBuilderConfigContext();
   const { isOpen, onToggle } = useDisclosure({ defaultIsOpen: true });
   const [dataSet, setDataSet] = useState(null);
+  const [algorithm, setAlgorithm] = useState('c45');
   const [decisionAttribute, setDecisionAttribute] = useState(null);
   const [ignoredAttributes, setIgnoredAttributes] = useState([]);
   const [minItems, setMinItems] = useState(4);
@@ -42,11 +46,7 @@ function Navigation({ onPrepareConfig }) {
   const [allAttrs, setAllAttributes] = useState([]);
   const [allClazz, setAllClasses] = useState([]);
   const [config, setConfig] = useState({});
-  const [options, setOptions] = useState([
-    { value: 'hamburger', name: 'Hamburger' },
-    { value: 'fries', name: 'Fries' },
-    { value: 'milkshake', name: 'Milkshake' },
-  ]);
+  const { attributes: options, onAttributesChange } = useAttributesContext();
   const { isLoading } = useLoadingContext();
 
   function handleSelectDecision(value) {
@@ -76,12 +76,8 @@ function Navigation({ onPrepareConfig }) {
    */
   function handleGetAllAttributes({ allAttributes, data }) {
     console.log(allAttributes, data);
-    let array = [];
-    allAttributes.forEach(element => {
-      array.push({ value: element, name: element });
-    });
     setAllAttributes(allAttributes);
-    setOptions(array);
+    onAttributesChange(allAttributes);
     setDataSet(data);
   }
   /**
@@ -92,17 +88,20 @@ function Navigation({ onPrepareConfig }) {
       allAttributes: allAttrs,
       allClasses: allClazz || [],
       categoryAttr: decisionAttribute,
-      ignoredAttributes: ignoredAttributes,
       entropyThrehold: entropy,
       maxTreeDepth: maxDepth,
       minItemsCount: minItems,
       trainingSet: dataSet || [],
+      ignoredAttributes,
+      algorithm,
     };
   }
 
   function handleDrawTree() {
-    setConfig(prepareConfig());
-    onPrepareConfig(prepareConfig());
+    const config = prepareConfig();
+    setConfig(config);
+    onPrepareConfig(config);
+    setBuilderConfig(config);
   }
 
   return (
@@ -130,6 +129,22 @@ function Navigation({ onPrepareConfig }) {
             <FormControl id="deploySet" width="auto">
               <FormLabel fontSize={['md', 'md', 'xs', 'sm', 'md']}>Deploy Set</FormLabel>
               <FileReader onChange={handleGetAllAttributes} isHeaders={false} />{' '}
+            </FormControl>
+          </Box>
+          <Box w={'100%'}>
+            <FormControl id="algorithm" width="auto" zIndex={2}>
+              <FormLabel fontSize={['md', 'md', 'xs', 'sm', 'md']}>Algorithm</FormLabel>
+              <SearchBar
+                placeholder="Select algorithm"
+                onChange={setAlgorithm}
+                value={algorithm}
+                options={['c45', 'tsp', 'tspw'].map(v => ({ value: v, name: v.toUpperCase() }))}
+                multiple={false}
+                closeOnSelect={true}
+              />
+              {/* <FormHelperText width={size}>
+              <Builder size={size} builder={prepareConfig()} />
+            </FormHelperText> */}
             </FormControl>
           </Box>
           <Box w={'100%'}>

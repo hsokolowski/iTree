@@ -21,7 +21,8 @@ export function buildDecisionTreeTSPW(
   _builder,
   isChanged = false,
   changedAttribute1 = null,
-  changedAttribute2 = null
+  changedAttribute2 = null,
+  weight = 1
 ) {
   //debugger;
   const builder = { ..._builder };
@@ -60,7 +61,6 @@ export function buildDecisionTreeTSPW(
 
   var right = 0,
     left = 0,
-    weight = 0,
     sum1 = 0,
     sum2 = 0,
     L_weight = 0;
@@ -262,7 +262,7 @@ export function buildDecisionTreeTSPW(
     matchedCount: match.length,
     notMatchedCount: notMatch.length,
     nodeSet: match.concat(notMatch),
-    weight: weight,
+    weight: L_weight,
   };
   //console.log(attributes);
 }
@@ -302,3 +302,15 @@ function mostFrequentValue(items, attr) {
 
   return mostFrequentValue;
 }
+
+/** @type {Worker} */
+// @ts-ignore
+const context = self; //eslint-disable-line
+context.onmessage = function (event) {
+  console.log('received message', event);
+  const {
+    data: { _builder, isChanged = false, changedAttribute1 = null, changedAttribute2 = null, weight = 1 },
+  } = event;
+  const result = buildDecisionTreeTSPW(_builder, isChanged, changedAttribute1, changedAttribute2, weight);
+  context.postMessage(result);
+};

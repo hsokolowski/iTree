@@ -44,6 +44,7 @@ function Joint({ children, attr2, predicateName, pivot, match, notMatch, onChang
         attr2={attr2}
         predicateName={predicateName}
         pivot={pivot}
+        onChange={onChange}
         onClose={onClose}
         onOpen={onOpen}
       />

@@ -12,5 +12,6 @@ export const Search = props => (
     printOptions="on-focus"
     closeOnSelect={props.closeOnSelect}
     placeholder={props.placeholder}
+    value={props.value}
   />
 );

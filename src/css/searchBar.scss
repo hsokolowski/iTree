@@ -7,7 +7,8 @@ $raisin-black: #1b1b1eff;
  * Main wrapper
  */
 .select-search {
-  width: auto;
+  width: 100%;
+  height: 40px;
   position: relative;
   font-family: 'Nunito Sans', sans-serif;
   box-sizing: border-box;
@@ -25,6 +26,7 @@ $raisin-black: #1b1b1eff;
 .select-search__value {
   position: relative;
   z-index: 1;
+  width: 100%;
 }
 
 .select-search__value::after {
