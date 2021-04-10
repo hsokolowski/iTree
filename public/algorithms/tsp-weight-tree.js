@@ -17,7 +17,7 @@
  * @param {boolean} isChanged
  */
 //TSP-weight
-export function buildDecisionTreeTSPW(
+function buildDecisionTreeTSPW(
   _builder,
   isChanged = false,
   changedAttribute1 = null,
@@ -52,7 +52,7 @@ export function buildDecisionTreeTSPW(
       quality: _quality,
       matchedCount: _positiveCounter,
       notMatchedCount: _negativeCounter,
-      trainingSet2: trainingSet.map(x => x[categoryAttr]),
+      trainingSet2: trainingSet,
     };
   }
   var attributes = builder.allAttributes.filter(function (el) {
@@ -217,7 +217,7 @@ export function buildDecisionTreeTSPW(
       quality: _quality,
       matchedCount: _positiveCounter,
       notMatchedCount: _negativeCounter,
-      trainingSet2: trainingSet.map(x => x[categoryAttr]),
+      trainingSet2: trainingSet,
     };
   }
   // sprawdzic
@@ -242,7 +242,7 @@ export function buildDecisionTreeTSPW(
       quality: _quality,
       matchedCount: _positiveCounter,
       notMatchedCount: _negativeCounter,
-      trainingSet2: trainingSet.map(x => x[categoryAttr]),
+      trainingSet2: trainingSet,
     };
   }
 

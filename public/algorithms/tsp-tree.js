@@ -55,7 +55,7 @@ function buildDecisionTreeTSP(
       quality: _quality,
       matchedCount: _positiveCounter,
       notMatchedCount: _negativeCounter,
-      trainingSet2: trainingSet.map(x => x[categoryAttr]),
+      trainingSet2: trainingSet,
     };
   }
   var attributes = builder.allAttributes.filter(function (el) {
@@ -219,7 +219,7 @@ function buildDecisionTreeTSP(
       quality: _quality,
       matchedCount: _positiveCounter,
       notMatchedCount: _negativeCounter,
-      trainingSet2: trainingSet.map(x => x[categoryAttr]),
+      trainingSet2: trainingSet,
     };
   }
   // sprawdzic
@@ -244,7 +244,7 @@ function buildDecisionTreeTSP(
       quality: _quality,
       matchedCount: _positiveCounter,
       notMatchedCount: _negativeCounter,
-      trainingSet2: trainingSet.map(x => x[categoryAttr]),
+      trainingSet2: trainingSet,
     };
   }
 

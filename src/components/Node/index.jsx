@@ -1,7 +1,7 @@
 import { Spinner } from '@chakra-ui/react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useBuilderConfigContext } from '../../contexts/BuilderConfigContext';
-import { executeAlgorithm } from '../../utils/algorithm-executor';
+import { executeAlgorithm, mostFrequentValue } from '../../utils/algorithm-executor';
 //import { addNode } from "./utils";
 
 import Joint from './Joint';
@@ -25,9 +25,13 @@ const Node = props => {
     predicateName,
     pivot,
     nodeSet,
+    weight,
   } = node;
 
   const onNodeClicked = e => {
+    if (!e.target.classList.contains('node')) {
+      return;
+    }
     //console.log(e);
     e.stopPropagation();
     console.log('Node clicked', node);
@@ -85,6 +89,29 @@ const Node = props => {
     props.requestChildChange(targetNode);
   };
 
+  const foldJointToLeaf = () => {
+    const foldResult = mostFrequentValue(nodeSet, builderConfig.categoryAttr);
+    setNode(foldResult);
+    props.requestChildChange(foldResult);
+  };
+
+  const unfoldLeaf = algorithm => {
+    setLoading(true);
+    executeAlgorithm({
+      ...builderConfig,
+      trainingSet: node.trainingSet2,
+      algorithm,
+    })
+      .then(value => {
+        setNode(value);
+        props.requestChildChange(value);
+      })
+      .catch(e => console.error(e))
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
   if (loading) {
     return <Spinner size="xl" />;
   }
@@ -97,6 +124,7 @@ const Node = props => {
           matchedCount={matchedCount}
           notMatchedCount={notMatchedCount}
           quality={quality}
+          requestLeafUnfold={unfoldLeaf}
         />
       ) : (
         <Joint
@@ -106,7 +134,9 @@ const Node = props => {
           match={match}
           notMatch={notMatch}
           onChange={onChange}
+          requestFoldToLeaf={foldJointToLeaf}
           nodeSet={nodeSet}
+          weight={weight}
         >
           <Node node={match} onChange={onChange} requestChildChange={requestChildChangeIfMatchIs(true)} />
           <Node node={notMatch} onChange={onChange} requestChildChange={requestChildChangeIfMatchIs(false)} />

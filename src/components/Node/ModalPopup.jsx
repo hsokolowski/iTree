@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import Configurator from './Configurator';
 
-function ModalPopup({ attr2, predicateName, pivot, isOpen, nodeSet, onOpen, onChange, onClose }) {
+function ModalPopup({ attr2, predicateName, pivot, weight, isOpen, nodeSet, onOpen, onChange, onClose }) {
   const handleOnChange = value => {
     onClose();
     onChange(value);
@@ -32,7 +32,7 @@ function ModalPopup({ attr2, predicateName, pivot, isOpen, nodeSet, onOpen, onCh
               {x.attr1001} {x[attr2]}-{x[pivot]} {x[attr2] < x[pivot] ? 'Match' : 'NotMatch'}
             </div>
           ))} */}
-          <Configurator onChange={handleOnChange} attribute={attr2} pivot={pivot} />
+          <Configurator onChange={handleOnChange} attribute={attr2} pivot={pivot} weight={weight} />
         </ModalBody>
         <ModalFooter>
           <Button onClick={onClose}>Close</Button>

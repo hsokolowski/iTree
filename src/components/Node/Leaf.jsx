@@ -1,7 +1,8 @@
-import { Box } from '@chakra-ui/react';
+import { Box, Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import React from 'react';
+import { ChevronDownIcon, DownloadIcon } from '@chakra-ui/icons';
 
-function Leaf({ category, matchedCount, notMatchedCount, quality }) {
+function Leaf({ category, matchedCount, notMatchedCount, quality, requestLeafUnfold }) {
   return (
     <Box
       d="flex"
@@ -36,6 +37,16 @@ function Leaf({ category, matchedCount, notMatchedCount, quality }) {
       <Box mt="1" ml="2" fontWeight="semibold" as="h4" lineHeight="tight" isTruncated>
         {quality}%
       </Box>
+      <Menu closeOnSelect closeOnBlur>
+        <MenuButton fontSize="sm" w={20} h={6} as={Button} rightIcon={<ChevronDownIcon />}>
+          Unfold
+        </MenuButton>
+        <MenuList>
+          <MenuItem onClick={() => requestLeafUnfold('c45')}>C 4.5</MenuItem>
+          <MenuItem onClick={() => requestLeafUnfold('tsp')}>TSP</MenuItem>
+          <MenuItem onClick={() => requestLeafUnfold('tspw')}>TSP Weight</MenuItem>
+        </MenuList>
+      </Menu>
     </Box>
   );
 }

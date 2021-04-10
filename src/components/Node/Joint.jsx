@@ -11,11 +11,12 @@ import {
   ModalOverlay,
   useDisclosure,
 } from '@chakra-ui/react';
+import { CloseIcon } from '@chakra-ui/icons';
 import React, { useState } from 'react';
 import Configurator from './Configurator';
 import ModalPopup from './ModalPopup';
 
-function Joint({ children, attr2, predicateName, pivot, match, notMatch, onChange, nodeSet }) {
+function Joint({ children, attr2, predicateName, pivot, weight, requestFoldToLeaf, onChange, nodeSet }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [size, setSize] = useState('lg');
 
@@ -26,6 +27,9 @@ function Joint({ children, attr2, predicateName, pivot, match, notMatch, onChang
   const buildNewNode = () => {
     onChange();
   };
+
+  const foldToLeaf = () => requestFoldToLeaf();
+
   return (
     <Box>
       <Badge
@@ -35,9 +39,13 @@ function Joint({ children, attr2, predicateName, pivot, match, notMatch, onChang
         colorScheme="teal"
         onClick={handleOpenModalClick}
         className={'badge'}
+        marginRight={3}
       >
-        {attr2} <b>{predicateName}</b> {pivot}
+        {attr2} <b>{predicateName}</b> {weight} {pivot}
       </Badge>
+      <Button size="xs" rightIcon={<CloseIcon />} onClick={foldToLeaf}>
+        Fold
+      </Button>
       <ModalPopup
         isOpen={isOpen}
         nodeSet={nodeSet}
@@ -47,6 +55,7 @@ function Joint({ children, attr2, predicateName, pivot, match, notMatch, onChang
         onChange={onChange}
         onClose={onClose}
         onOpen={onOpen}
+        weight={weight}
       />
       {/* <Modal onClose={onClose} size={size} isOpen={isOpen}>
         <ModalOverlay />

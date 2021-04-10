@@ -55,7 +55,7 @@ function buildDecisionTreeC45(
       quality: _quality,
       matchedCount: _positiveCounter,
       notMatchedCount: _negativeCounter,
-      trainingSet2: trainingSet.map(x => x[categoryAttr]),
+      trainingSet2: trainingSet,
     };
   }
   //console.log(categoryAttr);
@@ -81,7 +81,7 @@ function buildDecisionTreeC45(
       quality: _quality,
       matchedCount: _positiveCounter,
       notMatchedCount: _negativeCounter,
-      trainingSet2: trainingSet.map(x => x[categoryAttr]),
+      trainingSet2: trainingSet,
     };
   }
 
@@ -260,7 +260,7 @@ function buildDecisionTreeC45(
       quality: _quality,
       matchedCount: _positiveCounter,
       notMatchedCount: _negativeCounter,
-      trainingSet2: trainingSet.map(x => x[categoryAttr]),
+      trainingSet2: trainingSet,
     };
   }
 
