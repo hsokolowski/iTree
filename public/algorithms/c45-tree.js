@@ -178,9 +178,8 @@ function buildDecisionTreeC45(
 
       // iterating over all attributes of item
       for (var attr in item) {
-        //console.log(ignoredAttributes)
         //if(ignoredAttributes[attr]===true) console.log("równe")
-        if (attr === categoryAttr || ignoredAttributes[attr]) {
+        if (attr === categoryAttr || ignoredAttributes.includes(attr)) {
           //if ((attr === categoryAttr) || ignore===attr) {
           continue;
         }

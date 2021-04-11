@@ -37,7 +37,7 @@ function Leaf({ category, matchedCount, notMatchedCount, quality, requestLeafUnf
       <Box mt="1" ml="2" fontWeight="semibold" as="h4" lineHeight="tight" isTruncated>
         {quality}%
       </Box>
-      <Menu closeOnSelect closeOnBlur>
+      <Menu closeOnSelect closeOnBlur isLazy>
         <MenuButton fontSize="sm" w={20} h={6} as={Button} rightIcon={<ChevronDownIcon />}>
           Unfold
         </MenuButton>
