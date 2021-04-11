@@ -55,7 +55,7 @@ function Navigation({ onPrepareConfig }) {
     setAllClasses(getAllClasses(dataSet, value));
   }
   function handleSelectIgnore(value) {
-    //console.log(value);
+    console.log(value);
     setIgnoredAttributes(value);
   }
   function handleSetMinItems(value) {
@@ -215,6 +215,7 @@ function Navigation({ onPrepareConfig }) {
                 w="100%"
                 h={10}
                 isLoading={isLoading}
+                disabled={decisionAttribute == null}
               >
                 Draw
               </Button>

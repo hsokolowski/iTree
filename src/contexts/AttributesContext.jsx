@@ -5,9 +5,9 @@ const AttributesContext = React.createContext();
 
 export const AttributesProvider = ({ children }) => {
   const [attributes, setAttributes] = useState([
-    { value: 'hamburger', name: 'Hamburger' },
-    { value: 'fries', name: 'Fries' },
-    { value: 'milkshake', name: 'Milkshake' },
+    // { value: 'hamburger', name: 'Hamburger' },
+    // { value: 'fries', name: 'Fries' },
+    // { value: 'milkshake', name: 'Milkshake' },
   ]);
 
   const onAttributesChange = input =>
