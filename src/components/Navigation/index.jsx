@@ -75,6 +75,8 @@ function Navigation({ onPrepareConfig }) {
    *
    */
   function handleGetAllAttributes({ allAttributes, data }) {
+    setDecisionAttribute(null);
+    setIgnoredAttributes([]);
     console.log(allAttributes, data);
     setAllAttributes(allAttributes);
     onAttributesChange(allAttributes);
@@ -156,6 +158,7 @@ function Navigation({ onPrepareConfig }) {
                 options={options}
                 multiple={false}
                 closeOnSelect={true}
+                value={decisionAttribute}
               />
               {/* <FormHelperText width={size}>
               <Builder size={size} builder={prepareConfig()} />
@@ -171,6 +174,7 @@ function Navigation({ onPrepareConfig }) {
                 options={options}
                 multiple={true}
                 closeOnSelect={false}
+                value={ignoredAttributes}
               />
             </FormControl>
           </Box>

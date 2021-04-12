@@ -141,12 +141,16 @@ function buildDecisionTreeTSPW(
           ];
           for (let index = 0; index < trainingSet.length; index++) {
             const element = trainingSet[index];
-            sum1 += element[attr1];
-            sum2 += element[attr2];
+            sum1 += parseFloat(element[attr1]);
+            sum2 += parseFloat(element[attr2]);
+            console.log(element[attr1], element[attr2]);
           }
+          console.log('sum1', sum1, 'sum2', sum2);
           sum1 /= trainingSet.length;
           sum2 /= trainingSet.length;
+          console.log('sum1', sum1, 'sum2', sum2);
           weight = sum1 / sum2;
+          console.log('weight', weight);
           for (let index = 0; index < trainingSet.length; index++) {
             const element = trainingSet[index];
 
@@ -177,17 +181,17 @@ function buildDecisionTreeTSPW(
           var currentDif =
             (right / trainingSet.length) * (1 - rankR) + (left / trainingSet.length) * (1 - rankL);
           if (currentDif < maxDif) {
-            //console.log("------Zapisanie maxDif-------");
-            //console.log(attr1,attr2);
-            //console.log("R/L ", right + ":" + left);
-            //console.log("cur/mD",currentDif + ":" + maxDif);
+            console.log('------Zapisanie maxDif-------');
+            console.log(attr1, attr2);
+            console.log('leftList', leftList);
+            console.log('rightList', rightList);
             maxDif = currentDif;
             attribute1 = attr1;
             attribute2 = attr2;
             match = leftList;
             notMatch = rightList;
             L_weight = weight;
-            //console.log("-----------------------------");
+            console.log('-----------------------------');
           }
         }
       }
@@ -252,7 +256,7 @@ function buildDecisionTreeTSPW(
 
   builder.trainingSet = notMatch;
   var notMatchSubTree = buildDecisionTreeTSPW(builder);
-  console.log('TUTAJ');
+  console.log('TUTAJ WAGA');
   return {
     attr2: attribute2,
     pivot: attribute1,

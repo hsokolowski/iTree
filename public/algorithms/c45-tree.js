@@ -36,10 +36,11 @@ function buildDecisionTreeC45(
 
   let _quality = 0;
   if (maxTreeDepth === 0 || trainingSet.length <= minItemsCount) {
+    //if (maxTreeDepth === 0) {
     let _category = mostFrequentValue(trainingSet, categoryAttr);
     let _positiveCounter = 0;
     let _hide = 0;
-    //console.log(trainingSet);
+    console.log('LIŚĆ bo maxTreeDepth ', maxTreeDepth, ' trainingSet.length', trainingSet.length);
     trainingSet.forEach(element => {
       if (element[categoryAttr] === _category) _positiveCounter++;
     });
