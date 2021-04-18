@@ -18,7 +18,7 @@ function ModalPopup({ attr2, predicateName, pivot, weight, isOpen, nodeSet, onOp
   };
 
   return (
-    <Modal onClose={onClose} size="lg" isOpen={isOpen}>
+    <Modal onClose={onClose} size="lg" isOpen={isOpen} blockScrollOnMount={false}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>

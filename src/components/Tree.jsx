@@ -69,7 +69,7 @@ const Tree = ({ options }) => {
         {!root ? (
           <p>No tree to show</p>
         ) : (
-          <Node node={root} onChange={() => {}} requestChildChange={requestChildChange} />
+          <Node node={root} onChange={() => {}} requestChildChange={requestChildChange} side={true} />
         )}
       </Box>
     </div>

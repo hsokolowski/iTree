@@ -7,12 +7,14 @@ function Leaf({ category, matchedCount, notMatchedCount, quality, requestLeafUnf
     <Box
       d="flex"
       alignItems="baseline"
-      borderWidth="1px"
+      borderWidth="2px"
       borderRadius="lg"
       flexDirection="column"
-      maxW="sm"
+      maxW="xs"
       p="1"
       my="2"
+      boxShadow="md"
+      className={'tree-branch'}
     >
       <Box
         color="gray.500"

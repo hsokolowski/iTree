@@ -3,6 +3,6 @@
     "checkJs": true,
     "jsx": "react",
     "allowSyntheticDefaultImports": true,
-    "lib": ["webworker"]
+    "lib": ["es2019"]
   }
 }

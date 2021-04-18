@@ -39,11 +39,23 @@ $gradient-radial: radial-gradient(#d8dbe2ff, #a9bcd0ff, #58a4b0ff, #373f51ff, #1
   transition: all 0.5s;
   background: white;
   color: #333;
+  border-left: 1px dashed black;
   // width: 50%;
+}
+.node:first-of-type {
+  border-left: 1px solid transparent;
 }
 .node.highlight {
   background: #09f;
   color: white;
+}
+.tree-branch {
+  position: relative;
+  &::before {
+    content: '--';
+    position: absolute;
+    left: -14px;
+  }
 }
 
 #tree {

@@ -33,40 +33,32 @@ function buildDecisionTreeTSP(
     maxTreeDepth,
     ignoredAttributes,
   } = builder;
-  //console.log("########## NOWY WEZEL ########", trainingSet.length);
+
   /** @type {string | number} */
   var _quality = 0;
+
+  // LEAF
   if (maxTreeDepth === 0 || trainingSet.length <= minItemsCount) {
-    console.log('LISC BO MAX TREE DEPTH', maxTreeDepth, 'LISC ILOSC', trainingSet.length);
-    //gger;
+    console.log('Liść bo maxTreeDepth:', maxTreeDepth, ' Ilość elementów:', trainingSet.length);
     let _category = mostFrequentValue(trainingSet, categoryAttr);
     let _positiveCounter = 0;
-    //console.log("KATEGORIA JAKO:", _category);
-    trainingSet.forEach(element => {
+    for (let element of trainingSet) {
       if (element[categoryAttr] == _category) _positiveCounter++;
-    });
+    }
     let _negativeCounter = trainingSet.length - _positiveCounter;
     _quality = _positiveCounter / trainingSet.length;
     _quality = _quality * 100;
-    _quality = _quality.toFixed(2);
-    //ugger;
+
     return {
       category: _category,
-      quality: _quality,
+      quality: _quality.toFixed(2),
       matchedCount: _positiveCounter,
       notMatchedCount: _negativeCounter,
       trainingSet2: trainingSet,
     };
   }
-  var attributes = builder.allAttributes.filter(function (el) {
-    return ![...ignoredAttributes, categoryAttr].includes(el);
-  });
-  //console.log(builder.minItemsCount, builder.trainingSet.length);
+  var attributes = builder.allAttributes.filter(el => el !== categoryAttr && !ignoredAttributes.includes(el));
 
-  // tu juz musi byc przekazana cm wyzerowana
-
-  var podzial = [];
-  //console.log(attributes);
   var right = 0,
     left = 0;
   var maxDif = 100;
@@ -83,31 +75,25 @@ function buildDecisionTreeTSP(
     notMatch = [];
 
   //#########################
-  //#   tu gdy zmieniamy    #
+  //#     force changes     #
   //#########################
   if (isChanged) {
-    right = left = 0;
-    leftList = [];
-    rightList = [];
-    classMatrix = [
-      new Array(builder.allClasses.length).fill(0),
-      new Array(builder.allClasses.length).fill(0),
-    ];
-
-    for (let index = 0; index < trainingSet.length; index++) {
-      const element = trainingSet[index];
+    // division
+    for (let element of trainingSet) {
+      const attribute = element[categoryAttr];
 
       if (element[changedAttribute1] < element[changedAttribute2]) {
         left++;
         leftList.push(element);
-        classMatrix[0][builder.allClasses.indexOf(element[categoryAttr])]++;
+        classMatrix[0][builder.allClasses.indexOf(attribute)]++;
       } else {
         right++;
         rightList.push(element);
-        classMatrix[1][builder.allClasses.indexOf(element[categoryAttr])]++;
+        classMatrix[1][builder.allClasses.indexOf(attribute)]++;
       }
     }
-    //console.log(classMatrix);
+
+    // probability
     var probR = 0,
       probL = 0,
       rankL = 0,
@@ -119,28 +105,22 @@ function buildDecisionTreeTSP(
       rankL += probL * probL;
       rankR += probR * probR;
     }
-    //console.log("Rank Lewy",rankL,"Rank Prawy",rankR);
 
+    // setting new values
     var currentDif = (right / trainingSet.length) * (1 - rankR) + (left / trainingSet.length) * (1 - rankL);
     if (currentDif < maxDif) {
-      //console.log("------Zapisanie maxDif-------");
-      //console.log(attr1,attr2);
-      //console.log("R/L ", right + ":" + left);
-      //console.log("cur/mD",currentDif + ":" + maxDif);
       maxDif = currentDif;
       attribute1 = changedAttribute1;
       attribute2 = changedAttribute2;
       match = leftList;
       notMatch = rightList;
-      podzial = classMatrix;
-      //console.log("-----------------------------");
+      //podzial = classMatrix;
     }
   } else {
-    for (let i = 0; i < attributes.length; i++) {
-      let attr1 = attributes[i];
-      for (let j = 0; j < attributes.length; j++) {
-        let attr2 = attributes[j];
+    for (let attr1 of attributes) {
+      for (let attr2 of attributes) {
         if (attr1 !== attr2) {
+          console.log(attr1, attr2);
           right = left = 0;
           leftList = [];
           rightList = [];
@@ -149,20 +129,22 @@ function buildDecisionTreeTSP(
             new Array(builder.allClasses.length).fill(0),
           ];
 
-          for (let index = 0; index < trainingSet.length; index++) {
-            const element = trainingSet[index];
+          // division
+          for (let element of trainingSet) {
+            const attribute = element[categoryAttr];
 
             if (element[attr1] < element[attr2]) {
               left++;
               leftList.push(element);
-              classMatrix[0][builder.allClasses.indexOf(element[categoryAttr])]++;
+              classMatrix[0][builder.allClasses.indexOf(attribute)]++;
             } else {
               right++;
               rightList.push(element);
-              classMatrix[1][builder.allClasses.indexOf(element[categoryAttr])]++;
+              classMatrix[1][builder.allClasses.indexOf(attribute)]++;
             }
           }
-          //console.log(classMatrix);
+
+          // probability
           var probR = 0,
             probL = 0,
             rankL = 0,
@@ -174,74 +156,60 @@ function buildDecisionTreeTSP(
             rankL += probL * probL;
             rankR += probR * probR;
           }
-          //console.log("Rank Lewy",rankL,"Rank Prawy",rankR);
 
+          // setting new values
           var currentDif =
             (right / trainingSet.length) * (1 - rankR) + (left / trainingSet.length) * (1 - rankL);
+          console.log('left', left, 'right', right, 'currentDiff', currentDif);
           if (currentDif < maxDif) {
-            //console.log("------Zapisanie maxDif-------");
-            //console.log(attr1,attr2);
-            //console.log("R/L ", right + ":" + left);
-            //console.log("cur/mD",currentDif + ":" + maxDif);
             maxDif = currentDif;
             attribute1 = attr1;
             attribute2 = attr2;
             match = leftList;
             notMatch = rightList;
-            podzial = classMatrix;
-            //console.log("-----------------------------");
+            //podzial = classMatrix;
           }
         }
       }
     }
   }
 
-  //console.log("PO WYLICZENIU NAJLEPSZEGO");
-  //console.log(attribute1, attribute2);
-  //console.log("L/R ", match.length + ":" + notMatch.length);
-  //console.log(podzial);
-  console.log('MaxDifference:', maxDif);
+  // LEAF
   if (!maxDif) {
-    //console.log("LISC BO MAX DIF ZERO", trainingSet.length);
+    console.log('Liść bo maxDif:', maxDif);
     let _category = mostFrequentValue(trainingSet, categoryAttr);
     let _positiveCounter = 0;
-    //console.log("KATEGORIA JAKO:", _category);
-    trainingSet.forEach(element => {
+    for (let element of trainingSet) {
       if (element[categoryAttr] == _category) _positiveCounter++;
-    });
+    }
     let _negativeCounter = trainingSet.length - _positiveCounter;
     _quality = _positiveCounter / trainingSet.length;
     _quality = _quality * 100;
-    _quality = _quality.toFixed(2);
 
     return {
       category: _category,
-      quality: _quality,
+      quality: _quality.toFixed(2),
       matchedCount: _positiveCounter,
       notMatchedCount: _negativeCounter,
       trainingSet2: trainingSet,
     };
   }
-  // sprawdzic
-  // wssytskies stringi do ignored
+
+  //LEAF
   if (match.length === 0 || notMatch.length === 0) {
-    console.log('LISC BO JEDNA ZE STRON MA 0');
+    console.log('Liść bo Lewa/Prawa wynosi 0');
     let _category = mostFrequentValue(trainingSet, categoryAttr);
     let _positiveCounter = 0;
-    //console.log(_category);
-    trainingSet.forEach(element => {
+    for (let element of trainingSet) {
       if (element[categoryAttr] == _category) _positiveCounter++;
-    });
+    }
     let _negativeCounter = trainingSet.length - _positiveCounter;
     _quality = _positiveCounter / trainingSet.length;
     _quality = _quality * 100;
-    _quality = _quality.toFixed(2);
-    // restriction by maximal depth of tree
-    // or size of training set is to small
-    // so we have to terminate process of building tree
+
     return {
       category: _category,
-      quality: _quality,
+      quality: _quality.toFixed(2),
       matchedCount: _positiveCounter,
       notMatchedCount: _negativeCounter,
       trainingSet2: trainingSet,
@@ -254,6 +222,7 @@ function buildDecisionTreeTSP(
 
   builder.trainingSet = notMatch;
   var notMatchSubTree = buildDecisionTreeTSP(builder);
+
   console.log('TUTAJ');
   return {
     attr2: attribute2,
@@ -265,17 +234,17 @@ function buildDecisionTreeTSP(
     notMatchedCount: notMatch.length,
     nodeSet: match.concat(notMatch),
   };
-  //console.log(attributes);
 }
 
 function countUniqueValues(items, attr) {
-  var counter = {};
+  ////var counter = {};
 
   // detecting different values of attribute
-  for (var i = items.length - 1; i >= 0; i--) {
-    // items[i][attr] - value of attribute
-    counter[items[i][attr]] = 0;
-  }
+  //// for (var i = items.length - 1; i >= 0; i--) {
+  ////   // items[i][attr] - value of attribute
+  ////   counter[items[i][attr]] = 0;
+  //// }
+  var counter = Object.fromEntries(items.map(item => [item[attr], 0]));
 
   // counting number of occurrences of each of values
   // of attribute

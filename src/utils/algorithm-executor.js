@@ -7,6 +7,7 @@ const workersMap = {
 export function executeAlgorithm(options, changeOptions = {}) {
   console.log(options);
   return new Promise((resolve, reject) => {
+    console.time(options.algorithm);
     const worker = new Worker(`algorithms/${workersMap[options.algorithm]}-tree.js`);
     worker.onmessage = ({ data }) => {
       console.log('got a result', data);
@@ -15,6 +16,9 @@ export function executeAlgorithm(options, changeOptions = {}) {
     };
     worker.onerror = reject;
     worker.postMessage({ _builder: { ...options }, ...changeOptions });
+  }).then(data => {
+    console.timeEnd(options.algorithm);
+    return data;
   });
 }
 

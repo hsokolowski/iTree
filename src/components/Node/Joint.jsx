@@ -2,6 +2,7 @@ import {
   Badge,
   Box,
   Button,
+  ButtonGroup,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -31,21 +32,31 @@ function Joint({ children, attr2, predicateName, pivot, weight, requestFoldToLea
   const foldToLeaf = () => requestFoldToLeaf();
 
   return (
-    <Box>
-      <Badge
-        borderRadius="full"
-        px="2"
-        py="1"
-        colorScheme="teal"
+    <Box mt={1}>
+      <ButtonGroup size="md" isAttached variant="solid" className="tree-branch">
+        <Button size="xs" colorScheme="green" onClick={handleOpenModalClick}>
+          {attr2} <b>{predicateName}</b> {weight} {pivot}
+        </Button>
+        <Button size="xs" borderRadius="0.375rem" rightIcon={<CloseIcon />} onClick={foldToLeaf}>
+          Fold
+        </Button>
+      </ButtonGroup>
+      {/* <Badge
+        borderRadius="0.375rem"
+        px="3"
+        py="2"
+        variant="subtle"
+        colorScheme="green"
         onClick={handleOpenModalClick}
         className={'badge'}
         marginRight={3}
+        fontSize={16}
       >
         {attr2} <b>{predicateName}</b> {weight} {pivot}
-      </Badge>
-      <Button size="xs" rightIcon={<CloseIcon />} onClick={foldToLeaf}>
+      </Badge> */}
+      {/* <Button size="xs" borderRadius="0.375rem" rightIcon={<CloseIcon />} onClick={foldToLeaf}>
         Fold
-      </Button>
+      </Button> */}
       <ModalPopup
         isOpen={isOpen}
         nodeSet={nodeSet}
@@ -57,35 +68,6 @@ function Joint({ children, attr2, predicateName, pivot, weight, requestFoldToLea
         onOpen={onOpen}
         weight={weight}
       />
-      {/* <Modal onClose={onClose} size={size} isOpen={isOpen}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>
-            {attr2} <b>{predicateName}</b> {pivot}
-          </ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            Text ( kolejny komponent z konfiguratorem){' '}
-            {nodeSet.map(x => (
-              <div>
-                {x.attr1001} {x[attr2]}-{x[pivot]} {x[attr2] < x[pivot] ? 'Match' : 'NotMatch'}
-              </div>
-            ))}
-            <Configurator />
-          </ModalBody>
-          <ModalFooter>
-            <Button onClick={onClose}>Close</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal> */}
-      {/* <div>
-        Match
-        {JSON.stringify(match)}
-      </div>
-      <div>
-        notMatch
-        {JSON.stringify(notMatch)}
-      </div> */}
       {children}
     </Box>
   );

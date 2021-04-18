@@ -1,7 +1,8 @@
-import { Spinner } from '@chakra-ui/react';
+import { Box, Spinner, useDisclosure } from '@chakra-ui/react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useBuilderConfigContext } from '../../contexts/BuilderConfigContext';
 import { executeAlgorithm, mostFrequentValue } from '../../utils/algorithm-executor';
+import DataViewer from './DataViewer';
 //import { addNode } from "./utils";
 
 import Joint from './Joint';
@@ -12,6 +13,7 @@ const Node = props => {
   const { builderConfig } = useBuilderConfigContext();
   const [highlighted, setHighlighted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [side, setSide] = useState(props.side);
   const [node, setNode] = useState(props.node || {});
   useEffect(() => setNode(props.node || {}), [props.node, setNode]);
   const {
@@ -118,30 +120,43 @@ const Node = props => {
 
   return (
     <div className={`node ${highlighted ? 'highlight' : ''}`} onClick={onNodeClicked}>
-      {category ? (
-        <Leaf
-          category={category}
-          matchedCount={matchedCount}
-          notMatchedCount={notMatchedCount}
-          quality={quality}
-          requestLeafUnfold={unfoldLeaf}
-        />
-      ) : (
-        <Joint
-          attr2={attr2}
-          predicateName={predicateName}
-          pivot={pivot}
-          match={match}
-          notMatch={notMatch}
-          onChange={onChange}
-          requestFoldToLeaf={foldJointToLeaf}
-          nodeSet={nodeSet}
-          weight={weight}
-        >
-          <Node node={match} onChange={onChange} requestChildChange={requestChildChangeIfMatchIs(true)} />
-          <Node node={notMatch} onChange={onChange} requestChildChange={requestChildChangeIfMatchIs(false)} />
-        </Joint>
-      )}
+      <Box d="flex" flexDirection="column" p="1" paddingLeft={3}>
+        <DataViewer node={node} side={side} />
+        {category ? (
+          <Leaf
+            category={category}
+            matchedCount={matchedCount}
+            notMatchedCount={notMatchedCount}
+            quality={quality}
+            requestLeafUnfold={unfoldLeaf}
+          />
+        ) : (
+          <Joint
+            attr2={attr2}
+            predicateName={predicateName}
+            pivot={pivot}
+            match={match}
+            notMatch={notMatch}
+            onChange={onChange}
+            requestFoldToLeaf={foldJointToLeaf}
+            nodeSet={nodeSet}
+            weight={weight}
+          >
+            <Node
+              node={match}
+              onChange={onChange}
+              requestChildChange={requestChildChangeIfMatchIs(true)}
+              side={side}
+            />
+            <Node
+              node={notMatch}
+              onChange={onChange}
+              requestChildChange={requestChildChangeIfMatchIs(false)}
+              side={!side}
+            />
+          </Joint>
+        )}
+      </Box>
     </div>
   );
 };
