@@ -13,9 +13,10 @@ const Node = props => {
   const { builderConfig } = useBuilderConfigContext();
   const [highlighted, setHighlighted] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [side, setSide] = useState(props.side);
   const [node, setNode] = useState(props.node || {});
   useEffect(() => setNode(props.node || {}), [props.node, setNode]);
+
+  const { side } = props;
   const {
     category,
     quality,
@@ -146,13 +147,13 @@ const Node = props => {
               node={match}
               onChange={onChange}
               requestChildChange={requestChildChangeIfMatchIs(true)}
-              side={side}
+              side={true}
             />
             <Node
               node={notMatch}
               onChange={onChange}
               requestChildChange={requestChildChangeIfMatchIs(false)}
-              side={!side}
+              side={false}
             />
           </Joint>
         )}

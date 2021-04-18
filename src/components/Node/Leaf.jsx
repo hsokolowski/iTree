@@ -1,4 +1,4 @@
-import { Box, Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
+import { Box, Button, Menu, MenuButton, MenuItem, MenuList, Text, Tooltip } from '@chakra-ui/react';
 import React from 'react';
 import { ChevronDownIcon, DownloadIcon } from '@chakra-ui/icons';
 
@@ -23,8 +23,13 @@ function Leaf({ category, matchedCount, notMatchedCount, quality, requestLeafUnf
         fontSize="sm"
         textTransform="uppercase"
         ml="2"
+        d="flex"
+        flexDirection="row"
       >
-        Category: {category}
+        <Box mr={2}>Category:</Box>
+        <Box color="black" fontWeight="bold">
+          {category}
+        </Box>
       </Box>
       <Box
         color="gray.500"
@@ -40,9 +45,11 @@ function Leaf({ category, matchedCount, notMatchedCount, quality, requestLeafUnf
         {quality}%
       </Box>
       <Menu closeOnSelect closeOnBlur isLazy>
-        <MenuButton fontSize="sm" w={20} h={6} as={Button} rightIcon={<ChevronDownIcon />}>
-          Unfold
-        </MenuButton>
+        <Tooltip hasArrow label="Unfold to node" bg="yellow.500" placement="right">
+          <MenuButton fontSize="sm" w={20} h={6} as={Button} rightIcon={<ChevronDownIcon />}>
+            Unfold
+          </MenuButton>
+        </Tooltip>
         <MenuList>
           <MenuItem onClick={() => requestLeafUnfold('c45')}>C 4.5</MenuItem>
           <MenuItem onClick={() => requestLeafUnfold('tsp')}>TSP</MenuItem>

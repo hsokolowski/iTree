@@ -9,9 +9,11 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Tooltip,
   useDisclosure,
 } from '@chakra-ui/react';
 import { CgDatabase } from 'react-icons/cg';
+import DataViewerTable from './DataViewerTable';
 
 function DataViewer({ node, side }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -21,27 +23,27 @@ function DataViewer({ node, side }) {
 
   return (
     <Box>
-      <Button
-        mt={1}
-        px={2}
-        py={3}
-        onClick={onOpen}
-        leftIcon={<CgDatabase />}
-        colorScheme="teal"
-        variant="solid"
-        size="sm"
-        fontSize="14px"
-        fontWeight="semibold"
-      >
-        {/* View Data */}
-        {/* <CgDatabase /> */}
-        {sideSubTitle}
-      </Button>
+      <Tooltip hasArrow label="View data in node" bg="blue.600" placement="right">
+        <Button
+          mt={1}
+          px={2}
+          py={3}
+          onClick={onOpen}
+          leftIcon={<CgDatabase />}
+          colorScheme="teal"
+          variant="solid"
+          size="sm"
+          fontSize="14px"
+          fontWeight="semibold"
+        >
+          {sideSubTitle}
+        </Button>
+      </Tooltip>
       <Modal
         finalFocusRef={finalRef}
         isOpen={isOpen}
         onClose={onClose}
-        size="xl"
+        size="full"
         scrollBehavior={scrollBehavior}
         blockScrollOnMount={false}
       >
@@ -49,7 +51,9 @@ function DataViewer({ node, side }) {
         <ModalContent>
           <ModalHeader>Data Viewer [ {sideSubTitle} ]</ModalHeader>
           <ModalCloseButton />
-          <ModalBody></ModalBody>
+          <ModalBody>
+            <DataViewerTable data={node.nodeSet ? node.nodeSet : node.trainingSet2} />
+          </ModalBody>
 
           <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={onClose}>

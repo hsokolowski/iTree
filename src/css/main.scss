@@ -40,7 +40,27 @@ $gradient-radial: radial-gradient(#d8dbe2ff, #a9bcd0ff, #58a4b0ff, #373f51ff, #1
   background: white;
   color: #333;
   border-left: 1px dashed black;
-  // width: 50%;
+  //position: relative;
+  // &::after {
+  //   content: '';
+  //   position: absolute;
+  //   left: 0px;
+  //   top: 0;
+  //   height: 90%;
+  //   border-left: 3px dashed #0000cc;
+  // }
+  // &:last-child {
+  //   // border-left: none;
+  //   position: relative;
+  //   &::before {
+  //     content: '';
+  //     position: absolute;
+  //     border-left: 1px dashed black;
+  //     left: 0;
+  //     top: 0;
+  //     height: 38%;
+  //   }
+  // }
 }
 .node:first-of-type {
   border-left: 1px solid transparent;
@@ -49,6 +69,7 @@ $gradient-radial: radial-gradient(#d8dbe2ff, #a9bcd0ff, #58a4b0ff, #373f51ff, #1
   background: #09f;
   color: white;
 }
+
 .tree-branch {
   position: relative;
   &::before {

@@ -10,6 +10,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Tooltip,
   useDisclosure,
 } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
@@ -34,12 +35,16 @@ function Joint({ children, attr2, predicateName, pivot, weight, requestFoldToLea
   return (
     <Box mt={1}>
       <ButtonGroup size="md" isAttached variant="solid" className="tree-branch">
-        <Button size="xs" colorScheme="green" onClick={handleOpenModalClick}>
-          {attr2} <b>{predicateName}</b> {weight} {pivot}
-        </Button>
-        <Button size="xs" borderRadius="0.375rem" rightIcon={<CloseIcon />} onClick={foldToLeaf}>
-          Fold
-        </Button>
+        <Tooltip hasArrow label="Changes at attribute" bg="red.600" placement="top">
+          <Button size="xs" colorScheme="green" onClick={handleOpenModalClick}>
+            {attr2} <b>{predicateName}</b> {weight} {pivot}
+          </Button>
+        </Tooltip>
+        <Tooltip hasArrow label="Fold a leaf" bg="orange.600" placement="right">
+          <Button size="xs" borderRadius="0.375rem" rightIcon={<CloseIcon />} onClick={foldToLeaf}>
+            Fold
+          </Button>
+        </Tooltip>
       </ButtonGroup>
       {/* <Badge
         borderRadius="0.375rem"
