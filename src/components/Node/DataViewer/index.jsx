@@ -45,12 +45,12 @@ function DataViewer({ node, side }) {
         onClose={onClose}
         size="full"
         scrollBehavior={scrollBehavior}
-        blockScrollOnMount={false}
+        blockScrollOnMount={true}
       >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Data Viewer [ {sideSubTitle} ]</ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton mr={3} />
           <ModalBody>
             <DataViewerTable data={node.nodeSet ? node.nodeSet : node.trainingSet2} />
           </ModalBody>
