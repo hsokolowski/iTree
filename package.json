@@ -19,6 +19,7 @@
     "react-icons": "^4.1.0",
     "react-scripts": "4.0.1",
     "react-select-search": "^2.2.4",
+    "react-table": "^7.6.3",
     "web-vitals": "^0.2.4"
   },
   "scripts": {

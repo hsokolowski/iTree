@@ -3,11 +3,13 @@ import React, { useState } from 'react';
 import { useAttributesContext } from '../../../contexts/AttributesContext';
 import { Search as SearchBar } from '../../SearchBar';
 import { CloseIcon } from '@chakra-ui/icons';
+import ReactTable from './ReactTable';
 
 function DataViewerTable({ data }) {
-  console.log(data);
+  //console.log(data);
   const [columns, setColumns] = useState([]);
   const [selected, setSelected] = useState([]);
+  const [state, setState] = useState({ selected: null });
   const { attributes } = useAttributesContext();
   function handleSetColumns(value) {
     setColumns(value);
@@ -26,7 +28,7 @@ function DataViewerTable({ data }) {
         tmp.splice(index, 1);
       }
     }
-    console.log(tmp);
+    //console.log(tmp);
     setSelected(tmp);
   }
 
@@ -59,7 +61,8 @@ function DataViewerTable({ data }) {
         </Button>
       </Box>
       <Box overflow="auto" bg="gray.200" d="flex" justifyContent="center">
-        <Table size="sm" bg="gray.200" w="auto">
+        <ReactTable set={data} cols={columns} />
+        {/* <Table size="sm" bg="gray.200" w="auto">
           <Thead>
             <Tr>
               {columns.length !== 0 ? (
@@ -111,7 +114,7 @@ function DataViewerTable({ data }) {
               </Tr>
             )}
           </Tbody>
-        </Table>
+        </Table> */}
       </Box>
     </Box>
   );
