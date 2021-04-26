@@ -1,9 +1,9 @@
-import { Box, Spinner, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, ButtonGroup, Hide, Spinner, Tooltip, useDisclosure } from '@chakra-ui/react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useBuilderConfigContext } from '../../contexts/BuilderConfigContext';
 import { executeAlgorithm, mostFrequentValue } from '../../utils/algorithm-executor';
 import DataViewer from './DataViewer';
-//import { addNode } from "./utils";
+import Hider from './Hide';
 
 import Joint from './Joint';
 import Leaf from './Leaf';
@@ -12,6 +12,7 @@ const Node = props => {
   //console.log(props.node);
   const { builderConfig } = useBuilderConfigContext();
   const [highlighted, setHighlighted] = useState(false);
+  const [hide, setHide] = useState(false);
   const [loading, setLoading] = useState(false);
   const [node, setNode] = useState(props.node || {});
   useEffect(() => setNode(props.node || {}), [props.node, setNode]);
@@ -115,6 +116,10 @@ const Node = props => {
       });
   };
 
+  const handleHide = value => {
+    setHide(value);
+  };
+
   if (loading) {
     return <Spinner size="xl" />;
   }
@@ -122,41 +127,48 @@ const Node = props => {
   return (
     <div className={`node ${highlighted ? 'highlight' : ''}`} onClick={onNodeClicked}>
       <Box d="flex" flexDirection="column" p="1" paddingLeft={3}>
-        <DataViewer node={node} side={side} />
-        {category ? (
-          <Leaf
-            category={category}
-            matchedCount={matchedCount}
-            notMatchedCount={notMatchedCount}
-            quality={quality}
-            requestLeafUnfold={unfoldLeaf}
-          />
-        ) : (
-          <Joint
-            attr2={attr2}
-            predicateName={predicateName}
-            pivot={pivot}
-            match={match}
-            notMatch={notMatch}
-            onChange={onChange}
-            requestFoldToLeaf={foldJointToLeaf}
-            nodeSet={nodeSet}
-            weight={weight}
-          >
-            <Node
-              node={match}
-              onChange={onChange}
-              requestChildChange={requestChildChangeIfMatchIs(true)}
-              side={true}
+        <Box d="flex" flexDirection="row">
+          <ButtonGroup size="sm" isAttached variant="outline">
+            <Hider hide={hide} onChange={handleHide} />
+            <DataViewer node={node} side={side} />
+          </ButtonGroup>
+        </Box>
+        <div style={{ display: hide ? 'none' : 'block' }}>
+          {category ? (
+            <Leaf
+              category={category}
+              matchedCount={matchedCount}
+              notMatchedCount={notMatchedCount}
+              quality={quality}
+              requestLeafUnfold={unfoldLeaf}
             />
-            <Node
-              node={notMatch}
+          ) : (
+            <Joint
+              attr2={attr2}
+              predicateName={predicateName}
+              pivot={pivot}
+              match={match}
+              notMatch={notMatch}
               onChange={onChange}
-              requestChildChange={requestChildChangeIfMatchIs(false)}
-              side={false}
-            />
-          </Joint>
-        )}
+              requestFoldToLeaf={foldJointToLeaf}
+              nodeSet={nodeSet}
+              weight={weight}
+            >
+              <Node
+                node={match}
+                onChange={onChange}
+                requestChildChange={requestChildChangeIfMatchIs(true)}
+                side={true}
+              />
+              <Node
+                node={notMatch}
+                onChange={onChange}
+                requestChildChange={requestChildChangeIfMatchIs(false)}
+                side={false}
+              />
+            </Joint>
+          )}
+        </div>
       </Box>
     </div>
   );

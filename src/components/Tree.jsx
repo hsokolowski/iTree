@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Box, Spinner } from '@chakra-ui/react';
-// import { start } from '../services/Playground';
-// import { dt } from '../services/TSP';
+import { Box, Button, HStack, Spinner } from '@chakra-ui/react';
+import { GrTechnology, GrDocumentUpload } from 'react-icons/gr';
+import { GiWaterDivinerStick } from 'react-icons/gi';
 import Node from './Node';
 import { useLoadingContext } from '../contexts/LoadingContext';
 import { executeAlgorithm } from '../utils/algorithm-executor';
+import TestSetFileReader from './TestSetFileReader';
 
 /**
  * @typedef {import('../utils/decision-tree.js').DecisionTreeBuilder} DecisionTreeBuilder
@@ -27,6 +28,7 @@ const Tree = ({ options }) => {
   // }, [options]);
 
   const [root, setRoot] = useState(null);
+  const [testSet, setTestSet] = useState([]);
   const { isLoading, setIsLoading } = useLoadingContext();
 
   useEffect(() => {
@@ -57,14 +59,39 @@ const Tree = ({ options }) => {
 
   const requestChildChange = newRoot => setRoot(newRoot);
 
+  function handleGetTestSet({ data }) {
+    setTestSet(data);
+    console.log(data);
+  }
+  function predict(root) {
+    console.log('predict');
+  }
+
   return (
     <div id="tree">
-      <h1>Tree</h1>
-      <p>
-        <button onClick={() => logTree(root)}>Log tree</button>
-      </p>
+      <HStack spacing="24px">
+        <Box>
+          <p>
+            <Button leftIcon={<GrTechnology />} onClick={() => logTree(root)}>
+              Log tree
+            </Button>
+          </p>
+        </Box>
+        <Box>
+          <p>
+            <TestSetFileReader onChange={handleGetTestSet} isHeaders={false} />
+          </p>
+        </Box>
+        <Box>
+          <p>
+            <Button leftIcon={<GiWaterDivinerStick />} onClick={() => predict(root)}>
+              Predict
+            </Button>
+          </p>
+        </Box>
+      </HStack>
       {isLoading && <Spinner size="xl" />}
-      <h2>Nodes:</h2>
+      <h1>Tree nodes:</h1>
       <Box>
         {!root ? (
           <p>No tree to show</p>

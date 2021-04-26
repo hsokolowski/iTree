@@ -23,9 +23,11 @@ function ReactTable({ set, cols }) {
   console.log(set, cols);
   const data = React.useMemo(() => set, []);
 
+  var collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
+
   function prepareHeaders(cols) {
     let tmp = [];
-    for (let item of cols.sort()) {
+    for (let item of cols.sort(collator.compare)) {
       tmp.push({
         Header: item,
         accessor: item,

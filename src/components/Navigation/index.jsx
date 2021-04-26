@@ -24,10 +24,11 @@ import { builder } from '../../services/Playground';
 import IgnoredAttributes from './IgnoredAttributes';
 import Builder from './Builder';
 import FormControlNumberInput from './FormControlNumberInput';
-import DrawerRoll from './DrawerRoll';
+import DrawerRoll, { DrawerMemo } from './DrawerRoll';
 import { useLoadingContext } from '../../contexts/LoadingContext';
 import { useAttributesContext } from '../../contexts/AttributesContext';
 import { useBuilderConfigContext } from '../../contexts/BuilderConfigContext';
+import { useIgnoredContext } from '../../contexts/IgnoredContext';
 
 /**
  * @typedef {import('../../utils/decision-tree.js').DecisionTreeBuilder} DecisionTreeBuilder
@@ -47,6 +48,7 @@ function Navigation({ onPrepareConfig }) {
   const [allClazz, setAllClasses] = useState([]);
   const [config, setConfig] = useState({});
   const { attributes: options, onAttributesChange } = useAttributesContext();
+  //const { attributes: ignoredAttributes, onIgnoredChange } = useIgnoredContext();
   const { isLoading } = useLoadingContext();
 
   function handleSelectDecision(value) {
@@ -57,6 +59,7 @@ function Navigation({ onPrepareConfig }) {
   function handleSelectIgnore(value) {
     console.log(value);
     setIgnoredAttributes(value);
+    //onIgnoredChange(value)
   }
   function handleSetMinItems(value) {
     //console.log(value);
@@ -229,7 +232,7 @@ function Navigation({ onPrepareConfig }) {
       </Collapse>
       <Stack spacing={2} direction={['row']} align="center" alignContent="center" justify="center">
         <Button onClick={onToggle}>{isOpen ? 'HIDE' : 'SHOW'}</Button>
-        <DrawerRoll />
+        <DrawerMemo ignoredAttributes={ignoredAttributes} />
       </Stack>
     </Box>
   );

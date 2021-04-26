@@ -1,3 +1,27 @@
+function predict(tree, item) {
+  var attr, value, predicate, pivot;
+
+  // Traversing tree from the root to leaf
+  while (true) {
+    if (tree.category) {
+      // only leafs contains predicted category
+      return tree.category;
+    }
+
+    attr = tree.attribute;
+    value = item[attr];
+
+    predicate = predicates[tree.predicate];
+    pivot = tree.pivot;
+
+    // move to one of subtrees
+    if (predicate(value, pivot)) {
+      tree = tree.match;
+    } else {
+      tree = tree.notMatch;
+    }
+  }
+}
 var predicates = {
   '==': function (a, b) {
     return a === b;

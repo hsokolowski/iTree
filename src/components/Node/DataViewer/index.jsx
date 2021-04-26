@@ -36,7 +36,7 @@ function DataViewer({ node, side }) {
           fontSize="14px"
           fontWeight="semibold"
         >
-          {sideSubTitle}
+          {sideSubTitle} - {node.nodeSet ? node.nodeSet.length : node.trainingSet2.length} elements.
         </Button>
       </Tooltip>
       <Modal
