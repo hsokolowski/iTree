@@ -138,7 +138,7 @@ function buildDecisionTreeTSPW(
             if (!isNaN(element[attr1]) && !isNaN(element[attr2])) {
               sum1 += parseFloat(element[attr1]);
               sum2 += parseFloat(element[attr2]);
-              console.log(element[attr1], element[attr2]);
+              console.log(index, element[attr1], element[attr2]);
             }
           }
           console.log('sum1', sum1, 'sum2', sum2);

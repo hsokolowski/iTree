@@ -71,23 +71,17 @@ const Tree = ({ options }) => {
     <div id="tree">
       <HStack spacing="24px">
         <Box>
-          <p>
-            <Button leftIcon={<GrTechnology />} onClick={() => logTree(root)}>
-              Log tree
-            </Button>
-          </p>
+          <Button leftIcon={<GrTechnology />} onClick={() => logTree(root)}>
+            Log tree
+          </Button>
         </Box>
         <Box>
-          <p>
-            <TestSetFileReader onChange={handleGetTestSet} isHeaders={false} />
-          </p>
+          <TestSetFileReader onChange={handleGetTestSet} isHeaders={false} />
         </Box>
         <Box>
-          <p>
-            <Button leftIcon={<GiWaterDivinerStick />} onClick={() => predict(root)}>
-              Predict
-            </Button>
-          </p>
+          <Button leftIcon={<GiWaterDivinerStick />} onClick={() => predict(root)}>
+            Predict
+          </Button>
         </Box>
       </HStack>
       {isLoading && <Spinner size="xl" />}
