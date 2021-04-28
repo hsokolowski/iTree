@@ -36,10 +36,17 @@ function buildDecisionTreeTSPW(
   } = builder;
   /** @type {string | number} */
   var _quality = 0;
-
+  console.log('zaczynam nowy podział');
   // LEAF
   if (maxTreeDepth === 0 || trainingSet.length <= minItemsCount) {
-    console.log('Liść bo maxTreeDepth:', maxTreeDepth, ' Ilość elementów:', trainingSet.length);
+    console.log(
+      'Liść bo maxTreeDepth:',
+      maxTreeDepth,
+      ' Ilość elementów:',
+      trainingSet.length,
+      '<=',
+      minItemsCount
+    );
     let _category = mostFrequentValue(trainingSet, categoryAttr);
     let _positiveCounter = 0;
     for (let element of trainingSet) {
@@ -59,7 +66,7 @@ function buildDecisionTreeTSPW(
   }
 
   var attributes = builder.allAttributes.filter(el => el !== categoryAttr && !ignoredAttributes.includes(el));
-
+  //console.log('attributes do petli', attributes);
   var right = 0,
     left = 0,
     sum1 = 0,
@@ -124,7 +131,7 @@ function buildDecisionTreeTSPW(
     for (let attr1 of attributes) {
       for (let attr2 of attributes) {
         if (attr1 !== attr2) {
-          console.log(attr1, attr2);
+          console.log('porównywana para: ', attr1, attr2);
           right = left = 0;
           leftList = [];
           rightList = [];
@@ -135,23 +142,31 @@ function buildDecisionTreeTSPW(
 
           for (let index = 0; index < trainingSet.length; index++) {
             const element = trainingSet[index];
+            //('index', index, trainingSet.length);
             if (!isNaN(element[attr1]) && !isNaN(element[attr2])) {
               sum1 += parseFloat(element[attr1]);
               sum2 += parseFloat(element[attr2]);
-              console.log(index, element[attr1], element[attr2]);
+              // console.log(
+              //   index,
+              //   element[attr1],
+              //   element[attr2],
+              //   'czesciowa suma1 ',
+              //   sum1,
+              //   'czescsiowa suma2 ',
+              //   sum2
+              // );
             }
           }
-          console.log('sum1', sum1, 'sum2', sum2);
+          //console.log('Sumy po całym zbiorze 1 i 2: ', sum1, sum2);
           sum1 /= trainingSet.length;
           sum2 /= trainingSet.length;
-          console.log('sum1', sum1, 'sum2', sum2);
           weight = sum1 / sum2;
-          console.log('weight', weight);
+          //console.log('Sumy po dzieleniu 1 i 2: ', sum1, sum2, 'waga', weight);
 
           // division
           for (let element of trainingSet) {
             const attribute = element[categoryAttr];
-
+            //console.log(attribute);
             if (element[attr1] < weight * element[attr2]) {
               left++;
               leftList.push(element);
@@ -162,7 +177,7 @@ function buildDecisionTreeTSPW(
               classMatrix[1][builder.allClasses.indexOf(attribute)]++;
             }
           }
-          //console.log(classMatrix);
+          console.log(classMatrix);
           var probR = 0,
             probL = 0,
             rankL = 0,
@@ -178,8 +193,11 @@ function buildDecisionTreeTSPW(
 
           var currentDif =
             (right / trainingSet.length) * (1 - rankR) + (left / trainingSet.length) * (1 - rankL);
+
+          //console.log('currentDif', currentDif, '<', maxDif);
           if (currentDif < maxDif) {
             console.log('------Zapisanie maxDif-------');
+            console.log(currentDif, maxDif);
             console.log(attr1, attr2);
             console.log('leftList', leftList);
             console.log('rightList', rightList);
@@ -196,7 +214,7 @@ function buildDecisionTreeTSPW(
     }
   }
 
-  console.log('MaxDifference:', maxDif);
+  //console.log('MaxDifference:', maxDif);
   // LEAF
   if (!maxDif) {
     console.log('Liść bo maxDif:', maxDif);
@@ -245,7 +263,7 @@ function buildDecisionTreeTSPW(
 
   builder.trainingSet = notMatch;
   var notMatchSubTree = buildDecisionTreeTSPW(builder);
-  console.log('TUTAJ WAGA');
+  console.log('Tutaj wyliczone już  gałęzie i glebokośc: ', builder.maxTreeDepth);
   return {
     attr2: attribute2,
     pivot: attribute1,
