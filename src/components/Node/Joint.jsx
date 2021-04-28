@@ -41,7 +41,19 @@ function Joint({ children, attr2, predicateName, pivot, weight, requestFoldToLea
           </Button>
         </Tooltip>
         <Tooltip hasArrow label="Fold a leaf" bg="orange.600" placement="right">
-          <Button size="xs" borderRadius="0.375rem" rightIcon={<CloseIcon />} onClick={foldToLeaf}>
+          <Button
+            size="xs"
+            borderRadius="0.375rem"
+            rightIcon={<CloseIcon />}
+            onClick={foldToLeaf}
+            variant="solid"
+            //colorScheme="telegram"
+            bg="#D8DBE2"
+            _hover={{
+              background: '#A9BCD0',
+              color: '#373F51',
+            }}
+          >
             Fold
           </Button>
         </Tooltip>

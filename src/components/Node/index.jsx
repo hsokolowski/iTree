@@ -3,7 +3,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useBuilderConfigContext } from '../../contexts/BuilderConfigContext';
 import { executeAlgorithm, mostFrequentValue } from '../../utils/algorithm-executor';
 import DataViewer from './DataViewer';
-import Hider from './Hide';
 
 import Joint from './Joint';
 import Leaf from './Leaf';
@@ -128,10 +127,7 @@ const Node = props => {
     <div className={`node ${highlighted ? 'highlight' : ''}`} onClick={onNodeClicked}>
       <Box d="flex" flexDirection="column" p="1" paddingLeft={3}>
         <Box d="flex" flexDirection="row">
-          <ButtonGroup size="sm" isAttached variant="outline">
-            <Hider hide={hide} onChange={handleHide} />
-            <DataViewer node={node} side={side} />
-          </ButtonGroup>
+          <DataViewer node={node} side={side} hide={hide} onChange={handleHide} />
         </Box>
         <div style={{ display: hide ? 'none' : 'block' }}>
           {category ? (

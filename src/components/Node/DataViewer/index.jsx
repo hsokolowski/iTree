@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import {
+  Badge,
   Box,
   Button,
+  ButtonGroup,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -9,13 +11,15 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Text,
   Tooltip,
   useDisclosure,
 } from '@chakra-ui/react';
 import { CgDatabase } from 'react-icons/cg';
+import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from 'react-icons/io';
 import DataViewerTable from './DataViewerTable';
 
-function DataViewer({ node, side }) {
+function DataViewer({ node, side, onChange, hide }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = React.useRef();
   const scrollBehavior = 'inside';
@@ -23,22 +27,36 @@ function DataViewer({ node, side }) {
 
   return (
     <Box>
-      <Tooltip hasArrow label="View data in node" bg="blue.600" placement="right">
+      <ButtonGroup isAttached>
         <Button
           mt={1}
           px={2}
           py={3}
-          onClick={onOpen}
-          leftIcon={<CgDatabase />}
+          onClick={() => onChange(!hide)}
           colorScheme="teal"
-          variant="solid"
+          variant="outline"
           size="sm"
-          fontSize="14px"
-          fontWeight="semibold"
         >
-          {sideSubTitle} - {node.nodeSet ? node.nodeSet.length : node.trainingSet2.length} elements.
+          {hide ? <IoMdArrowDropupCircle /> : <IoMdArrowDropdownCircle />}
         </Button>
-      </Tooltip>
+        <Tooltip hasArrow label="View data in node" bg="blue.600" placement="right">
+          <Button
+            mt={1}
+            px={2}
+            py={3}
+            h={26}
+            onClick={onOpen}
+            leftIcon={<CgDatabase />}
+            colorScheme="teal"
+            variant="solid"
+            size="sm"
+            fontSize="14px"
+            fontWeight="semibold"
+          >
+            {sideSubTitle} - ({node.nodeSet ? node.nodeSet.length : node.trainingSet2.length})
+          </Button>
+        </Tooltip>
+      </ButtonGroup>
       <Modal
         finalFocusRef={finalRef}
         isOpen={isOpen}
@@ -49,7 +67,19 @@ function DataViewer({ node, side }) {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Data Viewer [ {sideSubTitle} ]</ModalHeader>
+          <ModalHeader>
+            <Box ml="3">
+              <Box fontWeight="bold" d="flex" alignItems="center">
+                Data Viewer
+                <Badge ml="1" variant="subtle" colorScheme="green" fontSize={14}>
+                  {sideSubTitle}
+                </Badge>
+              </Box>
+              <Text fontSize="sm">
+                {node.nodeSet ? node.nodeSet.length : node.trainingSet2.length} elements
+              </Text>
+            </Box>
+          </ModalHeader>
           <ModalCloseButton mr={3} />
           <ModalBody>
             <DataViewerTable data={node.nodeSet ? node.nodeSet : node.trainingSet2} />
