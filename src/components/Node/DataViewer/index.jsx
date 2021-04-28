@@ -53,7 +53,7 @@ function DataViewer({ node, side, onChange, hide }) {
             fontSize="14px"
             fontWeight="semibold"
           >
-            {sideSubTitle} - ({node.nodeSet ? node.nodeSet.length : node.trainingSet2.length})
+            {sideSubTitle} ({node.nodeSet ? node.nodeSet.length : node.trainingSet2.length})
           </Button>
         </Tooltip>
       </ButtonGroup>
