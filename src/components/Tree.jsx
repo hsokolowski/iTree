@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Box, Button, HStack, Spinner } from '@chakra-ui/react';
+import { Box, Button, HStack, Spinner, Stack } from '@chakra-ui/react';
 import { GrTechnology, GrDocumentUpload } from 'react-icons/gr';
 import { GiWaterDivinerStick } from 'react-icons/gi';
 import Node from './Node';
 import { useLoadingContext } from '../contexts/LoadingContext';
 import { executeAlgorithm } from '../utils/algorithm-executor';
 import TestSetFileReader from './TestSetFileReader';
+import Predicter from './Predicter';
 
 /**
  * @typedef {import('../utils/decision-tree.js').DecisionTreeBuilder} DecisionTreeBuilder
@@ -69,7 +70,7 @@ const Tree = ({ options }) => {
 
   return (
     <div id="tree">
-      <HStack spacing="24px">
+      <Stack spacing={5} direction="row">
         <Box>
           <Button leftIcon={<GrTechnology />} onClick={() => logTree(root)}>
             Log tree
@@ -78,19 +79,18 @@ const Tree = ({ options }) => {
         <Box>
           <TestSetFileReader onChange={handleGetTestSet} isHeaders={false} />
         </Box>
-        <Box>
-          <Button leftIcon={<GiWaterDivinerStick />} onClick={() => predict(root)}>
-            Predict
-          </Button>
-        </Box>
-      </HStack>
+        <Predicter tree={root} testSet={testSet} onChange={predict} />
+      </Stack>
       {isLoading && <Spinner size="xl" />}
       <h1>Tree nodes:</h1>
       <Box>
         {!root ? (
           <p>No tree to show</p>
         ) : (
-          <Node node={root} onChange={() => {}} requestChildChange={requestChildChange} side={true} />
+          <Box d="flex" flexDirection="row">
+            <Node node={root} onChange={() => {}} requestChildChange={requestChildChange} side={true} />
+            {/* <Node node={root} onChange={() => {}} requestChildChange={requestChildChange} side={true} /> */}
+          </Box>
         )}
       </Box>
     </div>
