@@ -36,21 +36,36 @@ function buildDecisionTreeTSPW(
   } = builder;
   /** @type {string | number} */
   var _quality = 0;
-  console.log('zaczynam nowy podział');
+
   // LEAF
   if (maxTreeDepth === 0 || trainingSet.length <= minItemsCount) {
-    console.log(
-      'Liść bo maxTreeDepth:',
-      maxTreeDepth,
-      ' Ilość elementów:',
-      trainingSet.length,
-      '<=',
-      minItemsCount
-    );
+    //console.log('Liść maxTreeDepth:', maxTreeDepth, ' Ilość el:', trainingSet.length, '<=', minItemsCount);
     let _category = mostFrequentValue(trainingSet, categoryAttr);
     let _positiveCounter = 0;
     for (let element of trainingSet) {
-      if (element[categoryAttr] == _category) _positiveCounter++;
+      if (element[categoryAttr] === _category) _positiveCounter++;
+    }
+    let _negativeCounter = trainingSet.length - _positiveCounter;
+    _quality = _positiveCounter / trainingSet.length;
+    _quality = _quality * 100;
+
+    return {
+      category: _category,
+      quality: _quality.toFixed(2),
+      matchedCount: _positiveCounter,
+      notMatchedCount: _negativeCounter,
+      trainingSet2: trainingSet,
+    };
+  }
+
+  // LEAF
+  var initialEntropy = entropy(trainingSet, categoryAttr);
+  if (initialEntropy <= entropyThrehold && !isChanged) {
+    //console.log('initialEntropy ' + initialEntropy + '<=' + entropyThrehold + ' entropyThrehold');
+    let _category = mostFrequentValue(trainingSet, categoryAttr);
+    let _positiveCounter = 0;
+    for (let element of trainingSet) {
+      if (element[categoryAttr] === _category) _positiveCounter++;
     }
     let _negativeCounter = trainingSet.length - _positiveCounter;
     _quality = _positiveCounter / trainingSet.length;
@@ -66,7 +81,7 @@ function buildDecisionTreeTSPW(
   }
 
   var attributes = builder.allAttributes.filter(el => el !== categoryAttr && !ignoredAttributes.includes(el));
-  //console.log('attributes do petli', attributes);
+
   var right = 0,
     left = 0,
     sum1 = 0,
@@ -84,6 +99,11 @@ function buildDecisionTreeTSPW(
     ],
     match = [],
     notMatch = [];
+  var probR = 0,
+    probL = 0,
+    rankL = 0,
+    rankR = 0;
+  var currentDif;
 
   //#########################
   //#     force changes     #
@@ -93,7 +113,7 @@ function buildDecisionTreeTSPW(
     for (let element of trainingSet) {
       const attribute = element[categoryAttr];
 
-      if (element[changedAttribute1] < element[changedAttribute2]) {
+      if (element[changedAttribute1] < weight * element[changedAttribute2]) {
         left++;
         leftList.push(element);
         classMatrix[0][builder.allClasses.indexOf(attribute)]++;
@@ -105,10 +125,10 @@ function buildDecisionTreeTSPW(
     }
 
     // probability
-    var probR = 0,
-      probL = 0,
-      rankL = 0,
-      rankR = 0;
+    probR = 0;
+    probL = 0;
+    rankL = 0;
+    rankR = 0;
     for (let k = 0; k < builder.allClasses.length; k++) {
       probL = left === 0 ? 0 : classMatrix[0][k] / left;
       probR = right === 0 ? 0 : classMatrix[1][k] / right;
@@ -118,7 +138,7 @@ function buildDecisionTreeTSPW(
     }
 
     // setting new values
-    var currentDif = (right / trainingSet.length) * (1 - rankR) + (left / trainingSet.length) * (1 - rankL);
+    currentDif = (right / trainingSet.length) * (1 - rankR) + (left / trainingSet.length) * (1 - rankL);
     if (currentDif < maxDif) {
       maxDif = currentDif;
       attribute1 = changedAttribute1;
@@ -131,7 +151,6 @@ function buildDecisionTreeTSPW(
     for (let attr1 of attributes) {
       for (let attr2 of attributes) {
         if (attr1 !== attr2) {
-          console.log('porównywana para: ', attr1, attr2);
           right = left = 0;
           leftList = [];
           rightList = [];
@@ -142,31 +161,21 @@ function buildDecisionTreeTSPW(
 
           for (let index = 0; index < trainingSet.length; index++) {
             const element = trainingSet[index];
-            //('index', index, trainingSet.length);
+
             if (!isNaN(element[attr1]) && !isNaN(element[attr2])) {
               sum1 += parseFloat(element[attr1]);
               sum2 += parseFloat(element[attr2]);
-              // console.log(
-              //   index,
-              //   element[attr1],
-              //   element[attr2],
-              //   'czesciowa suma1 ',
-              //   sum1,
-              //   'czescsiowa suma2 ',
-              //   sum2
-              // );
             }
           }
-          //console.log('Sumy po całym zbiorze 1 i 2: ', sum1, sum2);
+
           sum1 /= trainingSet.length;
           sum2 /= trainingSet.length;
           weight = sum1 / sum2;
-          //console.log('Sumy po dzieleniu 1 i 2: ', sum1, sum2, 'waga', weight);
 
           // division
           for (let element of trainingSet) {
             const attribute = element[categoryAttr];
-            //console.log(attribute);
+
             if (element[attr1] < weight * element[attr2]) {
               left++;
               leftList.push(element);
@@ -177,11 +186,11 @@ function buildDecisionTreeTSPW(
               classMatrix[1][builder.allClasses.indexOf(attribute)]++;
             }
           }
-          console.log(classMatrix);
-          var probR = 0,
-            probL = 0,
-            rankL = 0,
-            rankR = 0;
+
+          probR = 0;
+          probL = 0;
+          rankL = 0;
+          rankR = 0;
           for (let k = 0; k < builder.allClasses.length; k++) {
             probL = left === 0 ? 0 : classMatrix[0][k] / left;
             probR = right === 0 ? 0 : classMatrix[1][k] / right;
@@ -189,39 +198,29 @@ function buildDecisionTreeTSPW(
             rankL += probL * probL;
             rankR += probR * probR;
           }
-          //console.log("Rank Lewy",rankL,"Rank Prawy",rankR);
 
-          var currentDif =
-            (right / trainingSet.length) * (1 - rankR) + (left / trainingSet.length) * (1 - rankL);
+          currentDif = (right / trainingSet.length) * (1 - rankR) + (left / trainingSet.length) * (1 - rankL);
 
-          //console.log('currentDif', currentDif, '<', maxDif);
           if (currentDif < maxDif) {
-            console.log('------Zapisanie maxDif-------');
-            console.log(currentDif, maxDif);
-            console.log(attr1, attr2);
-            console.log('leftList', leftList);
-            console.log('rightList', rightList);
             maxDif = currentDif;
             attribute1 = attr1;
             attribute2 = attr2;
             match = leftList;
             notMatch = rightList;
             L_weight = weight;
-            console.log('-----------------------------');
           }
         }
       }
     }
   }
 
-  //console.log('MaxDifference:', maxDif);
   // LEAF
   if (!maxDif) {
-    console.log('Liść bo maxDif:', maxDif);
+    //console.log('Liść bo maxDif:', maxDif);
     let _category = mostFrequentValue(trainingSet, categoryAttr);
     let _positiveCounter = 0;
     for (let element of trainingSet) {
-      if (element[categoryAttr] == _category) _positiveCounter++;
+      if (element[categoryAttr] === _category) _positiveCounter++;
     }
     let _negativeCounter = trainingSet.length - _positiveCounter;
     _quality = _positiveCounter / trainingSet.length;
@@ -238,11 +237,11 @@ function buildDecisionTreeTSPW(
 
   //LEAF
   if (match.length === 0 || notMatch.length === 0) {
-    console.log('Liść bo Lewa/Prawa wynosi 0');
+    //console.log('Liść bo Lewa/Prawa wynosi 0');
     let _category = mostFrequentValue(trainingSet, categoryAttr);
     let _positiveCounter = 0;
     for (let element of trainingSet) {
-      if (element[categoryAttr] == _category) _positiveCounter++;
+      if (element[categoryAttr] === _category) _positiveCounter++;
     }
     let _negativeCounter = trainingSet.length - _positiveCounter;
     _quality = _positiveCounter / trainingSet.length;
@@ -263,19 +262,18 @@ function buildDecisionTreeTSPW(
 
   builder.trainingSet = notMatch;
   var notMatchSubTree = buildDecisionTreeTSPW(builder);
-  console.log('Tutaj wyliczone już  gałęzie i glebokośc: ', builder.maxTreeDepth);
+
   return {
-    attr2: attribute2,
-    pivot: attribute1,
+    attr2: attribute1,
+    pivot: attribute2,
     predicateName: directrion,
     match: matchSubTree,
     notMatch: notMatchSubTree, //{category: ...}
     matchedCount: match.length,
     notMatchedCount: notMatch.length,
     nodeSet: match.concat(notMatch),
-    weight: L_weight,
+    weight: L_weight.toFixed(3),
   };
-  //console.log(attributes);
 }
 
 function countUniqueValues(items, attr) {
@@ -325,3 +323,27 @@ context.onmessage = function (event) {
   const result = buildDecisionTreeTSPW(_builder, isChanged, changedAttribute1, changedAttribute2, weight);
   context.postMessage(result);
 };
+
+/**
+ * Calculating entropy of array of objects
+ * by specific attribute.
+ *
+ * @param items - array of objects
+ *
+ * @param attr  - variable with name of attribute,
+ *                which embedded in each object
+ */
+function entropy(items, attr) {
+  // counting number of occurrences of each of values
+  // of attribute
+  var counter = countUniqueValues(items, attr);
+
+  var entropy = 0;
+  var p;
+  for (var i in counter) {
+    p = counter[i] / items.length;
+    entropy += -p * Math.log(p);
+  }
+
+  return entropy;
+}

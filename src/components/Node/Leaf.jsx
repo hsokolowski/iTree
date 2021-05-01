@@ -51,9 +51,9 @@ function Leaf({ category, matchedCount, notMatchedCount, quality, requestLeafUnf
           </MenuButton>
         </Tooltip>
         <MenuList>
-          <MenuItem onClick={() => requestLeafUnfold('c45')}>C 4.5</MenuItem>
-          <MenuItem onClick={() => requestLeafUnfold('tsp')}>TSP</MenuItem>
-          <MenuItem onClick={() => requestLeafUnfold('tspw')}>TSP Weight</MenuItem>
+          <MenuItem onClick={() => requestLeafUnfold(['c45'])}>C 4.5</MenuItem>
+          <MenuItem onClick={() => requestLeafUnfold(['tsp'])}>TSP</MenuItem>
+          <MenuItem onClick={() => requestLeafUnfold(['tspw'])}>TSP Weight</MenuItem>
         </MenuList>
       </Menu>
     </Box>

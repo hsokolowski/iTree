@@ -1,9 +1,10 @@
 import React from 'react';
 import { Input, Stack } from '@chakra-ui/react';
-import { ChevronLeftIcon } from '@chakra-ui/icons';
+import { FaLessThan } from 'react-icons/fa';
 import { Search as SearchBar } from '../../SearchBar';
 import './alg-style.scss';
 import { useAttributesContext } from '../../../contexts/AttributesContext';
+import { IconContext } from 'react-icons';
 
 export default function TabTSP({ attribute, value, changeValues }) {
   const { attributes: options } = useAttributesContext();
@@ -13,7 +14,6 @@ export default function TabTSP({ attribute, value, changeValues }) {
 
   return (
     <Stack spacing={3} direction="row">
-      {/* <div className="alg-search"> */}
       <SearchBar
         value={attribute}
         onChange={onAttributeChange}
@@ -21,8 +21,9 @@ export default function TabTSP({ attribute, value, changeValues }) {
         multiple={false}
         closeOnSelect={true}
       />
-      {/* </div> */}
-      <ChevronLeftIcon w={10} h={10} />
+      <IconContext.Provider value={{ style: { height: 40 } }}>
+        <FaLessThan size={50} />
+      </IconContext.Provider>
       <SearchBar
         value={value}
         onChange={onPivotChange}

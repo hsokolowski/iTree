@@ -1,7 +1,6 @@
 import React from 'react';
 import { Input, Stack } from '@chakra-ui/react';
-import { ChevronRightIcon } from '@chakra-ui/icons';
-import { CgMathEqual } from 'react-icons/cg';
+import { FaGreaterThan, FaEquals } from 'react-icons/fa';
 import { IconContext } from 'react-icons';
 import { Search as SearchBar } from '../../SearchBar';
 import './alg-style.scss';
@@ -11,7 +10,7 @@ export default function TabC45({ attribute, value, changeValues }) {
   const { attributes: options } = useAttributesContext();
 
   const onAttributeChange = value => changeValues({ attribute: value });
-  const onPivotChange = event => changeValues({ pivot: +event.target.value });
+  const onPivotChange = event => changeValues({ pivot: event.target.value });
 
   return (
     <Stack spacing={3} direction="row">
@@ -23,15 +22,12 @@ export default function TabC45({ attribute, value, changeValues }) {
         multiple={false}
         closeOnSelect={true}
       />
-      {/* </div> */}
-
-      <IconContext.Provider value={{ style: { height: 10 } }}>
-        <Stack direction="row" spacing={0}>
-          <ChevronRightIcon w={10} h={10} />
-        </Stack>
+      <IconContext.Provider value={{ style: { height: 40 } }}>
+        <FaGreaterThan size={50} />
+        <FaEquals size={50} />
       </IconContext.Provider>
 
-      <Input value={value} size="md" name="c45-value" onChange={onPivotChange} />
+      <Input variant="filled" value={value} size="md" name="c45-value" onChange={onPivotChange} />
     </Stack>
   );
 }

@@ -11,12 +11,17 @@ function Configurator({ onChange, attribute, pivot, weight }) {
     attribute,
     pivot,
     weight,
-    algorithm: algorithms[tabIndex],
+    algorithm: [algorithms[tabIndex]],
   });
 
   useEffect(() => {
-    setState({ ...state, algorithm: algorithms[tabIndex] });
+    setState({ ...state, algorithm: [algorithms[tabIndex]] });
   }, [tabIndex]); // eslint-disable-line
+
+  useEffect(() => {
+    onChange({ ...state });
+    console.log('Zmienił się stan ###########');
+  }, [state]);
 
   function handleConfirmChange() {
     onChange({ ...state });
@@ -44,13 +49,15 @@ function Configurator({ onChange, attribute, pivot, weight }) {
             <TabTSPW
               attribute={state.attribute}
               value={state.pivot}
-              weight={state.weight}
+              weight={state.weight ? state.weight : 1}
               changeValues={handleValuesChange}
             />
           </TabPanel>
         </TabPanels>
       </Tabs>
-      <Button onClick={handleConfirmChange}>Confirm</Button>
+      {/* <Button colorScheme="blue" onClick={handleConfirmChange}>
+        Confirm
+      </Button> */}
     </div>
   );
 }

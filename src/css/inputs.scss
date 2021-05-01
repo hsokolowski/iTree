@@ -9,3 +9,20 @@
   z-index: 2;
   position: absolute;
 }
+.tabs-selects {
+  display: block;
+  height: 40px;
+  width: 100%;
+  padding: 0 16px;
+  background: #edf2f7;
+  border: 1px solid transparent;
+  //box-shadow: 0 0.0625rem 0.125rem rgb(0 0 0 / 15%);
+  border-radius: 0.375rem;
+  outline: none;
+  font-family: 'Noto Sans', sans-serif;
+  font-size: 14px;
+  text-align: left;
+  text-overflow: ellipsis;
+  line-height: 36px;
+  -webkit-appearance: none;
+}

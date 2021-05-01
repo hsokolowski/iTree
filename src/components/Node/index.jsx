@@ -50,11 +50,13 @@ const Node = props => {
       return;
     }
     console.log('builderConfig', builderConfig);
+
     const builderModel = {
       ...builderConfig,
       trainingSet: node.nodeSet,
-      algorithm: options.algorithm.toLowerCase(),
+      algorithm: options.algorithm.map(item => item.toLowerCase()),
     };
+
     const changeOptions = {
       isChanged: true,
       changedAttribute1: options.attr2 || node.attr2,

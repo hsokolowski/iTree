@@ -2,13 +2,20 @@ const workersMap = {
   c45: 'c45',
   tsp: 'tsp',
   tspw: 'tsp-weight',
+  mix: 'mix',
 };
 
 export function executeAlgorithm(options, changeOptions = {}) {
   console.log(options);
   return new Promise((resolve, reject) => {
     console.time(options.algorithm);
-    const worker = new Worker(`algorithms/${workersMap[options.algorithm]}-tree.js`);
+    let worker;
+    if (options.algorithm.length > 1) {
+      console.log('mix');
+      worker = new Worker(`algorithms/${workersMap['mix']}-tree.js`);
+    } else {
+      worker = new Worker(`algorithms/${workersMap[options.algorithm[0]]}-tree.js`);
+    }
     worker.onmessage = ({ data }) => {
       console.log('got a result', data);
       resolve(data);

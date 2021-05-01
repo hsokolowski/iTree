@@ -1,15 +1,16 @@
 import React from 'react';
 import { Icon, Input, Stack } from '@chakra-ui/react';
-import { ChevronLeftIcon } from '@chakra-ui/icons';
+import { FaLessThan, FaTimes } from 'react-icons/fa';
 import { Search as SearchBar } from '../../SearchBar';
 import './alg-style.scss';
 import { useAttributesContext } from '../../../contexts/AttributesContext';
+import { IconContext } from 'react-icons';
 
 export default function TabTSPW({ attribute, value, weight, changeValues }) {
   const { attributes: options } = useAttributesContext();
 
   const onAttributeChange = value => changeValues({ attribute: value });
-  const onWeightChange = event => changeValues({ weight: +event.target.value });
+  const onWeightChange = event => changeValues({ weight: parseFloat(event.target.value) });
   const onPivotChange = value => changeValues({ pivot: value });
 
   return (
@@ -22,12 +23,13 @@ export default function TabTSPW({ attribute, value, weight, changeValues }) {
         multiple={false}
         closeOnSelect={true}
       />
-      {/* </div> */}
-      <ChevronLeftIcon w={10} h={10} />
-      <Input value={weight} size="sm" name="c45-value" onChange={onWeightChange} />
-      <Icon viewBox="0 0 200 200" color="black.500">
-        <path fill="currentColor" d="M 100, 100 m -75, 0 a 75,75 0 1,0 150,0 a 75,75 0 1,0 -150,0" />
-      </Icon>
+      <IconContext.Provider value={{ style: { height: 40 } }}>
+        <FaLessThan size={50} />
+      </IconContext.Provider>
+      <Input variant="filled" value={weight} size="md" onChange={onWeightChange} />
+      <IconContext.Provider value={{ style: { height: 40 } }}>
+        <FaTimes size={50} />
+      </IconContext.Provider>
       <SearchBar
         value={value}
         onChange={onPivotChange}

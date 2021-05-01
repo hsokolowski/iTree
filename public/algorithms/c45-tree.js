@@ -39,47 +39,38 @@ function buildDecisionTreeC45(
     //if (maxTreeDepth === 0) {
     let _category = mostFrequentValue(trainingSet, categoryAttr);
     let _positiveCounter = 0;
-    let _hide = 0;
-    console.log('LIŚĆ bo maxTreeDepth ', maxTreeDepth, ' trainingSet.length', trainingSet.length);
-    trainingSet.forEach(element => {
+    for (let element of trainingSet) {
       if (element[categoryAttr] === _category) _positiveCounter++;
-    });
+    }
     let _negativeCounter = trainingSet.length - _positiveCounter;
     _quality = _positiveCounter / trainingSet.length;
-    if (_quality !== 1) _hide = 25;
     _quality = _quality * 100;
-    // restriction by maximal depth of tree
-    // or size of training set is to small
-    // so we have to terminate process of building tree
+
     return {
       category: _category,
-      quality: _quality,
+      quality: _quality.toFixed(2),
       matchedCount: _positiveCounter,
       notMatchedCount: _negativeCounter,
       trainingSet2: trainingSet,
     };
   }
-  //console.log(categoryAttr);
+
+  //LEAF
   var initialEntropy = entropy(trainingSet, categoryAttr);
-  console.log('initialEntropy ' + initialEntropy);
-  if (initialEntropy <= entropyThrehold) {
+  if (initialEntropy <= entropyThrehold && !isChanged) {
+    //console.log('initialEntropy ' + initialEntropy + '<=' + entropyThrehold + ' entropyThrehold');
     let _category = mostFrequentValue(trainingSet, categoryAttr);
     let _positiveCounter = 0;
-    let _hide = 0;
-    //console.log(trainingSet);
-    trainingSet.forEach(element => {
+    for (let element of trainingSet) {
       if (element[categoryAttr] === _category) _positiveCounter++;
-    });
+    }
     let _negativeCounter = trainingSet.length - _positiveCounter;
     _quality = _positiveCounter / trainingSet.length;
-    if (_quality !== 1) _hide = 25;
     _quality = _quality * 100;
-    // entropy of training set too small
-    // (it means that training set is almost homogeneous),
-    // so we have to terminate process of building tree
+
     return {
       category: _category,
-      quality: _quality,
+      quality: _quality.toFixed(2),
       matchedCount: _positiveCounter,
       notMatchedCount: _negativeCounter,
       trainingSet2: trainingSet,
@@ -245,19 +236,16 @@ function buildDecisionTreeC45(
   if (!bestSplit.gain) {
     let _category = mostFrequentValue(trainingSet, categoryAttr);
     let _positiveCounter = 0;
-    let _hide = 0;
-    //console.log(trainingSet);
-    trainingSet.forEach(element => {
+    for (let element of trainingSet) {
       if (element[categoryAttr] === _category) _positiveCounter++;
-    });
+    }
     let _negativeCounter = trainingSet.length - _positiveCounter;
     _quality = _positiveCounter / trainingSet.length;
-    if (_quality !== 1) _hide = 25;
     _quality = _quality * 100;
-    // can't find optimal split
+
     return {
       category: _category,
-      quality: _quality,
+      quality: _quality.toFixed(2),
       matchedCount: _positiveCounter,
       notMatchedCount: _negativeCounter,
       trainingSet2: trainingSet,

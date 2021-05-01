@@ -38,7 +38,7 @@ function Navigation({ onPrepareConfig }) {
   const { setBuilderConfig } = useBuilderConfigContext();
   const { isOpen, onToggle } = useDisclosure({ defaultIsOpen: true });
   const [dataSet, setDataSet] = useState(null);
-  const [algorithm, setAlgorithm] = useState('c45');
+  const [algorithm, setAlgorithm] = useState(['c45']);
   const [decisionAttribute, setDecisionAttribute] = useState(null);
   const [ignoredAttributes, setIgnoredAttributes] = useState([]);
   const [minItems, setMinItems] = useState(4);
@@ -109,6 +109,11 @@ function Navigation({ onPrepareConfig }) {
     setBuilderConfig(config);
   }
 
+  function handleSetAlgorithm(value) {
+    console.log(value);
+    setAlgorithm(value);
+  }
+
   return (
     <Box
       boxShadow="md"
@@ -141,11 +146,12 @@ function Navigation({ onPrepareConfig }) {
               <FormLabel fontSize={['md', 'md', 'xs', 'sm', 'md']}>Algorithm</FormLabel>
               <SearchBar
                 placeholder="Select algorithm"
-                onChange={setAlgorithm}
+                //onChange={setAlgorithm}
+                onChange={handleSetAlgorithm}
                 value={algorithm}
                 options={['c45', 'tsp', 'tspw'].map(v => ({ value: v, name: v.toUpperCase() }))}
-                multiple={false}
-                closeOnSelect={true}
+                multiple={true}
+                closeOnSelect={false}
               />
               {/* <FormHelperText width={size}>
               <Builder size={size} builder={prepareConfig()} />
@@ -184,7 +190,7 @@ function Navigation({ onPrepareConfig }) {
           <Box w={'100%'}>
             <FormControlNumberInput
               htmlId="minItemsCount"
-              label="Min items count"
+              label="Min node size"
               defaultValue={minItems}
               min={1}
               onChange={handleSetMinItems}

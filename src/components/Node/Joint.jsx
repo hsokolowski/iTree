@@ -10,6 +10,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Stack,
   Tooltip,
   useDisclosure,
 } from '@chakra-ui/react';
@@ -35,19 +36,36 @@ function Joint({ children, attr2, predicateName, pivot, weight, requestFoldToLea
   return (
     <Box mt={1}>
       <ButtonGroup size="md" isAttached variant="solid" className="tree-branch">
-        <Tooltip hasArrow label="Changes at attribute" bg="red.600" placement="top">
-          <Button size="xs" colorScheme="green" onClick={handleOpenModalClick}>
+        <Tooltip hasArrow label="Changes at attribute" bg="red.600" placement="top" p={3} fontSize={16}>
+          <Box
+            as={Button}
+            padding={5}
+            colorScheme="green"
+            onClick={handleOpenModalClick}
+            fontWeight={400}
+            fontSize={25}
+          >
+            <Stack direction={'row'} spacing="10px">
+              <Box>{attr2}</Box>
+              <Box fontSize={23}>
+                <b>{predicateName}</b>
+              </Box>
+              <Box>{weight}</Box>
+              <Box>{pivot}</Box>
+            </Stack>
+          </Box>
+          {/* <Button size="xs" colorScheme="green" onClick={handleOpenModalClick}>
             {attr2} <b>{predicateName}</b> {weight} {pivot}
-          </Button>
+          </Button> */}
         </Tooltip>
         <Tooltip hasArrow label="Fold a leaf" bg="orange.600" placement="right">
           <Button
-            size="xs"
+            size="md"
             borderRadius="0.375rem"
             rightIcon={<CloseIcon />}
             onClick={foldToLeaf}
             variant="solid"
-            //colorScheme="telegram"
+            padding={5}
             bg="#D8DBE2"
             _hover={{
               background: '#A9BCD0',
