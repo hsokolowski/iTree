@@ -88,7 +88,7 @@ function ReactTable({ set, cols }) {
         {headerGroups.map(headerGroup => (
           <Tr {...headerGroup.getHeaderGroupProps()}>
             <Th fontSize={11} p={1}>
-              {cols.length !== 0 ? 'ID' : ''}
+              {cols.length !== 0 ? 'No.' : ''}
             </Th>
             {headerGroup.headers.map(column => (
               <Th
@@ -125,11 +125,14 @@ function ReactTable({ set, cols }) {
               <Td fontSize={10} p={1}>
                 {i + 1}
               </Td>
-              {row.cells.map(cell => (
-                <Td {...cell.getCellProps()} isNumeric={cell.column.isNumeric} fontSize={10} p={1}>
-                  {cell.render('Cell')}
-                </Td>
-              ))}
+              {row.cells.map(cell => {
+                console.log(cell);
+                return (
+                  <Td {...cell.getCellProps()} isNumeric={cell.column.isNumeric} fontSize={10} p={1}>
+                    {cell.render('Cell')}
+                  </Td>
+                );
+              })}
             </Tr>
           );
         })}

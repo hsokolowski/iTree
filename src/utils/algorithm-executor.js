@@ -12,7 +12,7 @@ export function executeAlgorithm(options, changeOptions = {}) {
     let worker;
     if (options.algorithm.length > 1) {
       console.log('mix');
-      worker = new Worker(`algorithms/${workersMap['mix']}-tree.js`);
+      worker = new Worker(`algorithms/${workersMap.mix}-tree.js`);
     } else {
       worker = new Worker(`algorithms/${workersMap[options.algorithm[0]]}-tree.js`);
     }

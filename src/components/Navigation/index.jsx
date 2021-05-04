@@ -1,34 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '../../css/main.scss';
 import '../../css/inputs.scss';
-import { Collapse, Icon, useDisclosure } from '@chakra-ui/react';
+import { Checkbox, Collapse, Icon, useDisclosure } from '@chakra-ui/react';
 import { GiLightningTree } from 'react-icons/gi';
-import {
-  Button,
-  Stack,
-  FormHelperText,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
-  FormControl,
-  FormLabel,
-  Box,
-} from '@chakra-ui/react';
+import { Button, Stack, FormControl, FormLabel, Box } from '@chakra-ui/react';
 import FileReader from '../FileReader';
 import { Search as SearchBar } from '../SearchBar';
 import { getAllClasses } from '../../utils/config-builder';
-import { builder } from '../../services/Playground';
-
-import IgnoredAttributes from './IgnoredAttributes';
-import Builder from './Builder';
 import FormControlNumberInput from './FormControlNumberInput';
-import DrawerRoll, { DrawerMemo } from './DrawerRoll';
+import { DrawerMemo } from './DrawerRoll';
 import { useLoadingContext } from '../../contexts/LoadingContext';
 import { useAttributesContext } from '../../contexts/AttributesContext';
 import { useBuilderConfigContext } from '../../contexts/BuilderConfigContext';
-import { useIgnoredContext } from '../../contexts/IgnoredContext';
 
 /**
  * @typedef {import('../../utils/decision-tree.js').DecisionTreeBuilder} DecisionTreeBuilder
@@ -47,6 +30,7 @@ function Navigation({ onPrepareConfig }) {
   const [allAttrs, setAllAttributes] = useState([]);
   const [allClazz, setAllClasses] = useState([]);
   const [config, setConfig] = useState({});
+  const [isHeaders, setIsHeaders] = useState(true);
   const { attributes: options, onAttributesChange } = useAttributesContext();
   //const { attributes: ignoredAttributes, onIgnoredChange } = useIgnoredContext();
   const { isLoading } = useLoadingContext();
@@ -138,8 +122,15 @@ function Navigation({ onPrepareConfig }) {
           <Box w={'100%'}>
             <FormControl id="deploySet" width="auto">
               <FormLabel fontSize={['md', 'md', 'xs', 'sm', 'md']}>Deploy Set</FormLabel>
-              <FileReader onChange={handleGetAllAttributes} isHeaders={false} />{' '}
+              <FileReader onChange={handleGetAllAttributes} isHeaders={isHeaders} />
             </FormControl>
+            <Checkbox
+              colorScheme="green"
+              defaultIsChecked={isHeaders}
+              onChange={e => setIsHeaders(e.target.checked)}
+            >
+              Headers?
+            </Checkbox>
           </Box>
           <Box w={'100%'}>
             <FormControl id="algorithm" width="auto" zIndex={2}>

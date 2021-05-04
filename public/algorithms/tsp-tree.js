@@ -65,7 +65,6 @@ function buildDecisionTreeTSP(
     let _category = mostFrequentValue(trainingSet, categoryAttr);
     let _positiveCounter = 0;
     for (let element of trainingSet) {
-      console.log(element[categoryAttr] === _category, element[categoryAttr] == _category);
       if (element[categoryAttr] === _category) _positiveCounter++;
     }
     let _negativeCounter = trainingSet.length - _positiveCounter;

@@ -9,7 +9,7 @@ import { predict } from '../../utils/predict';
  * @param {Object[]} props.testSet
  * @param {Function} props.onChange
  */
-function Predicter({ tree, onChange, testSet }) {
+function Predicter({ tree, onChange, testSet, accuracy }) {
   const [allow, setAllow] = useState(true);
 
   function handlePredict() {
@@ -28,7 +28,7 @@ function Predicter({ tree, onChange, testSet }) {
           <Button leftIcon={<GiWaterDivinerStick />} onClick={handlePredict}>
             Predict
           </Button>
-          <Button disabled={allow}>Confusion Matrix</Button>
+          <Button disabled={allow}>Confusion Matrix {accuracy}</Button>
         </ButtonGroup>
       </Box>
     </Box>

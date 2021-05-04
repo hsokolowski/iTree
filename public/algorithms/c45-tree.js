@@ -1,4 +1,4 @@
-// @ts-check
+// @ts-nocheck
 
 /**
  * @typedef {Object} DecisionTreeBuilder
@@ -32,8 +32,10 @@ function buildDecisionTreeC45(
     entropyThrehold,
     maxTreeDepth,
     ignoredAttributes,
+    oldTree,
+    isUpdate,
   } = builder;
-
+  console.log('old Treee', oldTree, 'isUpdate', isUpdate, 'isChange', isChanged);
   let _quality = 0;
   if (maxTreeDepth === 0 || trainingSet.length <= minItemsCount) {
     //if (maxTreeDepth === 0) {
@@ -155,6 +157,47 @@ function buildDecisionTreeC45(
     }
 
     isChanged = false;
+  } else if (isUpdate && !isChanged) {
+    console.log('################### IS UPDATE BITCH ##############3');
+    let attr = oldTree.attr2;
+    pivot = oldTree.pivot;
+
+    if (!isNaN(pivot)) {
+      pivot = parseFloat(pivot);
+    }
+
+    if (typeof pivot == 'number') {
+      predicateName = '>=';
+    } else {
+      predicateName = '==';
+    }
+
+    attrPredPivot = attr + predicateName + pivot;
+    if (alreadyChecked[attrPredPivot]) {
+    }
+    alreadyChecked[attrPredPivot] = true;
+
+    predicate = predicates[predicateName];
+
+    currSplit = split(trainingSet, attr, predicate, pivot);
+
+    matchEntropy = entropy(currSplit.match, categoryAttr);
+    notMatchEntropy = entropy(currSplit.notMatch, categoryAttr);
+
+    newEntropy = 0;
+    newEntropy += matchEntropy * currSplit.match.length;
+    newEntropy += notMatchEntropy * currSplit.notMatch.length;
+    newEntropy /= trainingSet.length;
+    currGain = initialEntropy - newEntropy;
+    console.log('CURRENT GAIN ' + currGain);
+    if (currGain > bestSplit.gain) {
+      bestSplit = currSplit;
+      bestSplit.predicateName = predicateName;
+      bestSplit.predicate = predicate;
+      bestSplit.attribute = attr;
+      bestSplit.pivot = pivot;
+      bestSplit.gain = currGain;
+    }
   } else {
     //delete space from property in object
     // let ignore=""
@@ -257,11 +300,19 @@ function buildDecisionTreeC45(
   // building subtrees
   builder.maxTreeDepth = maxTreeDepth - 1;
 
-  builder.trainingSet = bestSplit.match;
-  var matchSubTree = buildDecisionTreeC45(builder);
+  var matchSubTree = buildDecisionTreeC45({
+    ...builder,
+    trainingSet: bestSplit.match,
+    isUpdate: oldTree?.match?.category ? false : oldTree?.match,
+    oldTree: oldTree?.match,
+  });
 
-  builder.trainingSet = bestSplit.notMatch;
-  var notMatchSubTree = buildDecisionTreeC45(builder);
+  var notMatchSubTree = buildDecisionTreeC45({
+    ...builder,
+    trainingSet: bestSplit.notMatch,
+    isUpdate: oldTree?.notMatch?.category ? false : oldTree?.notMatch,
+    oldTree: oldTree?.notMatch,
+  });
 
   return {
     attr2: bestSplit.attribute,

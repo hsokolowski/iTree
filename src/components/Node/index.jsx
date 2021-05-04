@@ -54,6 +54,8 @@ const Node = props => {
     const builderModel = {
       ...builderConfig,
       trainingSet: node.nodeSet,
+      oldTree: JSON.parse(JSON.stringify(node)),
+      isUpdate: true,
       algorithm: options.algorithm.map(item => item.toLowerCase()),
     };
 

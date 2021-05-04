@@ -27,7 +27,7 @@ const Tree = ({ options }) => {
   //   console.log('Call to doSomething took ' + (t1 - t0) + ' milliseconds.');
   //   return r;
   // }, [options]);
-
+  const [accuracy, setAccuracy] = useState(0);
   const [root, setRoot] = useState(null);
   const [testSet, setTestSet] = useState([]);
   const { isLoading, setIsLoading } = useLoadingContext();
@@ -56,7 +56,10 @@ const Tree = ({ options }) => {
     };
   }, [options, setIsLoading]);
 
-  useEffect(() => logTree(root), [root]);
+  useEffect(() => {
+    logTree(root);
+    setAccuracy(Math.random() * 10);
+  }, [root]);
 
   const requestChildChange = newRoot => setRoot(newRoot);
 
@@ -79,7 +82,7 @@ const Tree = ({ options }) => {
         <Box>
           <TestSetFileReader onChange={handleGetTestSet} isHeaders={false} />
         </Box>
-        <Predicter tree={root} testSet={testSet} onChange={predict} />
+        <Predicter tree={root} testSet={testSet} onChange={predict} accuracy={accuracy} />
       </Stack>
       {isLoading && <Spinner size="xl" />}
       <h1>Tree nodes:</h1>
