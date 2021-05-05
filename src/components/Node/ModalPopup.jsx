@@ -18,7 +18,11 @@ function ModalPopup({ attr2, predicateName, pivot, weight, isOpen, nodeSet, onOp
   };
   const handleConfirm = () => {
     onClose();
-    onChange(state);
+    onChange({ ...state, isUpdate: false });
+  };
+  const handleUpdate = () => {
+    onClose();
+    onChange({ ...state, isUpdate: true });
   };
 
   return (
@@ -33,8 +37,11 @@ function ModalPopup({ attr2, predicateName, pivot, weight, isOpen, nodeSet, onOp
           <Configurator onChange={handleOnChange} attribute={attr2} pivot={pivot} weight={weight} />
         </ModalBody>
         <ModalFooter>
+          <Button colorScheme="gray" onClick={handleUpdate}>
+            Update
+          </Button>
           <Button colorScheme="blue" onClick={handleConfirm}>
-            Confirm
+            Rebuild
           </Button>
         </ModalFooter>
       </ModalContent>

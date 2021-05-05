@@ -50,18 +50,20 @@ const Node = props => {
       return;
     }
     console.log('builderConfig', builderConfig);
+    console.log('node', node);
+    console.log('options', options);
 
     const builderModel = {
       ...builderConfig,
-      trainingSet: node.nodeSet,
+      //trainingSet: node.nodeSet,
       oldTree: JSON.parse(JSON.stringify(node)),
-      isUpdate: true,
+      isUpdate: options.isUpdate || false,
       algorithm: options.algorithm.map(item => item.toLowerCase()),
     };
 
     const changeOptions = {
       isChanged: true,
-      changedAttribute1: options.attr2 || node.attr2,
+      changedAttribute1: options.attribute || node.attr2,
       changedAttribute2: options.pivot || node.pivot,
       weight: typeof options.weight === 'number' ? options.weight : node.weight,
     };

@@ -23,7 +23,6 @@ function buildDecisionTreeC45(
   changedAttribute1 = null,
   changedAttribute2 = null
 ) {
-  //debugger;
   const builder = { ..._builder };
   const {
     trainingSet,
@@ -35,48 +34,21 @@ function buildDecisionTreeC45(
     oldTree,
     isUpdate,
   } = builder;
-  console.log('old Treee', oldTree, 'isUpdate', isUpdate, 'isChange', isChanged);
-  let _quality = 0;
-  if (maxTreeDepth === 0 || trainingSet.length <= minItemsCount) {
-    //if (maxTreeDepth === 0) {
-    let _category = mostFrequentValue(trainingSet, categoryAttr);
-    let _positiveCounter = 0;
-    for (let element of trainingSet) {
-      if (element[categoryAttr] === _category) _positiveCounter++;
-    }
-    let _negativeCounter = trainingSet.length - _positiveCounter;
-    _quality = _positiveCounter / trainingSet.length;
-    _quality = _quality * 100;
 
-    return {
-      category: _category,
-      quality: _quality.toFixed(2),
-      matchedCount: _positiveCounter,
-      notMatchedCount: _negativeCounter,
-      trainingSet2: trainingSet,
-    };
+  //console.log('old Treee', oldTree, 'isUpdate', isUpdate, 'isChange', isChanged, trainingSet);
+
+  let _quality = 0;
+  if (!isUpdate && (maxTreeDepth === 0 || trainingSet?.length <= minItemsCount)) {
+    console.log('LEAF Minimal node size', minItemsCount + 'trainingSet?.length ' + trainingSet?.length);
+    return MakeLeaf(trainingSet, categoryAttr);
   }
 
   //LEAF
   var initialEntropy = entropy(trainingSet, categoryAttr);
-  if (initialEntropy <= entropyThrehold && !isChanged) {
-    //console.log('initialEntropy ' + initialEntropy + '<=' + entropyThrehold + ' entropyThrehold');
-    let _category = mostFrequentValue(trainingSet, categoryAttr);
-    let _positiveCounter = 0;
-    for (let element of trainingSet) {
-      if (element[categoryAttr] === _category) _positiveCounter++;
-    }
-    let _negativeCounter = trainingSet.length - _positiveCounter;
-    _quality = _positiveCounter / trainingSet.length;
-    _quality = _quality * 100;
-
-    return {
-      category: _category,
-      quality: _quality.toFixed(2),
-      matchedCount: _positiveCounter,
-      notMatchedCount: _negativeCounter,
-      trainingSet2: trainingSet,
-    };
+  console.log('initial entropy', initialEntropy);
+  if (initialEntropy <= entropyThrehold && !isChanged && !isUpdate) {
+    console.log('LEAF initial entropy', initialEntropy);
+    return MakeLeaf(trainingSet, categoryAttr);
   }
 
   // used as hash-set for avoiding the checking of split by rules
@@ -131,8 +103,8 @@ function buildDecisionTreeC45(
 
     // splitting training set by given 'attribute-predicate-value'
     currSplit = split(trainingSet, attr, predicate, pivot);
-    //console.log(currSplit.match)
-    //console.log(currSplit.notMatch)
+    // console.log(currSplit.match);
+    // console.log(currSplit.notMatch);
 
     // calculating entropy of subsets
     matchEntropy = entropy(currSplit.match, categoryAttr);
@@ -144,8 +116,18 @@ function buildDecisionTreeC45(
     newEntropy += notMatchEntropy * currSplit.notMatch.length;
     newEntropy /= trainingSet.length;
     currGain = initialEntropy - newEntropy;
-    console.log('CURRENT GAIN ' + currGain);
+    console.log('IS CHAANGED CURRENT GAIN ' + currGain);
     if (currGain > bestSplit.gain) {
+      // remember pairs 'attribute-predicate-value'
+      // which provides informational gain
+      bestSplit = currSplit;
+      bestSplit.predicateName = predicateName;
+      bestSplit.predicate = predicate;
+      bestSplit.attribute = attr;
+      bestSplit.pivot = pivot;
+      bestSplit.gain = currGain;
+    }
+    if (!currGain) {
       // remember pairs 'attribute-predicate-value'
       // which provides informational gain
       bestSplit = currSplit;
@@ -158,56 +140,74 @@ function buildDecisionTreeC45(
 
     isChanged = false;
   } else if (isUpdate && !isChanged) {
-    console.log('################### IS UPDATE BITCH ##############3');
-    let attr = oldTree.attr2;
-    pivot = oldTree.pivot;
-
-    if (!isNaN(pivot)) {
-      pivot = parseFloat(pivot);
-    }
-
-    if (typeof pivot == 'number') {
-      predicateName = '>=';
+    if (oldTree?.category) {
+      console.log('oldTree?.category', oldTree?.category);
+      //if (maxTreeDepth === 0) {
+      let _category = oldTree.category;
+      if (trainingSet.length === 0) {
+        console.log('trainigSet pusty', trainingSet);
+        return {
+          category: _category,
+          quality: 0,
+          matchedCount: 0,
+          notMatchedCount: 0,
+          trainingSet2: [],
+        };
+      }
+      return MakeLeaf(trainingSet, _category);
     } else {
-      predicateName = '==';
-    }
+      console.log('################### NODE ##############3');
+      let attr = oldTree.attr2;
+      pivot = oldTree.pivot;
 
-    attrPredPivot = attr + predicateName + pivot;
-    if (alreadyChecked[attrPredPivot]) {
-    }
-    alreadyChecked[attrPredPivot] = true;
+      if (!isNaN(pivot)) {
+        pivot = parseFloat(pivot);
+      }
 
-    predicate = predicates[predicateName];
+      if (typeof pivot == 'number') {
+        predicateName = '>=';
+      } else {
+        predicateName = '==';
+      }
 
-    currSplit = split(trainingSet, attr, predicate, pivot);
+      attrPredPivot = attr + predicateName + pivot;
+      if (alreadyChecked[attrPredPivot]) {
+      }
+      alreadyChecked[attrPredPivot] = true;
 
-    matchEntropy = entropy(currSplit.match, categoryAttr);
-    notMatchEntropy = entropy(currSplit.notMatch, categoryAttr);
+      predicate = predicates[predicateName];
 
-    newEntropy = 0;
-    newEntropy += matchEntropy * currSplit.match.length;
-    newEntropy += notMatchEntropy * currSplit.notMatch.length;
-    newEntropy /= trainingSet.length;
-    currGain = initialEntropy - newEntropy;
-    console.log('CURRENT GAIN ' + currGain);
-    if (currGain > bestSplit.gain) {
-      bestSplit = currSplit;
-      bestSplit.predicateName = predicateName;
-      bestSplit.predicate = predicate;
-      bestSplit.attribute = attr;
-      bestSplit.pivot = pivot;
-      bestSplit.gain = currGain;
+      currSplit = split(trainingSet, attr, predicate, pivot);
+      console.log('currSplit', currSplit);
+      matchEntropy = entropy(currSplit.match, categoryAttr);
+      notMatchEntropy = entropy(currSplit.notMatch, categoryAttr);
+      console.log('matchEntropy', matchEntropy, 'notMatchEntropy', notMatchEntropy);
+      newEntropy = 0;
+      newEntropy += matchEntropy * currSplit.match.length;
+      newEntropy += notMatchEntropy * currSplit.notMatch.length;
+      newEntropy /= trainingSet.length;
+      currGain = initialEntropy - newEntropy;
+      console.log('CURRENT GAIN ' + currGain);
+      if (currGain > bestSplit.gain) {
+        bestSplit = currSplit;
+        bestSplit.predicateName = predicateName;
+        bestSplit.predicate = predicate;
+        bestSplit.attribute = attr;
+        bestSplit.pivot = pivot;
+        bestSplit.gain = currGain;
+      }
+      if (!currGain) {
+        // remember pairs 'attribute-predicate-value'
+        // which provides informational gain
+        bestSplit = currSplit;
+        bestSplit.predicateName = predicateName;
+        bestSplit.predicate = predicate;
+        bestSplit.attribute = attr;
+        bestSplit.pivot = pivot;
+        bestSplit.gain = currGain;
+      }
     }
   } else {
-    //delete space from property in object
-    // let ignore=""
-    // if(!(Object.entries(ignoredAttributes).length === 0 && ignoredAttributes.constructor === Object)){
-    //     ignore = Object.keys(ignoredAttributes)
-    //     ignore = ignore[0].substring(0, ignore[0].length - 1);
-    //     console.log(ignore)
-    // }
-    //console.log("Liczy")
-
     for (var i = trainingSet.length - 1; i >= 0; i--) {
       var item = trainingSet[i];
 
@@ -261,7 +261,7 @@ function buildDecisionTreeC45(
         newEntropy += notMatchEntropy * currSplit.notMatch.length;
         newEntropy /= trainingSet.length;
         currGain = initialEntropy - newEntropy;
-        //console.log("CURRENT GAIN 2"+currGain)
+        console.log(' !!!!!!!!!!!!  CURRENT GAIN 2', attrPredPivot, currGain);
         if (currGain > bestSplit.gain) {
           // remember pairs 'attribute-predicate-value'
           // which provides informational gain
@@ -275,42 +275,27 @@ function buildDecisionTreeC45(
       }
     }
   }
-  console.log(bestSplit.gain);
-  if (!bestSplit.gain) {
-    let _category = mostFrequentValue(trainingSet, categoryAttr);
-    let _positiveCounter = 0;
-    for (let element of trainingSet) {
-      if (element[categoryAttr] === _category) _positiveCounter++;
-    }
-    let _negativeCounter = trainingSet.length - _positiveCounter;
-    _quality = _positiveCounter / trainingSet.length;
-    _quality = _quality * 100;
-
-    return {
-      category: _category,
-      quality: _quality.toFixed(2),
-      matchedCount: _positiveCounter,
-      notMatchedCount: _negativeCounter,
-      trainingSet2: trainingSet,
-    };
+  console.log('bestSplit.gain', bestSplit.gain);
+  if (!bestSplit.gain && !isUpdate) {
+    return MakeLeaf(trainingSet, categoryAttr);
   }
-
-  //console.log(window.list_obj)
 
   // building subtrees
   builder.maxTreeDepth = maxTreeDepth - 1;
-
+  console.log('BestSpLIT', bestSplit);
   var matchSubTree = buildDecisionTreeC45({
     ...builder,
-    trainingSet: bestSplit.match,
-    isUpdate: oldTree?.match?.category ? false : oldTree?.match,
+    trainingSet: bestSplit.match?.length ? bestSplit.match : [],
+    //isUpdate: oldTree?.match?.category ? false : oldTree?.match,
+    isUpdate: isUpdate,
     oldTree: oldTree?.match,
   });
 
   var notMatchSubTree = buildDecisionTreeC45({
     ...builder,
-    trainingSet: bestSplit.notMatch,
-    isUpdate: oldTree?.notMatch?.category ? false : oldTree?.notMatch,
+    trainingSet: bestSplit.notMatch?.length ? bestSplit.notMatch : [],
+    //isUpdate: oldTree?.notMatch?.category ? false : oldTree?.notMatch,
+    isUpdate: isUpdate,
     oldTree: oldTree?.notMatch,
   });
 
@@ -320,9 +305,12 @@ function buildDecisionTreeC45(
     pivot: bestSplit.pivot,
     match: matchSubTree,
     notMatch: notMatchSubTree,
-    matchedCount: bestSplit.match.length,
-    notMatchedCount: bestSplit.notMatch.length,
-    nodeSet: bestSplit.match.concat(bestSplit.notMatch),
+    matchedCount: bestSplit.match?.length ? bestSplit.match.length : 0,
+    notMatchedCount: bestSplit.notMatch?.length ? bestSplit.notMatch.length : 0,
+    nodeSet:
+      bestSplit.match?.length && bestSplit.notMatch?.length
+        ? bestSplit.match?.concat(bestSplit.notMatch)
+        : [],
   };
 }
 
@@ -437,6 +425,26 @@ var predicates = {
     return a >= b;
   },
 };
+
+function MakeLeaf(trainingSet, categoryAttr) {
+  var _quality = 0;
+  let _category = mostFrequentValue(trainingSet, categoryAttr);
+  let _positiveCounter = 0;
+  for (let element of trainingSet) {
+    if (element[categoryAttr] === _category) _positiveCounter++;
+  }
+  let _negativeCounter = trainingSet.length - _positiveCounter;
+  _quality = _positiveCounter / trainingSet.length;
+  _quality = _quality * 100;
+
+  return {
+    category: _category,
+    quality: _quality.toFixed(2),
+    matchedCount: _positiveCounter,
+    notMatchedCount: _negativeCounter,
+    trainingSet2: trainingSet,
+  };
+}
 
 /** @type {Worker} */
 // @ts-ignore
