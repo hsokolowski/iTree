@@ -139,7 +139,7 @@ function Navigation({ onPrepareConfig }) {
             </FormControl>
           </WrapItem>
           <WrapItem>
-            <FormControl id="algorithm" zIndex={2}>
+            <FormControl id="algorithm" zIndex={2} w={100}>
               <FormHelperText mb={2} mt={0}>
                 Algorithm
               </FormHelperText>
@@ -160,7 +160,7 @@ function Navigation({ onPrepareConfig }) {
             </FormControl>
           </WrapItem>
           <WrapItem>
-            <FormControl id="decisionAttr" width="auto" zIndex={2}>
+            <FormControl id="decisionAttr" width="auto" zIndex={2} w={130}>
               <FormHelperText mb={2} mt={0}>
                 Decision attr.
               </FormHelperText>

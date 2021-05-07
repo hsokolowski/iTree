@@ -23,11 +23,18 @@ export default function TabTSPW({ attribute, value, weight, changeValues }) {
         multiple={false}
         closeOnSelect={true}
       />
-      <IconContext.Provider value={{ style: { height: 40 } }}>
+      <IconContext.Provider value={{ style: { height: 32 } }}>
         <FaLessThan size={50} />
       </IconContext.Provider>
-      <Input variant="filled" value={weight} size="md" onChange={onWeightChange} />
-      <IconContext.Provider value={{ style: { height: 40 } }}>
+      <Input
+        variant="filled"
+        value={weight}
+        size="sm"
+        onChange={onWeightChange}
+        w={70}
+        borderRadius={'0.375rem'}
+      />
+      <IconContext.Provider value={{ style: { height: 32 } }}>
         <FaTimes size={50} />
       </IconContext.Provider>
       <SearchBar

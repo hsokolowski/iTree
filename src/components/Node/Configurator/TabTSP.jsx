@@ -21,7 +21,7 @@ export default function TabTSP({ attribute, value, changeValues }) {
         multiple={false}
         closeOnSelect={true}
       />
-      <IconContext.Provider value={{ style: { height: 40 } }}>
+      <IconContext.Provider value={{ style: { height: 32 } }}>
         <FaLessThan size={50} />
       </IconContext.Provider>
       <SearchBar

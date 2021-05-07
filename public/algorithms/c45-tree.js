@@ -44,7 +44,7 @@ function buildDecisionTreeC45(
 
   //LEAF
   var initialEntropy = entropy(trainingSet, categoryAttr);
-  console.log('initial entropy', initialEntropy);
+  //console.log('initial entropy', initialEntropy);
   if (initialEntropy <= entropyThrehold && !isChanged && !isUpdate) {
     console.log('LEAF initial entropy', initialEntropy);
     return MakeLeaf(trainingSet, categoryAttr);
@@ -115,7 +115,7 @@ function buildDecisionTreeC45(
     newEntropy += notMatchEntropy * currSplit.notMatch.length;
     newEntropy /= trainingSet.length;
     currGain = initialEntropy - newEntropy;
-    console.log('IS CHAANGED CURRENT GAIN ' + currGain);
+    //console.log('IS CHAANGED CURRENT GAIN ' + currGain);
     if (currGain > bestSplit.gain) {
       // remember pairs 'attribute-predicate-value'
       // which provides informational gain
@@ -125,6 +125,7 @@ function buildDecisionTreeC45(
       bestSplit.attribute = attr;
       bestSplit.pivot = pivot;
       bestSplit.gain = currGain;
+      console.log('@ IS CHANGE ', bestSplit);
     }
     if (!currGain) {
       // remember pairs 'attribute-predicate-value'
@@ -135,16 +136,18 @@ function buildDecisionTreeC45(
       bestSplit.attribute = attr;
       bestSplit.pivot = pivot;
       bestSplit.gain = currGain;
+      console.log('@ IS CHANGE ', bestSplit);
     }
 
     isChanged = false;
   } else if (isUpdate && !isChanged) {
+    console.log('# IS UPDATE');
     if (oldTree?.category) {
-      console.log('oldTree?.category', oldTree?.category);
-      //if (maxTreeDepth === 0) {
-      let _category = oldTree.category;
+      console.log('# IS UPDATE - oldTree?.category', oldTree?.category);
+
+      let _category = oldTree?.category;
       if (trainingSet.length === 0) {
-        console.log('trainigSet pusty', trainingSet);
+        console.log('# IS UPDATE - trainingSet.length = 0');
         return {
           category: _category,
           quality: 0,
@@ -153,9 +156,24 @@ function buildDecisionTreeC45(
           trainingSet2: [],
         };
       }
-      return MakeLeaf(trainingSet, _category);
+      var _quality = 0;
+      let _positiveCounter = 0;
+      for (let element of trainingSet) {
+        if (element[categoryAttr] === _category) _positiveCounter++;
+      }
+      let _negativeCounter = trainingSet.length - _positiveCounter;
+      _quality = _positiveCounter / trainingSet.length;
+      _quality = _quality * 100;
+
+      return {
+        category: _category,
+        quality: _quality.toFixed(2),
+        matchedCount: _positiveCounter,
+        notMatchedCount: _negativeCounter,
+        trainingSet2: trainingSet,
+      };
     } else {
-      console.log('################### NODE ##############3');
+      console.log('# IS UPDATE - NODE');
       let attr = oldTree.attr2;
       pivot = oldTree.pivot;
 
@@ -274,14 +292,14 @@ function buildDecisionTreeC45(
       }
     }
   }
-  console.log('bestSplit.gain', bestSplit.gain);
+  //console.log('bestSplit.gain', bestSplit.gain);
   if (!bestSplit.gain && !isUpdate) {
     return MakeLeaf(trainingSet, categoryAttr);
   }
 
   // building subtrees
   builder.maxTreeDepth = maxTreeDepth - 1;
-  console.log('BestSpLIT', bestSplit);
+  //console.log('BestSpLIT', bestSplit);
   var matchSubTree = buildDecisionTreeC45({
     ...builder,
     trainingSet: bestSplit.match?.length ? bestSplit.match : [],
@@ -306,10 +324,11 @@ function buildDecisionTreeC45(
     notMatch: notMatchSubTree,
     matchedCount: bestSplit.match?.length ? bestSplit.match.length : 0,
     notMatchedCount: bestSplit.notMatch?.length ? bestSplit.notMatch.length : 0,
-    nodeSet:
-      bestSplit.match?.length && bestSplit.notMatch?.length
-        ? bestSplit.match?.concat(bestSplit.notMatch)
-        : [],
+    // nodeSet:
+    //   bestSplit.match?.length && bestSplit.notMatch?.length
+    //     ? bestSplit.match?.concat(bestSplit.notMatch)
+    //     : [],
+    nodeSet: trainingSet,
   };
 }
 

@@ -22,12 +22,19 @@ export default function TabC45({ attribute, value, changeValues }) {
         multiple={false}
         closeOnSelect={true}
       />
-      <IconContext.Provider value={{ style: { height: 40 } }}>
+      <IconContext.Provider value={{ style: { height: 32 } }}>
         <FaGreaterThan size={50} />
         <FaEquals size={50} />
       </IconContext.Provider>
 
-      <Input variant="filled" value={value} size="md" name="c45-value" onChange={onPivotChange} />
+      <Input
+        variant="filled"
+        value={value}
+        size="sm"
+        name="c45-value"
+        onChange={onPivotChange}
+        borderRadius={'0.375rem'}
+      />
     </Stack>
   );
 }

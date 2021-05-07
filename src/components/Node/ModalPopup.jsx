@@ -8,6 +8,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Stack,
 } from '@chakra-ui/react';
 import Configurator from './Configurator';
 
@@ -37,12 +38,14 @@ function ModalPopup({ attr2, predicateName, pivot, weight, isOpen, nodeSet, onOp
           <Configurator onChange={handleOnChange} attribute={attr2} pivot={pivot} weight={weight} />
         </ModalBody>
         <ModalFooter>
-          <Button colorScheme="gray" onClick={handleUpdate}>
-            Update
-          </Button>
-          <Button colorScheme="blue" onClick={handleConfirm}>
-            Rebuild
-          </Button>
+          <Stack spacing={5} direction="row">
+            <Button colorScheme="gray" onClick={handleUpdate}>
+              Update
+            </Button>
+            <Button colorScheme="blue" onClick={handleConfirm}>
+              Rebuild
+            </Button>
+          </Stack>
         </ModalFooter>
       </ModalContent>
     </Modal>
