@@ -18,7 +18,9 @@ function DrawerRoll({ ignoredAttributes }) {
 
   return (
     <>
-      <Button onClick={onOpen}>Open Drawer</Button>
+      <Button size="xs" onClick={onOpen} variant="outline">
+        Open Drawer
+      </Button>
       <Drawer placement="right" onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />
         <DrawerContent>

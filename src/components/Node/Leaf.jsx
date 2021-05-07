@@ -1,23 +1,24 @@
-import { Box, Button, Menu, MenuButton, MenuItem, MenuList, Text, Tooltip } from '@chakra-ui/react';
+import { Box, Button, Menu, MenuButton, MenuItem, MenuList, Tooltip } from '@chakra-ui/react';
 import React from 'react';
-import { ChevronDownIcon, DownloadIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon } from '@chakra-ui/icons';
 
 function Leaf({ category, matchedCount, notMatchedCount, quality, requestLeafUnfold }) {
   return (
     <Box
       d="flex"
       alignItems="baseline"
-      borderWidth="2px"
+      border={'2px solid #eee'}
+      //bg={'#3182ce'}
       borderRadius="lg"
       flexDirection="column"
       maxW="xs"
-      p="1"
+      p={3}
       my="2"
-      boxShadow="md"
+      boxShadow="lg"
       className={'tree-branch'}
     >
       <Box
-        color="gray.500"
+        color="gray.600"
         fontWeight="semibold"
         letterSpacing="wide"
         fontSize="sm"

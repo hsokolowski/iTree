@@ -37,35 +37,27 @@ function Joint({ children, attr2, predicateName, pivot, weight, requestFoldToLea
     <Box mt={1}>
       <ButtonGroup size="md" isAttached variant="solid" className="tree-branch">
         <Tooltip hasArrow label="Changes at attribute" bg="red.600" placement="top" p={3} fontSize={16}>
-          <Box
-            as={Button}
-            padding={5}
-            colorScheme="green"
-            onClick={handleOpenModalClick}
-            fontWeight={400}
-            fontSize={25}
-          >
-            <Stack direction={'row'} spacing="10px">
+          <Button colorScheme="blue" onClick={handleOpenModalClick} fontWeight={400} size="sm" bg="#006a4e">
+            <Stack direction={'row'} spacing="5px">
               <Box>{attr2}</Box>
-              <Box fontSize={23}>
+              <Box>
                 <b>{predicateName}</b>
               </Box>
               <Box>{weight}</Box>
               <Box>{pivot}</Box>
             </Stack>
-          </Box>
+          </Button>
           {/* <Button size="xs" colorScheme="green" onClick={handleOpenModalClick}>
             {attr2} <b>{predicateName}</b> {weight} {pivot}
           </Button> */}
         </Tooltip>
         <Tooltip hasArrow label="Fold a leaf" bg="orange.600" placement="right">
           <Button
-            size="md"
+            size="sm"
             borderRadius="0.375rem"
             rightIcon={<CloseIcon />}
             onClick={foldToLeaf}
             variant="solid"
-            padding={5}
             bg="#D8DBE2"
             _hover={{
               background: '#A9BCD0',

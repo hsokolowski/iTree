@@ -27,29 +27,29 @@ function FormControlNumberInput({ defaultValue, min, max, step, onChange, label,
   }
 
   return (
-    <FormControl id={htmlId} width="auto">
-      <FormLabel fontSize={['md', 'md', 'xs', 'sm', 'md']}>{label}</FormLabel>
-      <NumberInput
-        defaultValue={defaultValue}
-        min={min}
-        step={step}
-        max={max}
-        variant="solid"
-        onChange={handleChange}
-        shadow={'md'}
-        //border="1px solid #E2E8F0"
-        borderRadius="0.375rem"
-        _hover={{
-          borderColor: '#2fcc8b',
-        }}
-      >
-        <NumberInputField />
-        <NumberInputStepper>
-          <NumberIncrementStepper />
-          <NumberDecrementStepper />
-        </NumberInputStepper>
-      </NumberInput>
-    </FormControl>
+    // <FormControl id={htmlId}>
+    //   <FormLabel fontSize={['xs', 'sm', 'md']}>{label}</FormLabel>
+    <NumberInput
+      defaultValue={defaultValue}
+      min={min}
+      step={step}
+      max={max}
+      size="sm"
+      onChange={handleChange}
+      bg="white"
+      borderRadius="0.375rem"
+      w={100}
+      // _hover={{
+      //   borderColor: '#2fcc8b',
+      // }}
+    >
+      <NumberInputField borderRadius="0.375rem" />
+      <NumberInputStepper borderRadius="0.375rem">
+        <NumberIncrementStepper />
+        <NumberDecrementStepper />
+      </NumberInputStepper>
+    </NumberInput>
+    // {/* </FormControl> */}
   );
 }
 

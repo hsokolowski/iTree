@@ -16,7 +16,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { CgDatabase } from 'react-icons/cg';
-import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from 'react-icons/io';
+import { AiOutlineArrowDown, AiOutlineArrowUp } from 'react-icons/ai';
 import DataViewerTable from './DataViewerTable';
 
 function DataViewer({ node, side, onChange, hide }) {
@@ -30,26 +30,39 @@ function DataViewer({ node, side, onChange, hide }) {
       <ButtonGroup isAttached>
         <Button
           mt={1}
-          px={2}
-          py={3}
+          // px={2}
+          // py={3}
           onClick={() => onChange(!hide)}
-          colorScheme="teal"
+          // bg={'#444'}
+          // color="white"
+          // _hover={{
+          //   bg: '#333',
+          //   color: 'white',
+          // }}
           variant="outline"
-          size="sm"
+          colorScheme="facebook"
+          size="xs"
         >
-          {hide ? <IoMdArrowDropupCircle /> : <IoMdArrowDropdownCircle />}
+          {hide ? <AiOutlineArrowDown /> : <AiOutlineArrowUp />}
         </Button>
-        <Tooltip hasArrow label="View data in node" bg="blue.600" placement="right">
+        <Tooltip hasArrow label="View data in node" bg="purple.600" placement="right">
           <Button
             mt={1}
-            px={2}
-            py={3}
-            h={26}
+            // px={2}
+            // py={3}
+            // h={26}
+            colorScheme="facebook"
+            border={'1px solid #333'}
+            // bg={'#ddd'}
+            // color="black"
+            // _hover={{
+            //   bg: '#333',
+            //   color: 'white',
+            // }}
             onClick={onOpen}
             leftIcon={<CgDatabase />}
-            colorScheme="teal"
-            variant="solid"
-            size="sm"
+            variant="outline"
+            size="xs"
             fontSize="14px"
             fontWeight="semibold"
           >

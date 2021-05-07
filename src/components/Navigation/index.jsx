@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../../css/main.scss';
 import '../../css/inputs.scss';
-import { Checkbox, Collapse, Icon, useDisclosure } from '@chakra-ui/react';
+import { Checkbox, Collapse, FormHelperText, Icon, useDisclosure, Wrap, WrapItem } from '@chakra-ui/react';
 import { GiLightningTree } from 'react-icons/gi';
 import { Button, Stack, FormControl, FormLabel, Box } from '@chakra-ui/react';
 import FileReader from '../FileReader';
@@ -100,135 +100,183 @@ function Navigation({ onPrepareConfig }) {
 
   return (
     <Box
-      boxShadow="md"
-      p={1}
-      //borderBottom={'1px solid #1b1b1eff'}
-      borderBottomLeftRadius={'0.975rem'}
-      borderBottomRightRadius={'0.975rem'}
-      backgroundColor={'#a9bcd0ff'}
-      fontSize={['xs', 'xs', 'sm', 'sm', 'md']}
+      boxShadow="lg"
+      p={2}
+      pb={3}
+      borderBottom={'0.5px solid lightgray'}
+      // borderBottomLeftRadius={'0.975rem'}
+      // borderBottomRightRadius={'0.975rem'}
+      // backgroundColor={'#a9bcd0ff'}
+      //fontSize={['xs', 'xs', 'sm', 'sm', 'md']}
     >
       <Collapse in={isOpen} animateOpacity style={{ overflow: 'visible' }}>
-        <Stack
-          spacing={2}
-          direction={['column', 'column', 'row']}
-          align="center"
-          alignContent="center"
-          justify="center"
-          px={2}
-          py={3}
-          zIndex={2}
-        >
-          <Box w={'100%'}>
+        <Wrap spacing={2} align="center" alignContent="center" justify="center" px={2} py={3} zIndex={2}>
+          <WrapItem>
             <FormControl id="deploySet" width="auto">
-              <FormLabel fontSize={['md', 'md', 'xs', 'sm', 'md']}>Deploy Set</FormLabel>
-              <FileReader onChange={handleGetAllAttributes} isHeaders={isHeaders} />
-            </FormControl>
-            <Checkbox
-              colorScheme="green"
-              defaultIsChecked={isHeaders}
-              onChange={e => setIsHeaders(e.target.checked)}
-            >
-              Headers?
-            </Checkbox>
-          </Box>
-          <Box w={'100%'}>
-            <FormControl id="algorithm" width="auto" zIndex={2}>
-              <FormLabel fontSize={['md', 'md', 'xs', 'sm', 'md']}>Algorithm</FormLabel>
-              <SearchBar
-                placeholder="Select algorithm"
-                //onChange={setAlgorithm}
-                onChange={handleSetAlgorithm}
-                value={algorithm}
-                options={['c45', 'tsp', 'tspw'].map(v => ({ value: v, name: v.toUpperCase() }))}
-                multiple={true}
-                closeOnSelect={false}
-              />
-              {/* <FormHelperText width={size}>
-              <Builder size={size} builder={prepareConfig()} />
-            </FormHelperText> */}
-            </FormControl>
-          </Box>
-          <Box w={'100%'}>
-            <FormControl id="decisionAttr" width="auto" zIndex={2}>
-              <FormLabel fontSize={['md', 'md', 'xs', 'sm', 'md']}>Decision attribute</FormLabel>
-              <SearchBar
-                placeholder="Select decision attribute"
-                onChange={handleSelectDecision}
-                options={options}
-                multiple={false}
-                closeOnSelect={true}
-                value={decisionAttribute}
-              />
-              {/* <FormHelperText width={size}>
-              <Builder size={size} builder={prepareConfig()} />
-            </FormHelperText> */}
-            </FormControl>
-          </Box>
-          <Box w={'100%'}>
-            <FormControl id="ignoreAttr" width="auto">
-              <FormLabel fontSize={['md', 'md', 'xs', 'sm', 'md']}>Ignore attributes</FormLabel>
-              <SearchBar
-                placeholder="Select ignore attributes"
-                onChange={handleSelectIgnore}
-                options={options}
-                multiple={true}
-                closeOnSelect={false}
-                value={ignoredAttributes}
-              />
-            </FormControl>
-          </Box>
-          <Box w={'100%'}>
-            <FormControlNumberInput
-              htmlId="minItemsCount"
-              label="Min node size"
-              defaultValue={minItems}
-              min={1}
-              onChange={handleSetMinItems}
-            />
-          </Box>
-          <Box w={'100%'}>
-            <FormControlNumberInput
-              htmlId="maxDepth"
-              label="Max tree depth"
-              defaultValue={maxDepth}
-              min={1}
-              onChange={handleSetMaxDepth}
-            />
-          </Box>
-          <Box w={'100%'}>
-            <FormControlNumberInput
-              htmlId="entropy"
-              label="Entropy threshold"
-              defaultValue={entropy}
-              min={0}
-              max={1}
-              step={0.1}
-              onChange={handleSetEntropy}
-            />
-          </Box>
-          <Box w={'100%'}>
-            <FormControl id="drawTree" width="auto">
-              <FormLabel fontSize={['md', 'md', 'xs', 'sm', 'md']}>Draw tree</FormLabel>
-              <Button
-                leftIcon={<Icon as={GiLightningTree} />}
-                colorScheme="teal"
-                variant="outline"
-                aria-label="Deploy set"
-                onClick={handleDrawTree}
-                w="100%"
-                h={10}
-                isLoading={isLoading}
-                disabled={decisionAttribute == null}
+              <FormHelperText mb={2} mt={0}>
+                File has a headers?
+              </FormHelperText>
+              <Checkbox
+                size="sm"
+                colorScheme="linkedin"
+                defaultIsChecked={isHeaders}
+                onChange={e => setIsHeaders(e.target.checked)}
               >
-                Draw
-              </Button>
+                Headers?
+              </Checkbox>
             </FormControl>
-          </Box>
-        </Stack>
+          </WrapItem>
+          <WrapItem>
+            <FormControl id="deploySet">
+              <FormHelperText mb={2} mt={0}>
+                Deploy file
+              </FormHelperText>
+              <Box>
+                {/* <FormLabel fontSize={['md', 'md', 'xs', 'sm', 'md']}>Deploy Set</FormLabel> */}
+
+                <FileReader onChange={handleGetAllAttributes} isHeaders={isHeaders} />
+              </Box>
+            </FormControl>
+          </WrapItem>
+          <WrapItem>
+            <FormControl id="algorithm" zIndex={2}>
+              <FormHelperText mb={2} mt={0}>
+                Algorithm
+              </FormHelperText>
+              <Box>
+                {/* <FormLabel fontSize={['xs', 'sm', 'md']}>Algorithm</FormLabel> */}
+                <SearchBar
+                  placeholder="Select algorithm"
+                  onChange={handleSetAlgorithm}
+                  value={algorithm}
+                  options={['c45', 'tsp', 'tspw'].map(v => ({ value: v, name: v.toUpperCase() }))}
+                  multiple={true}
+                  closeOnSelect={false}
+                />
+                {/* <FormHelperText width={size}>
+              <Builder size={size} builder={prepareConfig()} />
+            </FormHelperText> */}
+              </Box>
+            </FormControl>
+          </WrapItem>
+          <WrapItem>
+            <FormControl id="decisionAttr" width="auto" zIndex={2}>
+              <FormHelperText mb={2} mt={0}>
+                Decision attr.
+              </FormHelperText>
+              <Box>
+                {/* <FormLabel fontSize={['xs', 'sm', 'md']}>Decision attribute</FormLabel> */}
+                <SearchBar
+                  placeholder="Select decision attribute"
+                  onChange={handleSelectDecision}
+                  options={options}
+                  multiple={false}
+                  closeOnSelect={true}
+                  value={decisionAttribute}
+                />
+                {/* <FormHelperText width={size}>
+              <Builder size={size} builder={prepareConfig()} />
+            </FormHelperText> */}
+              </Box>
+            </FormControl>
+          </WrapItem>
+          <WrapItem>
+            <FormControl id="ignoreAttr" width="auto">
+              <FormHelperText mb={2} mt={0}>
+                Ignored attrs.
+              </FormHelperText>
+              <Box>
+                {/* <FormLabel fontSize={['md', 'md', 'xs', 'sm', 'md']}>Ignore attributes</FormLabel> */}
+                <SearchBar
+                  placeholder="Select ignore attributes"
+                  onChange={handleSelectIgnore}
+                  options={options}
+                  multiple={true}
+                  closeOnSelect={false}
+                  value={ignoredAttributes}
+                />
+              </Box>
+            </FormControl>
+          </WrapItem>
+          <WrapItem>
+            <FormControl id="ignoreAttr" width="auto">
+              <FormHelperText mb={2} mt={0}>
+                Min node size
+              </FormHelperText>
+              <Box>
+                <FormControlNumberInput
+                  htmlId="minItemsCount"
+                  label="Min node size"
+                  defaultValue={minItems}
+                  min={1}
+                  onChange={handleSetMinItems}
+                />
+              </Box>
+            </FormControl>
+          </WrapItem>
+          <WrapItem>
+            <FormControl id="ignoreAttr" width="auto">
+              <FormHelperText mb={2} mt={0}>
+                Max tree depth
+              </FormHelperText>
+              <Box w={'100%'}>
+                <FormControlNumberInput
+                  htmlId="maxDepth"
+                  label="Max tree depth"
+                  defaultValue={maxDepth}
+                  min={1}
+                  onChange={handleSetMaxDepth}
+                />
+              </Box>
+            </FormControl>
+          </WrapItem>
+          <WrapItem>
+            <FormControl id="entropy" width="auto">
+              <FormHelperText mb={2} mt={0}>
+                Entropy threshold
+              </FormHelperText>
+              <Box>
+                <FormControlNumberInput
+                  htmlId="entropy"
+                  label="Entropy threshold"
+                  defaultValue={entropy}
+                  min={0}
+                  max={1}
+                  step={0.1}
+                  onChange={handleSetEntropy}
+                />
+              </Box>
+            </FormControl>
+          </WrapItem>
+          <WrapItem>
+            <Box w={'100%'}>
+              <FormControl id="drawTree">
+                {/* <FormLabel fontSize={['md', 'md', 'xs', 'sm', 'md']}>Draw tree</FormLabel> */}
+                <FormHelperText mb={2} mt={0}>
+                  Draw tree
+                </FormHelperText>
+                <Button
+                  leftIcon={<Icon as={GiLightningTree} />}
+                  colorScheme="blue"
+                  variant="solid"
+                  aria-label="Deploy set"
+                  onClick={handleDrawTree}
+                  isLoading={isLoading}
+                  disabled={decisionAttribute == null}
+                  w={100}
+                  size="sm"
+                >
+                  Draw
+                </Button>
+              </FormControl>
+            </Box>
+          </WrapItem>
+        </Wrap>
       </Collapse>
       <Stack spacing={2} direction={['row']} align="center" alignContent="center" justify="center">
-        <Button onClick={onToggle}>{isOpen ? 'HIDE' : 'SHOW'}</Button>
+        <Button size="xs" onClick={onToggle} variant="outline">
+          {isOpen ? 'HIDE' : 'SHOW'}
+        </Button>
         <DrawerMemo ignoredAttributes={ignoredAttributes} />
       </Stack>
     </Box>

@@ -1,7 +1,17 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Box, Button, HStack, Spinner, Stack } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  HStack,
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  InputRightAddon,
+  Spinner,
+  Stack,
+} from '@chakra-ui/react';
 import { GrTechnology, GrDocumentUpload } from 'react-icons/gr';
-import { GiWaterDivinerStick } from 'react-icons/gi';
+import { AiOutlinePercentage } from 'react-icons/ai';
 import Node from './Node';
 import { useLoadingContext } from '../contexts/LoadingContext';
 import { executeAlgorithm } from '../utils/algorithm-executor';
@@ -73,16 +83,53 @@ const Tree = ({ options }) => {
 
   return (
     <div id="tree">
-      <Stack spacing={5} direction="row">
+      <Stack spacing={5} direction="row" justifyContent="flex-end" wrap={'wrap'} pr={5}>
         <Box>
-          <Button leftIcon={<GrTechnology />} onClick={() => logTree(root)}>
-            Log tree
+          <InputGroup size="sm">
+            <InputLeftAddon
+              children="Accuracy:"
+              fontWeight={700}
+              bg={'#ddd'}
+              color="#black"
+              borderRadius="0.375rem"
+            />
+            <Input value={accuracy} readOnly textAlign="center" />
+            <InputRightAddon
+              children="%"
+              fontWeight={700}
+              bg={'#ddd'}
+              color="#black"
+              borderRadius="0.375rem"
+            />
+          </InputGroup>
+        </Box>
+        <Box>
+          <Button
+            bg={'#ddd'}
+            color="#black"
+            _hover={{ bg: '#aaa' }}
+            onClick={() => console.log('confusion matrix')}
+            size="sm"
+          >
+            Confusion Matrix
           </Button>
         </Box>
         <Box>
+          <Button
+            leftIcon={<GrTechnology />}
+            bg={'#ddd'}
+            color="#black"
+            _hover={{ bg: '#aaa' }}
+            onClick={() => logTree(root)}
+            size="sm"
+          >
+            Log tree
+          </Button>
+        </Box>
+        {/* <Box>
           <TestSetFileReader onChange={handleGetTestSet} isHeaders={false} />
         </Box>
-        <Predicter tree={root} testSet={testSet} onChange={predict} accuracy={accuracy} />
+        <Predicter tree={root} testSet={testSet} onChange={predict} /> */}
       </Stack>
       {isLoading && <Spinner size="xl" />}
       <h1>Tree nodes:</h1>

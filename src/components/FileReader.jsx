@@ -44,12 +44,11 @@ function FileReader(props) {
       <ReactFileReader multipleFiles={false} fileTypes={['.csv']} handleFiles={handleFiles}>
         <Button
           leftIcon={<AddIcon />}
-          //size={buttonSize}
-          colorScheme="teal"
+          size="sm"
+          colorScheme="blue"
           variant="outline"
           aria-label="Deploy set"
-          w="100%"
-          h={10}
+          w={100}
         >
           Deploy
         </Button>

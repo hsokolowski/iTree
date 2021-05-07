@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-check
 
 /**
  * @typedef {Object} DecisionTreeBuilder
@@ -37,7 +37,6 @@ function buildDecisionTreeC45(
 
   //console.log('old Treee', oldTree, 'isUpdate', isUpdate, 'isChange', isChanged, trainingSet);
 
-  let _quality = 0;
   if (!isUpdate && (maxTreeDepth === 0 || trainingSet?.length <= minItemsCount)) {
     console.log('LEAF Minimal node size', minItemsCount + 'trainingSet?.length ' + trainingSet?.length);
     return MakeLeaf(trainingSet, categoryAttr);

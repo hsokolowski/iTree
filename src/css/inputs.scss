@@ -1,7 +1,7 @@
 .inputss {
-  border: 1px solid transparent;
+  border: 1px solid gray;
   &:hover {
-    border: 1px solid #2fcc8b;
+    border: 1px solid #cbd1cf;
     border-radius: 0.375rem;
   }
 }
@@ -11,12 +11,12 @@
 }
 .tabs-selects {
   display: block;
-  height: 40px;
+  height: 32px;
   width: 100%;
   padding: 0 16px;
-  background: #edf2f7;
+  background: gray;
   border: 1px solid transparent;
-  //box-shadow: 0 0.0625rem 0.125rem rgb(0 0 0 / 15%);
+  box-shadow: inset 0 0 rgb(0, 0, 0);
   border-radius: 0.375rem;
   outline: none;
   font-family: 'Noto Sans', sans-serif;
