@@ -141,15 +141,15 @@ const Tree = ({ options }) => {
         <Predicter tree={root} testSet={testSet} onChange={predict} /> */}
       </Stack>
       {isLoading && <Spinner size="xl" />}
-      <h1>Tree nodes:</h1>
-      <Box>
+      <Box p={5}>
+        <h1>Tree nodes:</h1>
         {!root ? (
           <p>No tree to show</p>
         ) : (
-          <Box d="flex" flexDirection="row">
-            <Node node={root} onChange={() => {}} requestChildChange={requestChildChange} side={true} />
-            {/* <Node node={root} onChange={() => {}} requestChildChange={requestChildChange} side={true} /> */}
-          </Box>
+          <Node node={root} onChange={() => {}} requestChildChange={requestChildChange} side={true} />
+          // <Box d="flex" flexDirection="row">
+          //   {/* <Node node={root} onChange={() => {}} requestChildChange={requestChildChange} side={true} /> */}
+          // </Box>
         )}
       </Box>
     </div>
