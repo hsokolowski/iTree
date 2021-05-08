@@ -7,8 +7,15 @@ function Leaf({ category, matchedCount, notMatchedCount, quality, requestLeafUnf
     <Box
       d="flex"
       alignItems="baseline"
-      border={'2px solid #eee'}
-      //bg={'#3182ce'}
+      //border={'2px solid #eee'}
+      // border={'2px solid #009c72'}
+      // bg={'#e1ffde'}
+      border={'2px solid #1560ab'}
+      //bg={'#baefff'}
+      bg={'#dbedff'}
+      _hover={{
+        bg: '#c9e4ff',
+      }}
       borderRadius="lg"
       flexDirection="column"
       maxW="xs"
@@ -42,21 +49,50 @@ function Leaf({ category, matchedCount, notMatchedCount, quality, requestLeafUnf
       >
         {matchedCount} good &bull; {notMatchedCount} bad
       </Box>
-      <Box mt="1" ml="2" fontWeight="semibold" as="h4" lineHeight="tight" isTruncated>
-        {quality}%
+      <br />
+
+      <Box d="flex" flexDirection="row" justifyContent="space-between" w="100%">
+        <Box boxShadow="md">
+          <Menu closeOnSelect closeOnBlur isLazy>
+            <Tooltip hasArrow label="Unfold to node" bg="yellow.500" placement="right">
+              <MenuButton
+                fontSize="sm"
+                w={20}
+                h={6}
+                as={Button}
+                rightIcon={<ChevronDownIcon />}
+                //bg={'#009c72'}
+                // _hover={{
+                //   bg: '#00402f',
+                // }}
+                // _active={{
+                //   bg: '#00402f',
+                // }}
+                bg={'#1560ab'}
+                _hover={{
+                  bg: '#005069',
+                }}
+                _active={{
+                  bg: '#005069',
+                }}
+                color={'white'}
+              >
+                Unfold
+              </MenuButton>
+            </Tooltip>
+            <MenuList>
+              <MenuItem onClick={() => requestLeafUnfold(['c45'])}>C 4.5</MenuItem>
+              <MenuItem onClick={() => requestLeafUnfold(['tsp'])}>TSP</MenuItem>
+              <MenuItem onClick={() => requestLeafUnfold(['tspw'])}>TSP Weight</MenuItem>
+            </MenuList>
+          </Menu>
+        </Box>
+        <Box fontWeight="700" lineHeight="tight" isTruncated>
+          <Box position="absolute" right={3} bottom={2} fontSize={30}>
+            {quality}%
+          </Box>
+        </Box>
       </Box>
-      <Menu closeOnSelect closeOnBlur isLazy>
-        <Tooltip hasArrow label="Unfold to node" bg="yellow.500" placement="right">
-          <MenuButton fontSize="sm" w={20} h={6} as={Button} rightIcon={<ChevronDownIcon />}>
-            Unfold
-          </MenuButton>
-        </Tooltip>
-        <MenuList>
-          <MenuItem onClick={() => requestLeafUnfold(['c45'])}>C 4.5</MenuItem>
-          <MenuItem onClick={() => requestLeafUnfold(['tsp'])}>TSP</MenuItem>
-          <MenuItem onClick={() => requestLeafUnfold(['tspw'])}>TSP Weight</MenuItem>
-        </MenuList>
-      </Menu>
     </Box>
   );
 }

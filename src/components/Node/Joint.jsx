@@ -37,7 +37,8 @@ function Joint({ children, attr2, predicateName, pivot, weight, requestFoldToLea
     <Box mt={1}>
       <ButtonGroup size="md" isAttached variant="solid" className="tree-branch">
         <Tooltip hasArrow label="Changes at attribute" bg="red.600" placement="top" p={3} fontSize={16}>
-          <Button colorScheme="blue" onClick={handleOpenModalClick} fontWeight={400} size="sm" bg="#006a4e">
+          {/* </Tooltip><Button colorScheme="blue" onClick={handleOpenModalClick} fontWeight={400} size="sm" bg="#006a4e"> */}
+          <Button colorScheme="telegram" onClick={handleOpenModalClick} fontWeight={400} size="sm">
             <Stack direction={'row'} spacing="5px">
               <Box>{attr2}</Box>
               <Box>
