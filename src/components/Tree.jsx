@@ -17,6 +17,7 @@ import { useLoadingContext } from '../contexts/LoadingContext';
 import { executeAlgorithm } from '../utils/algorithm-executor';
 import TestSetFileReader from './TestSetFileReader';
 import Predicter from './Predicter';
+import ConfusionMatrix from './ConfusionMatrix';
 
 /**
  * @typedef {import('../utils/decision-tree.js').DecisionTreeBuilder} DecisionTreeBuilder
@@ -68,7 +69,7 @@ const Tree = ({ options }) => {
 
   useEffect(() => {
     logTree(root);
-    setAccuracy(Math.random() * 10);
+    //setAccuracy(Math.random() * 10);
   }, [root]);
 
   const requestChildChange = newRoot => setRoot(newRoot);
@@ -93,7 +94,7 @@ const Tree = ({ options }) => {
               color="#black"
               borderRadius="0.375rem"
             />
-            <Input value={accuracy} readOnly textAlign="center" />
+            <Input value={accuracy.toFixed(3)} readOnly textAlign="center" />
             <InputRightAddon
               children="%"
               fontWeight={700}
@@ -104,7 +105,7 @@ const Tree = ({ options }) => {
           </InputGroup>
         </Box>
         <Box>
-          <Button
+          {/* <Button
             bg={'#ddd'}
             color="#black"
             _hover={{ bg: '#aaa' }}
@@ -112,7 +113,15 @@ const Tree = ({ options }) => {
             size="sm"
           >
             Confusion Matrix
-          </Button>
+          </Button> */}
+          <ConfusionMatrix
+            tree={root}
+            data={options.trainingSet}
+            allClasses={options.allClasses}
+            categoryAttr={options.categoryAttr}
+            onChange={setAccuracy}
+            disabled={isLoading}
+          />
         </Box>
         <Box>
           <Button

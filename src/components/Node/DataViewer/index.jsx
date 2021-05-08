@@ -24,6 +24,7 @@ function DataViewer({ node, side, onChange, hide }) {
   const finalRef = React.useRef();
   const scrollBehavior = 'inside';
   const sideSubTitle = side ? 'Matched' : 'Not Matched';
+  const nodeSize = node.nodeSet ? node.nodeSet.length : node.trainingSet2.length;
 
   return (
     <Box>
@@ -48,17 +49,9 @@ function DataViewer({ node, side, onChange, hide }) {
         <Tooltip hasArrow label="View data in node" bg="purple.600" placement="right">
           <Button
             mt={1}
-            // px={2}
-            // py={3}
-            // h={26}
             colorScheme="facebook"
             border={'1px solid #333'}
-            // bg={'#ddd'}
-            // color="black"
-            // _hover={{
-            //   bg: '#333',
-            //   color: 'white',
-            // }}
+            disabled={nodeSize ? false : true}
             onClick={onOpen}
             leftIcon={<CgDatabase />}
             variant="outline"
@@ -66,7 +59,7 @@ function DataViewer({ node, side, onChange, hide }) {
             fontSize="14px"
             fontWeight="semibold"
           >
-            {sideSubTitle} ({node.nodeSet ? node.nodeSet.length : node.trainingSet2.length})
+            {sideSubTitle} ({nodeSize})
           </Button>
         </Tooltip>
       </ButtonGroup>
