@@ -416,7 +416,7 @@ function tspisChange(changedAttribute1, changedAttribute2, trainingSet, category
   var right = 0,
     left = 0;
 
-  var  currentDif;
+  var currentDif;
 
   var directrion = '<';
   var leftList = [],
@@ -469,13 +469,12 @@ function tspisChange(changedAttribute1, changedAttribute2, trainingSet, category
 function tspwisChange(changedAttribute1, changedAttribute2, weight, trainingSet, categoryAttr, allClasses) {
   var right = 0,
     left = 0;
-  var
-    currentDif;
+  var currentDif;
 
   var directrion = '<';
   var leftList = [],
     rightList = [],
-    classMatrix = [new Array(allClasses.length).fill(0), new Array(allClasses.length).fill(0)],
+    classMatrix = [new Array(allClasses.length).fill(0), new Array(allClasses.length).fill(0)];
 
   var probR = 0,
     probL = 0,
