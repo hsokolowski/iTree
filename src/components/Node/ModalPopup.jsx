@@ -23,7 +23,9 @@ function ModalPopup({ attr2, predicateName, pivot, weight, isOpen, nodeSet, onOp
   };
   const handleUpdate = () => {
     onClose();
-    onChange({ ...state, isUpdate: true });
+    let oldAlg = state.algorithm;
+
+    onChange({ ...state, isUpdate: true, algorithm: ['update'], oldAlgorithm: oldAlg });
   };
 
   return (
@@ -31,7 +33,7 @@ function ModalPopup({ attr2, predicateName, pivot, weight, isOpen, nodeSet, onOp
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          {attr2} <b>{predicateName}</b> {pivot}
+          {attr2} <b>{predicateName}</b> {weight.toFixed(3)} {pivot}
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>

@@ -139,17 +139,21 @@ function buildDecisionTreeTSPW(
 
     // setting new values
     currentDif = (right / trainingSet.length) * (1 - rankR) + (left / trainingSet.length) * (1 - rankL);
-    if (currentDif < maxDif) {
-      maxDif = currentDif;
-      attribute1 = changedAttribute1;
-      attribute2 = changedAttribute2;
-      match = leftList;
-      notMatch = rightList;
-      L_weight = weight;
-    }
+
+    maxDif = currentDif;
+    attribute1 = changedAttribute1;
+    attribute2 = changedAttribute2;
+    match = leftList;
+    notMatch = rightList;
+    L_weight = weight;
   } else {
-    for (let attr1 of attributes) {
-      for (let attr2 of attributes) {
+    let attr1, attr2;
+    for (let i = 0; i < attributes.length; i++) {
+      attr1 = attributes[i];
+      for (let j = i + 1; j < attributes.length; j++) {
+        // for (let attr1 of attributes) {
+        //   for (let attr2 of attributes) {
+        attr2 = attributes[j];
         if (attr1 !== attr2) {
           right = left = 0;
           leftList = [];
@@ -255,7 +259,7 @@ function buildDecisionTreeTSPW(
       trainingSet2: trainingSet,
     };
   }
-
+  console.log('-----------Podział-----------');
   builder.maxTreeDepth = maxTreeDepth - 1;
   builder.trainingSet = match;
   var matchSubTree = buildDecisionTreeTSPW(builder);
@@ -272,7 +276,7 @@ function buildDecisionTreeTSPW(
     matchedCount: match.length,
     notMatchedCount: notMatch.length,
     nodeSet: match.concat(notMatch),
-    weight: L_weight.toFixed(3),
+    weight: L_weight,
   };
 }
 

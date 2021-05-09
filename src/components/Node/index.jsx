@@ -59,6 +59,7 @@ const Node = props => {
       oldTree: JSON.parse(JSON.stringify(node)),
       isUpdate: options.isUpdate || false,
       algorithm: options.algorithm.map(item => item.toLowerCase()),
+      oldAlgorithm: options.oldAlgorithm,
     };
 
     const changeOptions = {

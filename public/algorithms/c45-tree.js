@@ -10,6 +10,8 @@
  * @property {number} entropyThrehold
  * @property {number} maxTreeDepth
  * @property {Array<string>} ignoredAttributes
+ * @property {Object} oldTree
+ * @property {boolean} isUpdate
  */
 
 /**

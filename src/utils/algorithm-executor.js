@@ -3,10 +3,11 @@ const workersMap = {
   tsp: 'tsp',
   tspw: 'tsp-weight',
   mix: 'mix',
+  update: 'updater',
 };
 
 export function executeAlgorithm(options, changeOptions = {}) {
-  console.log(options);
+  console.log(changeOptions);
   return new Promise((resolve, reject) => {
     console.time(options.algorithm);
     let worker;

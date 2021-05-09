@@ -44,7 +44,7 @@ function Joint({ children, attr2, predicateName, pivot, weight, requestFoldToLea
               <Box>
                 <b>{predicateName}</b>
               </Box>
-              <Box>{weight}</Box>
+              <Box>{weight.toFixed(3)}</Box>
               <Box>{pivot}</Box>
             </Stack>
           </Button>
