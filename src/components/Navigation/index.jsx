@@ -233,7 +233,7 @@ function Navigation({ onPrepareConfig }) {
           <WrapItem>
             <FormControl id="entropy" width="auto">
               <FormHelperText mb={2} mt={0}>
-                Entropy threshold
+                Entropy thres.
               </FormHelperText>
               <Box>
                 <FormControlNumberInput

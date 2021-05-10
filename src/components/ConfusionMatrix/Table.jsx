@@ -27,7 +27,7 @@ function TableComponent({ confusionMatrix, headers }) {
       <Thead>
         <Tr>
           <Th colSpan={confusionMatrix.length + 2} textAlign="center">
-            Actual
+            PREDICT
           </Th>
         </Tr>
         <Tr>
@@ -53,7 +53,7 @@ function TableComponent({ confusionMatrix, headers }) {
                     //padding: '2px',
                   }}
                 >
-                  Predict
+                  ACTUAL
                 </Th>
               ) : (
                 <></>

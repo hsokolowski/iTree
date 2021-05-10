@@ -50,19 +50,15 @@ function ConfusionMatrix({ tree, onChange, data, allClasses, categoryAttr, disab
   }
 
   useEffect(() => {
-    //console.log(allClasses);
+    console.log('use effect confusion matrix');
     let CM = buildArray(allClasses.length);
-    // console.log(CM);
-    // console.log(categoryAttr);
-    // console.log(tree);
-    // console.log(data);
 
     if (!disabled && tree !== null) {
       let prediction, clazz;
       for (let index = 0; index < data.length; index++) {
+        //for (let index = 100; index < 102; index++) {
         prediction = predict(tree, data[index]);
         clazz = data[index][categoryAttr];
-        //console.log(prediction, clazz);
 
         if (prediction === clazz) {
           CM[allClasses.indexOf(clazz)][allClasses.indexOf(clazz)]++;
@@ -74,9 +70,8 @@ function ConfusionMatrix({ tree, onChange, data, allClasses, categoryAttr, disab
       let tmpAccuracy = handleAccuracy(CM);
       setAccuracy(tmpAccuracy);
       onChange(tmpAccuracy);
-      //console.log(CM);
     }
-  }, [tree, disabled, allClasses, categoryAttr, data]);
+  }, [tree, disabled, allClasses, categoryAttr, data, onChange]);
 
   function buildArray(lenght) {
     let arr = [];
