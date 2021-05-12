@@ -40,7 +40,9 @@ function TestSetFileReader(props) {
   return (
     <div>
       <ReactFileReader multipleFiles={false} fileTypes={['.csv']} handleFiles={handleFiles}>
-        <Button leftIcon={<GrDocumentUpload />}>Upload test set</Button>
+        <Button leftIcon={<GrDocumentUpload />} size="sm">
+          Upload test set
+        </Button>
       </ReactFileReader>
     </div>
   );

@@ -29,7 +29,7 @@ export function predict(tree, item) {
       //console.log('predict - tsp', match);
     }
     if (tree.weight) {
-      console.log(tree.weight);
+      //console.log(tree.weight);
       attr1 = tree.attr2;
       attr2 = tree.pivot;
       value = parseFloat(item[attr1]);

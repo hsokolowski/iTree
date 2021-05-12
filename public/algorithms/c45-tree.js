@@ -40,7 +40,7 @@ function buildDecisionTreeC45(
   //console.log('old Treee', oldTree, 'isUpdate', isUpdate, 'isChange', isChanged, trainingSet);
 
   if (!isUpdate && (maxTreeDepth === 0 || trainingSet?.length <= minItemsCount)) {
-    console.log('LEAF Minimal node size', minItemsCount + 'trainingSet?.length ' + trainingSet?.length);
+    //console.log('LEAF Minimal node size', minItemsCount + 'trainingSet?.length ' + trainingSet?.length);
     return MakeLeaf(trainingSet, categoryAttr);
   }
 
@@ -48,7 +48,7 @@ function buildDecisionTreeC45(
   var initialEntropy = entropy(trainingSet, categoryAttr);
   //console.log('initial entropy', initialEntropy);
   if (initialEntropy <= entropyThrehold && !isChanged && !isUpdate) {
-    console.log('LEAF initial entropy', initialEntropy);
+    //console.log('LEAF initial entropy', initialEntropy);
     return MakeLeaf(trainingSet, categoryAttr);
   }
 
@@ -127,7 +127,7 @@ function buildDecisionTreeC45(
       bestSplit.attribute = attr;
       bestSplit.pivot = pivot;
       bestSplit.gain = currGain;
-      console.log('@ IS CHANGE ', bestSplit);
+      //console.log('@ IS CHANGE ', bestSplit);
     }
     if (!currGain) {
       // remember pairs 'attribute-predicate-value'
@@ -138,18 +138,18 @@ function buildDecisionTreeC45(
       bestSplit.attribute = attr;
       bestSplit.pivot = pivot;
       bestSplit.gain = currGain;
-      console.log('@ IS CHANGE ', bestSplit);
+      //console.log('@ IS CHANGE ', bestSplit);
     }
 
     isChanged = false;
   } else if (isUpdate && !isChanged) {
-    console.log('# IS UPDATE');
+    //console.log('# IS UPDATE');
     if (oldTree?.category) {
-      console.log('# IS UPDATE - oldTree?.category', oldTree?.category);
+      //console.log('# IS UPDATE - oldTree?.category', oldTree?.category);
 
       let _category = oldTree?.category;
       if (trainingSet.length === 0) {
-        console.log('# IS UPDATE - trainingSet.length = 0');
+        //console.log('# IS UPDATE - trainingSet.length = 0');
         return {
           category: _category,
           quality: 0,
@@ -175,7 +175,7 @@ function buildDecisionTreeC45(
         trainingSet2: trainingSet,
       };
     } else {
-      console.log('# IS UPDATE - NODE');
+      //console.log('# IS UPDATE - NODE');
       let attr = oldTree.attr2;
       pivot = oldTree.pivot;
 
@@ -197,16 +197,16 @@ function buildDecisionTreeC45(
       predicate = predicates[predicateName];
 
       currSplit = split(trainingSet, attr, predicate, pivot);
-      console.log('currSplit', currSplit);
+      //console.log('currSplit', currSplit);
       matchEntropy = entropy(currSplit.match, categoryAttr);
       notMatchEntropy = entropy(currSplit.notMatch, categoryAttr);
-      console.log('matchEntropy', matchEntropy, 'notMatchEntropy', notMatchEntropy);
+      //console.log('matchEntropy', matchEntropy, 'notMatchEntropy', notMatchEntropy);
       newEntropy = 0;
       newEntropy += matchEntropy * currSplit.match.length;
       newEntropy += notMatchEntropy * currSplit.notMatch.length;
       newEntropy /= trainingSet.length;
       currGain = initialEntropy - newEntropy;
-      console.log('CURRENT GAIN ' + currGain);
+      //console.log('CURRENT GAIN ' + currGain);
       if (currGain > bestSplit.gain) {
         bestSplit = currSplit;
         bestSplit.predicateName = predicateName;
@@ -280,7 +280,7 @@ function buildDecisionTreeC45(
         newEntropy += notMatchEntropy * currSplit.notMatch.length;
         newEntropy /= trainingSet.length;
         currGain = initialEntropy - newEntropy;
-        console.log(' !!!!!!!!!!!!  CURRENT GAIN 2', attrPredPivot, currGain);
+        //console.log(' !!!!!!!!!!!!  CURRENT GAIN 2', attrPredPivot, currGain);
         if (currGain > bestSplit.gain) {
           // remember pairs 'attribute-predicate-value'
           // which provides informational gain

@@ -37,7 +37,7 @@ const Node = props => {
     }
     //console.log(e);
     e.stopPropagation();
-    console.log('Node clicked', node);
+    //console.log('Node clicked', node);
     //const changed = addComment(node);
     //props.onChange(changed);
     //setNode(changed);
@@ -49,9 +49,9 @@ const Node = props => {
     if (!options) {
       return;
     }
-    console.log('builderConfig', builderConfig);
-    console.log('node', node);
-    console.log('options', options);
+    // console.log('builderConfig', builderConfig);
+    // console.log('node', node);
+    // console.log('options', options);
 
     const builderModel = {
       ...builderConfig,
@@ -68,7 +68,7 @@ const Node = props => {
       changedAttribute2: options.pivot || node.pivot,
       weight: typeof options.weight === 'number' ? options.weight : node.weight,
     };
-    console.log('partial builder model', builderModel, changeOptions);
+    //console.log('partial builder model', builderModel, changeOptions);
     setLoading(true);
     executeAlgorithm(builderModel, changeOptions)
       .then(value => {
@@ -87,7 +87,7 @@ const Node = props => {
   };
 
   useEffect(() => {
-    console.log(category, category ? 'Leaf' : 'Joint');
+    //console.log(category, category ? 'Leaf' : 'Joint');
   }, [category]);
 
   const requestChildChangeIfMatchIs = match => newNode => {

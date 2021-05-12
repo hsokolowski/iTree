@@ -10,7 +10,7 @@ function FileReader(props) {
 
   const handleFiles = async files => {
     const file = await readLocalFile(files[0]);
-    console.log(file);
+    //console.log(file);
     const clean = file
       .split('\n')
       .map(line => {
@@ -19,7 +19,7 @@ function FileReader(props) {
       })
       .join('\n');
     let allAttributes = [];
-    console.log(clean);
+    //console.log(clean);
     const data = parseCsv(clean, {
       columns: h => {
         // let header = h.map((v, i) => v || `attr${i}`);
@@ -33,7 +33,7 @@ function FileReader(props) {
       delimiter: [',', '\t'],
     });
     //const data = parseCsv(file,{columns: true, comment: "#",skipEmptyLines: true,})
-    console.log(data);
+    //console.log(data);
     allAttributes = Object.keys(data[0]);
     props.onChange({ allAttributes, data });
     allAttributes = [];
