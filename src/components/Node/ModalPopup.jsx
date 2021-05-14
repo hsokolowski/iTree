@@ -33,7 +33,7 @@ function ModalPopup({ attr2, predicateName, pivot, weight, isOpen, nodeSet, onOp
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          {attr2} <b>{predicateName}</b> {weight ? weight?.toFixed(3) + ' * ' : ''} {pivot}
+          {attr2} <b>{predicateName}</b> {weight ? parseFloat(weight).toFixed(3) + ' * ' : ''} {pivot}
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>

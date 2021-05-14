@@ -53,8 +53,9 @@ function ConfusionMatrix({ tree, onChange, data, allClasses, categoryAttr, disab
     console.log('use effect confusion matrix');
     let CM = buildArray(allClasses.length);
 
-    if (!disabled && tree !== null) {
+    if (!disabled && tree !== null && data !== null) {
       let prediction, clazz;
+      //console.log(data);
       for (let index = 0; index < data.length; index++) {
         //for (let index = 100; index < 102; index++) {
         prediction = predict(tree, data[index]);

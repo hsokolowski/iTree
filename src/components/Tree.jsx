@@ -22,6 +22,7 @@ import { executeAlgorithm } from '../utils/algorithm-executor';
 import TestSetFileReader from './TestSetFileReader';
 import ConfusionMatrix from './ConfusionMatrix';
 import { getSizeTree } from '../utils/size-checker';
+import { testTree } from '../services/playground3';
 
 /**
  * @typedef {import('../utils/decision-tree.js').DecisionTreeBuilder} DecisionTreeBuilder
@@ -45,14 +46,16 @@ const Tree = ({ options }) => {
   const [accuracyTraining, setAccuracyTraining] = useState(0);
   const [accuracyTest, setAccuracyTest] = useState(0);
   const [root, setRoot] = useState(null);
+  const [secondRoot, setSecondRoot] = useState(null);
   const [sizeTree, setSizeTree] = useState({ joints: 0, leafs: 0 });
-  const [testSet, setTestSet] = useState([]);
+  const [testSet, setTestSet] = useState(null);
   const [showTestTree, setShowTestTree] = useState(false);
   const { isLoading, setIsLoading } = useLoadingContext();
 
   useEffect(() => {
     setRoot(null);
     setIsLoading(true);
+    setTestSet(null);
     let terminated = false;
     executeAlgorithm(options)
       .then(value => {
@@ -60,6 +63,7 @@ const Tree = ({ options }) => {
           return;
         }
         setRoot(value);
+        updateTestTree(value);
       })
       .catch(e => console.error(e))
       .finally(() => {
@@ -82,13 +86,33 @@ const Tree = ({ options }) => {
     //setAccuracy(Math.random() * 10);
   }, [root]);
 
-  const requestChildChange = newRoot => setRoot(newRoot);
+  const requestChildChange = newRoot => {
+    setRoot(newRoot);
+    updateTestTree(newRoot);
+  };
 
   function handleGetTestSet({ data }) {
     setTestSet(data);
   }
+
+  function updateTestTree(newRoot) {
+    console.log(options.categoryAttr);
+    let tmpRoot = JSON.parse(JSON.stringify(newRoot));
+    if (testSet == null) {
+      testTree(tmpRoot, options.trainingSet, options.categoryAttr);
+      console.log(tmpRoot);
+      setSecondRoot(tmpRoot);
+    } else {
+      testTree(tmpRoot, testSet, options.categoryAttr);
+      console.log(tmpRoot);
+      setSecondRoot(tmpRoot);
+    }
+  }
+
   function handleShowTestTree(e) {
+    console.log(e);
     setShowTestTree(e.target.checked);
+    //updateTestTree(root);
   }
 
   return (
@@ -193,7 +217,7 @@ const Tree = ({ options }) => {
               <FormLabel htmlFor="show-tree" mb="0">
                 Show test tree
               </FormLabel>
-              <Switch id="show-tree-switch" onChange={handleShowTestTree} />
+              <Switch id="show-tree-switch" onChange={e => handleShowTestTree(e)} />
             </FormControl>
           </Box>
         </Stack>
@@ -211,7 +235,16 @@ const Tree = ({ options }) => {
             </Box>
             <Box width="100%" d={showTestTree ? '' : 'none'}>
               Test tree
-              <Node node={root} onChange={() => {}} requestChildChange={requestChildChange} side={true} />
+              {showTestTree ? (
+                <Node
+                  node={secondRoot}
+                  onChange={() => {}}
+                  //requestChildChange={requestChildChange}
+                  side={true}
+                />
+              ) : (
+                <div></div>
+              )}
             </Box>
           </Box>
         )}
