@@ -20,7 +20,7 @@ import { executeAlgorithm } from '../utils/algorithm-executor';
 import TestSetFileReader from './TestSetFileReader';
 import ConfusionMatrix from './ConfusionMatrix';
 import { getSizeTree } from '../utils/size-checker';
-import { testTree } from '../services/playground3';
+import { rebuildTestTree } from '../utils/RebuilderTestTree';
 
 /**
  * @typedef {import('../utils/decision-tree.js').DecisionTreeBuilder} DecisionTreeBuilder
@@ -95,11 +95,11 @@ const Tree = ({ options }) => {
     console.log(options.categoryAttr);
     let tmpRoot = JSON.parse(JSON.stringify(newRoot));
     if (testSet == null) {
-      testTree(tmpRoot, options.trainingSet, options.categoryAttr);
+      rebuildTestTree(tmpRoot, options.trainingSet, options.categoryAttr);
       console.log(tmpRoot);
       setSecondRoot(tmpRoot);
     } else {
-      testTree(tmpRoot, testSet, options.categoryAttr);
+      rebuildTestTree(tmpRoot, testSet, options.categoryAttr);
       console.log(tmpRoot);
       setSecondRoot(tmpRoot);
     }

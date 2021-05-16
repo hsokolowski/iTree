@@ -1,4 +1,4 @@
-export function testTree(tree, newData, categoryAttr) {
+export function rebuildTestTree(tree, newData, categoryAttr) {
   let predicate;
 
   if (tree.category) {
@@ -46,8 +46,8 @@ export function testTree(tree, newData, categoryAttr) {
 
     tree.matchedCount = matchedData.length;
     tree.notMatchedCount = notMatchedData.length;
-    testTree(tree.match, matchedData, categoryAttr);
-    testTree(tree.notMatch, notMatchedData, categoryAttr);
+    rebuildTestTree(tree.match, matchedData, categoryAttr);
+    rebuildTestTree(tree.notMatch, notMatchedData, categoryAttr);
   }
 }
 

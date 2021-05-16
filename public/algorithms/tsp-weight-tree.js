@@ -87,7 +87,7 @@ function buildDecisionTreeTSPW(
     sum1 = 0,
     sum2 = 0,
     L_weight = 0;
-  var maxDif = 100;
+  var maxDif = 0;
   /** @type {string | number} */ var attribute1 = -1;
   /** @type {string | number} */ var attribute2 = -1;
   var directrion = '<';
@@ -124,22 +124,38 @@ function buildDecisionTreeTSPW(
       }
     }
 
-    // probability
-    probR = 0;
-    probL = 0;
-    rankL = 0;
-    rankR = 0;
-    for (let k = 0; k < builder.allClasses.length; k++) {
-      probL = left === 0 ? 0 : classMatrix[0][k] / left;
-      probR = right === 0 ? 0 : classMatrix[1][k] / right;
+    // // probability
+    // probR = 0;
+    // probL = 0;
+    // rankL = 0;
+    // rankR = 0;
+    // for (let k = 0; k < builder.allClasses.length; k++) {
+    //   probL = left === 0 ? 0 : classMatrix[0][k] / left;
+    //   probR = right === 0 ? 0 : classMatrix[1][k] / right;
 
-      rankL += probL * probL;
-      rankR += probR * probR;
-    }
+    //   rankL += probL * probL;
+    //   rankR += probR * probR;
+    // }
 
-    // setting new values
-    currentDif = (right / trainingSet.length) * (1 - rankR) + (left / trainingSet.length) * (1 - rankL);
+    // // setting new values
+    // currentDif = (right / trainingSet.length) * (1 - rankR) + (left / trainingSet.length) * (1 - rankL);
 
+    // maxDif = currentDif;
+    // attribute1 = changedAttribute1;
+    // attribute2 = changedAttribute2;
+    // match = leftList;
+    // notMatch = rightList;
+    // L_weight = weight;
+
+    let matchEntropy = entropy(rightList, categoryAttr);
+    let notMatchEntropy = entropy(leftList, categoryAttr);
+
+    // calculating informational gain
+    let newEntropy = 0;
+    newEntropy += matchEntropy * rightList.length;
+    newEntropy += notMatchEntropy * leftList.length;
+    newEntropy /= trainingSet.length;
+    let currentDif = initialEntropy - newEntropy;
     maxDif = currentDif;
     attribute1 = changedAttribute1;
     attribute2 = changedAttribute2;
@@ -191,21 +207,16 @@ function buildDecisionTreeTSPW(
             }
           }
 
-          probR = 0;
-          probL = 0;
-          rankL = 0;
-          rankR = 0;
-          for (let k = 0; k < builder.allClasses.length; k++) {
-            probL = left === 0 ? 0 : classMatrix[0][k] / left;
-            probR = right === 0 ? 0 : classMatrix[1][k] / right;
+          let matchEntropy = entropy(rightList, categoryAttr);
+          let notMatchEntropy = entropy(leftList, categoryAttr);
 
-            rankL += probL * probL;
-            rankR += probR * probR;
-          }
-
-          currentDif = (right / trainingSet.length) * (1 - rankR) + (left / trainingSet.length) * (1 - rankL);
-
-          if (currentDif < maxDif) {
+          // calculating informational gain
+          let newEntropy = 0;
+          newEntropy += matchEntropy * rightList.length;
+          newEntropy += notMatchEntropy * leftList.length;
+          newEntropy /= trainingSet.length;
+          let currentDif = initialEntropy - newEntropy;
+          if (currentDif > maxDif) {
             maxDif = currentDif;
             attribute1 = attr1;
             attribute2 = attr2;
@@ -259,7 +270,7 @@ function buildDecisionTreeTSPW(
       trainingSet2: trainingSet,
     };
   }
-  console.log('-----------Podział-----------');
+  //console.log('-----------Podział-----------');
   builder.maxTreeDepth = maxTreeDepth - 1;
   builder.trainingSet = match;
   var matchSubTree = buildDecisionTreeTSPW(builder);

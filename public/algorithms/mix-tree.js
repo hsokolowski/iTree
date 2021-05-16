@@ -15,15 +15,9 @@
 
 /**
  * @param {DecisionTreeBuilder} _builder
- * @param {boolean} isChanged
  */
 //TSP
-function buildDecisionTreeMix(
-  _builder,
-  isChanged = false,
-  changedAttribute1 = null,
-  changedAttribute2 = null
-) {
+function buildDecisionTreeMix(_builder) {
   //debugger;
   const builder = { ..._builder };
   const {
@@ -63,8 +57,7 @@ function buildDecisionTreeMix(
 
   // LEAF
   var initialEntropy = entropy(trainingSet, categoryAttr);
-  if (initialEntropy <= entropyThrehold && !isChanged) {
-    console.log('initialEntropy ' + initialEntropy + '<=' + entropyThrehold + ' entropyThrehold');
+  if (initialEntropy <= entropyThrehold) {
     let _category = mostFrequentValue(trainingSet, categoryAttr);
     let _positiveCounter = 0;
     for (let element of trainingSet) {
@@ -96,10 +89,11 @@ function buildDecisionTreeMix(
 
   var lowest;
   var tmp;
-  var min = 1000;
+  var min = 0;
   for (var alg of arrayOfTests) {
     tmp = alg.maxDif;
-    if (tmp < min) {
+    //console.log(tmp);
+    if (tmp > min) {
       lowest = alg;
       min = tmp;
     }
@@ -220,9 +214,7 @@ context.onmessage = function (event) {
 };
 
 function TSPDif(allClasses, attributes, trainingSet, categoryAttr) {
-  var right = 0,
-    left = 0;
-  var maxDif = 100;
+  var maxDif = 0;
   var direction = '<';
   /** @type {string | number} */ var attribute1 = -1;
   /** @type {string | number} */ var attribute2 = -1;
@@ -231,11 +223,14 @@ function TSPDif(allClasses, attributes, trainingSet, categoryAttr) {
     classMatrix = [new Array(allClasses.length).fill(0), new Array(allClasses.length).fill(0)],
     match = [],
     notMatch = [];
+  var initialEntropy = entropy(trainingSet, categoryAttr);
 
-  for (let attr1 of attributes) {
-    for (let attr2 of attributes) {
+  let attr1, attr2;
+  for (let i = 0; i < attributes.length; i++) {
+    attr1 = attributes[i];
+    for (let j = i + 1; j < attributes.length; j++) {
+      attr2 = attributes[j];
       if (attr1 !== attr2) {
-        right = left = 0;
         leftList = [];
         rightList = [];
         classMatrix = [new Array(allClasses.length).fill(0), new Array(allClasses.length).fill(0)];
@@ -245,33 +240,41 @@ function TSPDif(allClasses, attributes, trainingSet, categoryAttr) {
           const attribute = element[categoryAttr];
 
           if (element[attr1] < element[attr2]) {
-            left++;
             leftList.push(element);
             classMatrix[0][allClasses.indexOf(attribute)]++;
           } else {
-            right++;
             rightList.push(element);
             classMatrix[1][allClasses.indexOf(attribute)]++;
           }
         }
 
         // probability
-        var probR = 0,
-          probL = 0,
-          rankL = 0,
-          rankR = 0;
-        for (let k = 0; k < allClasses.length; k++) {
-          probL = left === 0 ? 0 : classMatrix[0][k] / left;
-          probR = right === 0 ? 0 : classMatrix[1][k] / right;
+        // var probR = 0,
+        //   probL = 0,
+        //   rankL = 0,
+        //   rankR = 0;
+        // for (let k = 0; k < allClasses.length; k++) {
+        //   probL = left === 0 ? 0 : classMatrix[0][k] / left;
+        //   probR = right === 0 ? 0 : classMatrix[1][k] / right;
 
-          rankL += probL * probL;
-          rankR += probR * probR;
-        }
+        //   rankL += probL * probL;
+        //   rankR += probR * probR;
+        // }
 
-        // setting new values
-        var currentDif =
-          (right / trainingSet.length) * (1 - rankR) + (left / trainingSet.length) * (1 - rankL);
-        if (currentDif < maxDif) {
+        // // setting new values
+        // var currentDif =
+        //   (right / trainingSet.length) * (1 - rankR) + (left / trainingSet.length) * (1 - rankL);
+
+        let matchEntropy = entropy(rightList, categoryAttr);
+        let notMatchEntropy = entropy(leftList, categoryAttr);
+
+        // calculating informational gain
+        let newEntropy = 0;
+        newEntropy += matchEntropy * rightList.length;
+        newEntropy += notMatchEntropy * leftList.length;
+        newEntropy /= trainingSet.length;
+        let currentDif = initialEntropy - newEntropy;
+        if (currentDif > maxDif) {
           maxDif = currentDif;
           attribute1 = attr1;
           attribute2 = attr2;
@@ -292,7 +295,7 @@ function TSPWDif(allClasses, attributes, trainingSet, categoryAttr) {
     L_weight = 0,
     weight = 0,
     direction = '<';
-  var maxDif = 100;
+  var maxDif = 0;
   /** @type {string | number} */ var attribute1 = -1;
   /** @type {string | number} */ var attribute2 = -1;
   var leftList = [],
@@ -300,9 +303,13 @@ function TSPWDif(allClasses, attributes, trainingSet, categoryAttr) {
     classMatrix = [new Array(allClasses.length).fill(0), new Array(allClasses.length).fill(0)],
     match = [],
     notMatch = [];
+  var initialEntropy = entropy(trainingSet, categoryAttr);
 
-  for (let attr1 of attributes) {
-    for (let attr2 of attributes) {
+  let attr1, attr2;
+  for (let i = 0; i < attributes.length; i++) {
+    attr1 = attributes[i];
+    for (let j = i + 1; j < attributes.length; j++) {
+      attr2 = attributes[j];
       if (attr1 !== attr2) {
         right = left = sum1 = sum2 = weight = 0;
         leftList = [];
@@ -333,22 +340,17 @@ function TSPWDif(allClasses, attributes, trainingSet, categoryAttr) {
             classMatrix[1][allClasses.indexOf(attribute)]++;
           }
         }
-        var probR = 0,
-          probL = 0,
-          rankL = 0,
-          rankR = 0;
-        for (let k = 0; k < allClasses.length; k++) {
-          probL = left === 0 ? 0 : classMatrix[0][k] / left;
-          probR = right === 0 ? 0 : classMatrix[1][k] / right;
 
-          rankL += probL * probL;
-          rankR += probR * probR;
-        }
+        let matchEntropy = entropy(rightList, categoryAttr);
+        let notMatchEntropy = entropy(leftList, categoryAttr);
 
-        var currentDif =
-          (right / trainingSet.length) * (1 - rankR) + (left / trainingSet.length) * (1 - rankL);
-
-        if (currentDif < maxDif) {
+        // calculating informational gain
+        let newEntropy = 0;
+        newEntropy += matchEntropy * rightList.length;
+        newEntropy += notMatchEntropy * leftList.length;
+        newEntropy /= trainingSet.length;
+        let currentDif = initialEntropy - newEntropy;
+        if (currentDif > maxDif) {
           maxDif = currentDif;
           attribute1 = attr1;
           attribute2 = attr2;
