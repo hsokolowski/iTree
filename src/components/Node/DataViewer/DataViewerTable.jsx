@@ -3,14 +3,13 @@ import React, { useState } from 'react';
 import { useAttributesContext } from '../../../contexts/AttributesContext';
 import { Search as SearchBar } from '../../SearchBar';
 import { CloseIcon } from '@chakra-ui/icons';
-import ReactTable from './ReactTable';
 
 function DataViewerTable({ data }) {
   //console.log(data);
   const [columns, setColumns] = useState([]);
   const [selected, setSelected] = useState([]);
-  const [state, setState] = useState({ selected: null });
   const { attributes } = useAttributesContext();
+
   function handleSetColumns(value) {
     setColumns(value);
   }
@@ -47,27 +46,25 @@ function DataViewerTable({ data }) {
           rightIcon={<CloseIcon />}
           bg="gray.600"
           color="white"
-          h={10}
           ml={3}
           _hover={{
             background: 'gray.900',
             color: 'white',
           }}
-          size="xs"
-          p={4}
+          size="sm"
           onClick={clearColumns}
         >
-          Clear columns
+          Clear
         </Button>
       </Box>
       <Box overflow="auto" bg="gray.200" d="flex" justifyContent="center">
-        <ReactTable set={data} cols={columns} />
-        {/* <Table size="sm" bg="gray.200" w="auto">
+        {/* <ReactTable set={data} cols={columns} /> */}
+        <Table size="sm" bg="gray.200" w="auto">
           <Thead>
             <Tr>
               {columns.length !== 0 ? (
                 <Th fontSize={11} p={1}>
-                  ID
+                  No.
                 </Th>
               ) : (
                 <></>
@@ -84,12 +81,12 @@ function DataViewerTable({ data }) {
               data.map((item, index) => {
                 let tds = [
                   <Td fontSize={10} p={1}>
-                    {index + 1}
+                    {index + 1}.
                   </Td>,
                 ];
                 for (const key of columns) {
                   tds.push(
-                    <Td fontSize={10} p={1}>
+                    <Td fontSize={10} p={1} textAlign="center">
                       {item[key]}
                     </Td>
                   );
@@ -114,7 +111,7 @@ function DataViewerTable({ data }) {
               </Tr>
             )}
           </Tbody>
-        </Table> */}
+        </Table>
       </Box>
     </Box>
   );

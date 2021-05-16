@@ -1,6 +1,6 @@
 export function testTree(tree, newData, categoryAttr) {
   let predicate;
-  console.log(categoryAttr);
+
   if (tree.category) {
     tree.trainingSet2 = newData;
     let _positiveCounter = 0,
@@ -19,7 +19,11 @@ export function testTree(tree, newData, categoryAttr) {
   } else {
     tree.nodeSet = newData;
 
-    predicate = predicates[tree.predicateName];
+    if (tree.weight) {
+      predicate = predicates['w'];
+    } else {
+      predicate = predicates[tree.predicateName];
+    }
 
     let matchedData = [],
       notMatchedData = [];
@@ -40,6 +44,8 @@ export function testTree(tree, newData, categoryAttr) {
       match ? matchedData.push(x) : notMatchedData.push(x);
     });
 
+    tree.matchedCount = matchedData.length;
+    tree.notMatchedCount = notMatchedData.length;
     testTree(tree.match, matchedData, categoryAttr);
     testTree(tree.notMatch, notMatchedData, categoryAttr);
   }
@@ -56,7 +62,6 @@ var predicates = {
     return a < b;
   },
   w: function (a, b, w) {
-    //console.log(a < w * b, a, w * b);
     return a < w * b;
   },
 };

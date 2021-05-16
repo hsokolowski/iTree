@@ -5,7 +5,6 @@ import {
   ButtonGroup,
   FormControl,
   FormLabel,
-  HStack,
   Input,
   InputGroup,
   InputLeftAddon,
@@ -14,8 +13,7 @@ import {
   Stack,
   Switch,
 } from '@chakra-ui/react';
-import { GrTechnology, GrDocumentUpload } from 'react-icons/gr';
-import { AiOutlinePercentage } from 'react-icons/ai';
+import { GrTechnology } from 'react-icons/gr';
 import Node from './Node';
 import { useLoadingContext } from '../contexts/LoadingContext';
 import { executeAlgorithm } from '../utils/algorithm-executor';
@@ -79,11 +77,9 @@ const Tree = ({ options }) => {
   }, [options, setIsLoading]);
 
   useEffect(() => {
-    //logTree(root);
     if (root !== null) {
       setSizeTree(getSizeTree(root));
     }
-    //setAccuracy(Math.random() * 10);
   }, [root]);
 
   const requestChildChange = newRoot => {
@@ -112,7 +108,7 @@ const Tree = ({ options }) => {
   function handleShowTestTree(e) {
     console.log(e);
     setShowTestTree(e.target.checked);
-    //updateTestTree(root);
+    updateTestTree(root);
   }
 
   return (
@@ -217,7 +213,11 @@ const Tree = ({ options }) => {
               <FormLabel htmlFor="show-tree" mb="0">
                 Show test tree
               </FormLabel>
-              <Switch id="show-tree-switch" onChange={e => handleShowTestTree(e)} />
+              <Switch
+                id="show-tree-switch"
+                disabled={testSet !== null}
+                onChange={e => handleShowTestTree(e)}
+              />
             </FormControl>
           </Box>
         </Stack>

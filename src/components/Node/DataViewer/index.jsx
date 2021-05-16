@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   ButtonGroup,
+  Kbd,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -11,6 +12,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Tag,
   Text,
   Tooltip,
   useDisclosure,
@@ -18,13 +20,39 @@ import {
 import { CgDatabase } from 'react-icons/cg';
 import { AiOutlineArrowDown, AiOutlineArrowUp } from 'react-icons/ai';
 import DataViewerTable from './DataViewerTable';
+import { useBuilderConfigContext } from '../../../contexts/BuilderConfigContext';
+import { useEffect } from 'react';
 
 function DataViewer({ node, side, onChange, hide }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    builderConfig: { categoryAttr },
+  } = useBuilderConfigContext();
+  const [nodeCountness, setNodeCountness] = useState({});
   const finalRef = React.useRef();
   const scrollBehavior = 'inside';
   const sideSubTitle = side ? 'Matched' : 'Not Matched';
   const nodeSize = node.nodeSet ? node.nodeSet.length : node.trainingSet2.length;
+
+  useEffect(() => {
+    abc();
+  }, []);
+
+  function abc() {
+    let set = node.nodeSet ? node.nodeSet : node.trainingSet2;
+    var res = set.reduce(function (obj, v) {
+      obj[v[categoryAttr]] = (obj[v[categoryAttr]] || 0) + 1;
+      return obj;
+    }, {});
+
+    setNodeCountness(res);
+  }
+
+  const NodeCountClass = Object.entries(nodeCountness).map(v => (
+    <Tag key={Math.random() + 10} ml={3} colorScheme="blackAlpha">
+      {v[0]} ({v[1]})
+    </Tag>
+  ));
 
   return (
     <Box>
@@ -81,9 +109,12 @@ function DataViewer({ node, side, onChange, hide }) {
                   {sideSubTitle}
                 </Badge>
               </Box>
-              <Text fontSize="sm">
-                {node.nodeSet ? node.nodeSet.length : node.trainingSet2.length} elements
-              </Text>
+              <Box d="flex" justifyContent="space-between" flexWrap="wrap" alignItems="center">
+                <Text fontSize="sm">
+                  {node.nodeSet ? node.nodeSet.length : node.trainingSet2.length} elements
+                </Text>
+                <Text>{NodeCountClass}</Text>
+              </Box>
             </Box>
           </ModalHeader>
           <ModalCloseButton mr={3} />
@@ -95,7 +126,6 @@ function DataViewer({ node, side, onChange, hide }) {
             <Button colorScheme="blue" mr={3} onClick={onClose}>
               Close
             </Button>
-            <Button variant="ghost">Secondary Action</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

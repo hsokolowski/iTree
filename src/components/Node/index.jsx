@@ -134,7 +134,7 @@ const Node = props => {
     <div className={`node ${highlighted ? 'highlight' : ''}`} onClick={onNodeClicked}>
       <Box d="flex" flexDirection="column" p="1" paddingLeft={3}>
         <Box d="flex" flexDirection="row">
-          {/* <DataViewer node={node} side={side} hide={hide} onChange={handleHide} /> */}
+          <DataViewer node={node} side={side} hide={hide} onChange={handleHide} />
         </Box>
         <div style={{ display: hide ? 'none' : 'block' }}>
           {category ? (
