@@ -16,7 +16,7 @@ const Node = props => {
   const [node, setNode] = useState(props.node || {});
   useEffect(() => setNode(props.node || {}), [props.node, setNode]);
 
-  const { side } = props;
+  const { side, isNotModify } = props;
   const {
     category,
     quality,
@@ -144,6 +144,7 @@ const Node = props => {
               notMatchedCount={notMatchedCount}
               quality={quality}
               requestLeafUnfold={unfoldLeaf}
+              isNotModify={isNotModify}
             />
           ) : (
             <Joint
@@ -156,18 +157,21 @@ const Node = props => {
               requestFoldToLeaf={foldJointToLeaf}
               nodeSet={nodeSet}
               weight={weight}
+              isNotModify={isNotModify}
             >
               <Node
                 node={match}
                 onChange={onChange}
                 requestChildChange={requestChildChangeIfMatchIs(true)}
                 side={true}
+                isNotModify={isNotModify}
               />
               <Node
                 node={notMatch}
                 onChange={onChange}
                 requestChildChange={requestChildChangeIfMatchIs(false)}
                 side={false}
+                isNotModify={isNotModify}
               />
             </Joint>
           )}

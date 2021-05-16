@@ -2,7 +2,7 @@ import { Box, Button, Menu, MenuButton, MenuItem, MenuList, Tooltip } from '@cha
 import React from 'react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 
-function Leaf({ category, matchedCount, notMatchedCount, quality, requestLeafUnfold }) {
+function Leaf({ category, matchedCount, notMatchedCount, quality, requestLeafUnfold, isNotModify }) {
   return (
     <Box
       d="flex"
@@ -19,6 +19,8 @@ function Leaf({ category, matchedCount, notMatchedCount, quality, requestLeafUnf
       borderRadius="lg"
       flexDirection="column"
       maxW="xs"
+      minW="xs"
+      //w={250}
       p={3}
       my="2"
       boxShadow="lg"
@@ -33,6 +35,7 @@ function Leaf({ category, matchedCount, notMatchedCount, quality, requestLeafUnf
         ml="2"
         d="flex"
         flexDirection="row"
+        flexWrap="wrap"
       >
         <Box mr={2}>Category:</Box>
         <Box color="black" fontWeight="bold">
@@ -51,47 +54,59 @@ function Leaf({ category, matchedCount, notMatchedCount, quality, requestLeafUnf
       </Box>
       <br />
 
-      <Box d="flex" flexDirection="row" justifyContent="space-between" w="100%">
+      <Box
+        d="flex"
+        flexDirection="row"
+        justifyContent="space-between"
+        w="100%"
+        flexWrap="wrap-reverse"
+        alignItems="flex-end"
+      >
         <Box boxShadow="md">
-          <Menu closeOnSelect closeOnBlur isLazy>
-            <Tooltip hasArrow label="Unfold to node" bg="yellow.500" placement="right">
-              <MenuButton
-                fontSize="sm"
-                w={20}
-                h={6}
-                as={Button}
-                rightIcon={<ChevronDownIcon />}
-                //bg={'#009c72'}
-                // _hover={{
-                //   bg: '#00402f',
-                // }}
-                // _active={{
-                //   bg: '#00402f',
-                // }}
-                bg={'#1560ab'}
-                _hover={{
-                  bg: '#005069',
-                }}
-                _active={{
-                  bg: '#005069',
-                }}
-                color={'white'}
-              >
-                Unfold
-              </MenuButton>
-            </Tooltip>
-            <MenuList>
-              <MenuItem onClick={() => requestLeafUnfold(['c45'])}>C 4.5</MenuItem>
-              <MenuItem onClick={() => requestLeafUnfold(['tsp'])}>TSP</MenuItem>
-              <MenuItem onClick={() => requestLeafUnfold(['tspw'])}>TSP Weight</MenuItem>
-            </MenuList>
-          </Menu>
+          {isNotModify ? (
+            <div></div>
+          ) : (
+            <Menu closeOnSelect closeOnBlur isLazy>
+              <Tooltip hasArrow label="Unfold to node" bg="yellow.500" placement="right">
+                <MenuButton
+                  fontSize="sm"
+                  w={20}
+                  h={6}
+                  as={Button}
+                  rightIcon={<ChevronDownIcon />}
+                  //bg={'#009c72'}
+                  // _hover={{
+                  //   bg: '#00402f',
+                  // }}
+                  // _active={{
+                  //   bg: '#00402f',
+                  // }}
+                  bg={'#1560ab'}
+                  _hover={{
+                    bg: '#005069',
+                  }}
+                  _active={{
+                    bg: '#005069',
+                  }}
+                  color={'white'}
+                >
+                  Unfold
+                </MenuButton>
+              </Tooltip>
+              <MenuList>
+                <MenuItem onClick={() => requestLeafUnfold(['c45'])}>C 4.5</MenuItem>
+                <MenuItem onClick={() => requestLeafUnfold(['tsp'])}>TSP</MenuItem>
+                <MenuItem onClick={() => requestLeafUnfold(['tspw'])}>TSP Weight</MenuItem>
+              </MenuList>
+            </Menu>
+          )}
         </Box>
-        <Box fontWeight="700" lineHeight="tight" isTruncated>
-          <Box position="absolute" right={3} bottom={2} fontSize={30}>
-            {quality}%
-          </Box>
+        <Box fontWeight="700" fontSize={30}>
+          {quality}%
         </Box>
+        {/* <Box fontWeight="700" lineHeight="tight" isTruncated>
+          %<Box position="absolute" right={3} bottom={2} fontSize={30}></Box>
+        </Box> */}
       </Box>
     </Box>
   );

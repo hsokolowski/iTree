@@ -19,7 +19,17 @@ import React, { useState } from 'react';
 import Configurator from './Configurator';
 import ModalPopup from './ModalPopup';
 
-function Joint({ children, attr2, predicateName, pivot, weight, requestFoldToLeaf, onChange, nodeSet }) {
+function Joint({
+  children,
+  attr2,
+  predicateName,
+  pivot,
+  weight,
+  requestFoldToLeaf,
+  onChange,
+  nodeSet,
+  isNotModify,
+}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [size, setSize] = useState('lg');
 
@@ -35,10 +45,9 @@ function Joint({ children, attr2, predicateName, pivot, weight, requestFoldToLea
 
   return (
     <Box mt={1}>
-      <ButtonGroup size="md" isAttached variant="solid" className="tree-branch">
-        <Tooltip hasArrow label="Changes at attribute" bg="red.600" placement="top" p={3} fontSize={16}>
-          {/* </Tooltip><Button colorScheme="blue" onClick={handleOpenModalClick} fontWeight={400} size="sm" bg="#006a4e"> */}
-          <Button colorScheme="telegram" onClick={handleOpenModalClick} fontWeight={400} size="sm">
+      {isNotModify ? (
+        <ButtonGroup size="md" isAttached variant="solid" className="tree-branch">
+          <Button colorScheme="telegram" fontWeight={400} size="sm">
             <Stack direction={'row'} spacing="5px">
               <Box>{attr2}</Box>
               <Box>
@@ -48,27 +57,43 @@ function Joint({ children, attr2, predicateName, pivot, weight, requestFoldToLea
               <Box>{pivot}</Box>
             </Stack>
           </Button>
-          {/* <Button size="xs" colorScheme="green" onClick={handleOpenModalClick}>
+        </ButtonGroup>
+      ) : (
+        <ButtonGroup size="md" isAttached variant="solid" className="tree-branch">
+          <Tooltip hasArrow label="Changes at attribute" bg="red.600" placement="top" p={3} fontSize={16}>
+            {/* </Tooltip><Button colorScheme="blue" onClick={handleOpenModalClick} fontWeight={400} size="sm" bg="#006a4e"> */}
+            <Button colorScheme="telegram" onClick={handleOpenModalClick} fontWeight={400} size="sm">
+              <Stack direction={'row'} spacing="5px">
+                <Box>{attr2}</Box>
+                <Box>
+                  <b>{predicateName}</b>
+                </Box>
+                <Box>{weight ? parseFloat(weight).toFixed(3) + ' * ' : ''}</Box>
+                <Box>{pivot}</Box>
+              </Stack>
+            </Button>
+            {/* <Button size="xs" colorScheme="green" onClick={handleOpenModalClick}>
             {attr2} <b>{predicateName}</b> {weight} {pivot}
           </Button> */}
-        </Tooltip>
-        <Tooltip hasArrow label="Fold a leaf" bg="orange.600" placement="right">
-          <Button
-            size="sm"
-            borderRadius="0.375rem"
-            rightIcon={<CloseIcon />}
-            onClick={foldToLeaf}
-            variant="solid"
-            bg="#D8DBE2"
-            _hover={{
-              background: '#A9BCD0',
-              color: '#373F51',
-            }}
-          >
-            Fold
-          </Button>
-        </Tooltip>
-      </ButtonGroup>
+          </Tooltip>
+          <Tooltip hasArrow label="Fold a leaf" bg="orange.600" placement="right">
+            <Button
+              size="sm"
+              borderRadius="0.375rem"
+              rightIcon={<CloseIcon />}
+              onClick={foldToLeaf}
+              variant="solid"
+              bg="#D8DBE2"
+              _hover={{
+                background: '#A9BCD0',
+                color: '#373F51',
+              }}
+            >
+              Fold
+            </Button>
+          </Tooltip>
+        </ButtonGroup>
+      )}
       {/* <Badge
         borderRadius="0.375rem"
         px="3"

@@ -236,12 +236,7 @@ const Tree = ({ options }) => {
             <Box width="100%" d={showTestTree ? '' : 'none'}>
               Test tree
               {showTestTree ? (
-                <Node
-                  node={secondRoot}
-                  onChange={() => {}}
-                  //requestChildChange={requestChildChange}
-                  side={true}
-                />
+                <Node node={secondRoot} onChange={() => {}} side={true} isNotModify />
               ) : (
                 <div></div>
               )}
