@@ -3,19 +3,26 @@ export function rebuildTestTree(tree, newData, categoryAttr) {
 
   if (tree.category) {
     tree.trainingSet2 = newData;
-    let _positiveCounter = 0,
-      _quality = 0;
-    for (let element of newData) {
-      if (element[categoryAttr] === tree.category) _positiveCounter++;
-    }
-    let _negativeCounter = newData.length - _positiveCounter;
-    _quality = _positiveCounter / newData.length;
-    _quality = _quality * 100;
+    if (!newData) {
+      tree.quality = 0;
+      tree.matchedCount = 0;
+      tree.notMatchedCount = 0;
+      return;
+    } else {
+      let _positiveCounter = 0,
+        _quality = 0;
+      for (let element of newData) {
+        if (element[categoryAttr] === tree.category) _positiveCounter++;
+      }
+      let _negativeCounter = newData.length - _positiveCounter;
+      _quality = _positiveCounter / newData.length;
+      _quality = _quality * 100;
 
-    tree.quality = _quality.toFixed(2);
-    tree.matchedCount = _positiveCounter;
-    tree.notMatchedCount = _negativeCounter;
-    return;
+      tree.quality = _quality.toFixed(2);
+      tree.matchedCount = _positiveCounter;
+      tree.notMatchedCount = _negativeCounter;
+      return;
+    }
   } else {
     tree.nodeSet = newData;
 

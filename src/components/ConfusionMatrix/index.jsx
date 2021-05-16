@@ -50,27 +50,31 @@ function ConfusionMatrix({ tree, onChange, data, allClasses, categoryAttr, disab
   }
 
   useEffect(() => {
-    console.log('use effect confusion matrix');
-    let CM = buildArray(allClasses.length);
+    try {
+      console.log('use effect confusion matrix');
+      let CM = buildArray(allClasses.length);
 
-    if (!disabled && tree !== null && data !== null) {
-      let prediction, clazz;
-      //console.log(data);
-      for (let index = 0; index < data.length; index++) {
-        //for (let index = 100; index < 102; index++) {
-        prediction = predict(tree, data[index]);
-        clazz = data[index][categoryAttr];
+      if (!disabled && tree !== null && data !== null) {
+        let prediction, clazz;
+        //console.log(data);
+        for (let index = 0; index < data.length; index++) {
+          //for (let index = 100; index < 102; index++) {
+          prediction = predict(tree, data[index]);
+          clazz = data[index][categoryAttr];
 
-        if (prediction === clazz) {
-          CM[allClasses.indexOf(clazz)][allClasses.indexOf(clazz)]++;
-        } else {
-          CM[allClasses.indexOf(clazz)][allClasses.indexOf(prediction)]++;
+          if (prediction === clazz) {
+            CM[allClasses.indexOf(clazz)][allClasses.indexOf(clazz)]++;
+          } else {
+            CM[allClasses.indexOf(clazz)][allClasses.indexOf(prediction)]++;
+          }
         }
+        setConfusionMatrix(CM);
+        let tmpAccuracy = handleAccuracy(CM);
+        setAccuracy(tmpAccuracy);
+        onChange(tmpAccuracy);
       }
-      setConfusionMatrix(CM);
-      let tmpAccuracy = handleAccuracy(CM);
-      setAccuracy(tmpAccuracy);
-      onChange(tmpAccuracy);
+    } catch (error) {
+      console.log(error);
     }
   }, [tree, disabled, allClasses, categoryAttr, data, onChange]);
 

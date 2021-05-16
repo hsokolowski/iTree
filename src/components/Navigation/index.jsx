@@ -17,7 +17,7 @@ import { useBuilderConfigContext } from '../../contexts/BuilderConfigContext';
  * @typedef {import('../../utils/decision-tree.js').DecisionTreeBuilder} DecisionTreeBuilder
  */
 
-function Navigation({ onPrepareConfig }) {
+function Navigation({ onPrepareConfig, setHeaders }) {
   const { setBuilderConfig } = useBuilderConfigContext();
   const { isOpen, onToggle } = useDisclosure({ defaultIsOpen: true });
   const [dataSet, setDataSet] = useState(null);
@@ -98,6 +98,11 @@ function Navigation({ onPrepareConfig }) {
     setAlgorithm(value);
   }
 
+  function handleHeaders(e) {
+    setIsHeaders(e.target.checked);
+    setHeaders(e.target.checked);
+  }
+
   return (
     <Box
       boxShadow="lg"
@@ -120,7 +125,7 @@ function Navigation({ onPrepareConfig }) {
                 size="sm"
                 colorScheme="linkedin"
                 defaultIsChecked={isHeaders}
-                onChange={e => setIsHeaders(e.target.checked)}
+                onChange={e => handleHeaders(e)}
               >
                 Headers?
               </Checkbox>

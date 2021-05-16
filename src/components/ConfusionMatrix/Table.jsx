@@ -34,7 +34,7 @@ function TableComponent({ confusionMatrix, headers }) {
           <Th></Th>
           <Th></Th>
           {headers.map(x => (
-            <Th>{x}</Th>
+            <Th key={Math.random() + 5}>{x}</Th>
           ))}
         </Tr>
       </Thead>
@@ -42,7 +42,7 @@ function TableComponent({ confusionMatrix, headers }) {
         {confusionMatrix.map((x, idx) => {
           console.log(x, idx);
           return (
-            <Tr>
+            <Tr key={Math.random() + 51}>
               {idx === 0 ? (
                 <Th
                   rowSpan={confusionMatrix.length}
@@ -60,7 +60,7 @@ function TableComponent({ confusionMatrix, headers }) {
               )}
               <Th>{headers[idx]}</Th>
               {x.map(y => (
-                <Td>{y}</Td>
+                <Td key={Math.random() + 511}>{y}</Td>
               ))}
             </Tr>
           );

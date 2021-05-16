@@ -20,7 +20,7 @@ import { executeAlgorithm } from '../utils/algorithm-executor';
 import TestSetFileReader from './TestSetFileReader';
 import ConfusionMatrix from './ConfusionMatrix';
 import { getSizeTree } from '../utils/size-checker';
-import { rebuildTestTree } from '../utils/RebuilderTestTree';
+import { rebuildTestTree } from '../utils/rebuilderTestTree';
 
 /**
  * @typedef {import('../utils/decision-tree.js').DecisionTreeBuilder} DecisionTreeBuilder
@@ -31,8 +31,9 @@ const logTree = root => console.log('ROOT', root);
 /**
  * @param {Object} props
  * @param {DecisionTreeBuilder} props.options
+ * @param {boolean} props.headers
  */
-const Tree = ({ options }) => {
+const Tree = ({ options, headers }) => {
   // const root = useMemo(() => {
   //   //return dt.TSPDecisionTree(options)
   //   var t0 = performance.now();
@@ -152,74 +153,89 @@ const Tree = ({ options }) => {
             />
           </Box>
         </Stack>
-        <Box>
-          <Button
-            leftIcon={<GrTechnology />}
-            bg={'#ddd'}
-            color="#black"
-            _hover={{ bg: '#aaa' }}
-            onClick={() => logTree(root)}
-            size="sm"
-          >
-            Log tree
-          </Button>
-          {/* tree size */}
-        </Box>
-        <Box>
-          <ButtonGroup size="sm" isAttached>
-            <Button mr="-px" disabled>
-              Joints: {sizeTree.joints}
+        <Stack spacing={2} direction="row">
+          <Box>
+            <Button
+              leftIcon={<GrTechnology />}
+              bg={'#ddd'}
+              color="#black"
+              _hover={{ bg: '#aaa' }}
+              onClick={() => logTree(root)}
+              size="sm"
+            >
+              Log tree
             </Button>
-            <Button mr="-px" disabled>
-              Leafs: {sizeTree.leafs}
-            </Button>
-          </ButtonGroup>
-        </Box>
+            {/* tree size */}
+          </Box>
+          <Box>
+            <ButtonGroup size="sm" isAttached>
+              <Button mr="-px" disabled>
+                Joints: {sizeTree.joints}
+              </Button>
+              <Button mr="-px" disabled>
+                Leafs: {sizeTree.leafs}
+              </Button>
+            </ButtonGroup>
+          </Box>
+          <Box>
+            <TestSetFileReader onChange={handleGetTestSet} isHeaders={headers} />
+          </Box>
+        </Stack>
         <Stack id={'testTree'} spacing={5} direction="row" justifyContent="space-between">
-          <Box>
-            <InputGroup size="sm">
-              <InputLeftAddon
-                children="Accuracy:"
-                fontWeight={700}
-                bg={'#ddd'}
-                color="#black"
-                borderRadius="0.375rem"
-              />
-              <Input value={accuracyTest.toFixed(3)} readOnly textAlign="center" width={70} pl={1} pr={1} />
-              <InputRightAddon
-                children="%"
-                fontWeight={700}
-                bg={'#ddd'}
-                color="#black"
-                borderRadius="0.375rem"
-              />
-            </InputGroup>
-          </Box>
-          <Box>
-            <TestSetFileReader onChange={handleGetTestSet} isHeaders={true} />
-          </Box>
-          <Box>
-            <ConfusionMatrix
-              tree={root}
-              data={testSet}
-              allClasses={options.allClasses}
-              categoryAttr={options.categoryAttr}
-              onChange={setAccuracyTest}
-              disabled={isLoading}
-            />
-          </Box>
-          <Box>
-            <FormControl display="flex" alignItems="center">
-              <FormLabel htmlFor="show-tree" mb="0">
-                Show test tree
-              </FormLabel>
-              <Switch
-                id="show-tree-switch"
-                disabled={testSet !== null}
-                onChange={e => handleShowTestTree(e)}
-              />
-            </FormControl>
-          </Box>
+          {testSet !== null ? (
+            <>
+              <Box>
+                <InputGroup size="sm">
+                  <InputLeftAddon
+                    children="Accuracy:"
+                    fontWeight={700}
+                    bg={'#ddd'}
+                    color="#black"
+                    borderRadius="0.375rem"
+                  />
+                  <Input
+                    value={accuracyTest.toFixed(3)}
+                    readOnly
+                    textAlign="center"
+                    width={70}
+                    pl={1}
+                    pr={1}
+                  />
+                  <InputRightAddon
+                    children="%"
+                    fontWeight={700}
+                    bg={'#ddd'}
+                    color="#black"
+                    borderRadius="0.375rem"
+                  />
+                </InputGroup>
+              </Box>
+              <Box>
+                <ConfusionMatrix
+                  tree={root}
+                  data={testSet}
+                  allClasses={options.allClasses}
+                  categoryAttr={options.categoryAttr}
+                  onChange={setAccuracyTest}
+                  disabled={isLoading}
+                />
+              </Box>
+              <Box>
+                <FormControl display="flex" alignItems="center">
+                  <FormLabel htmlFor="show-tree" mb="0">
+                    Show test tree
+                  </FormLabel>
+                  <Switch
+                    id="show-tree-switch"
+                    disabled={testSet !== null}
+                    onChange={e => handleShowTestTree(e)}
+                  />
+                </FormControl>
+              </Box>
+            </>
+          ) : (
+            <div></div>
+          )}
         </Stack>
       </Stack>
       {isLoading && <Spinner size="xl" />}
