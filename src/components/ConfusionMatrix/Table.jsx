@@ -23,7 +23,7 @@ import { predict } from '../../utils/predict';
  */
 function TableComponent({ confusionMatrix, headers }) {
   return (
-    <Table size="sm" overflowX="auto" d="block">
+    <Table size="sm" w="auto" d="block">
       <Thead>
         <Tr>
           <Th colSpan={confusionMatrix.length + 2} textAlign="center">

@@ -10,7 +10,11 @@ export default function TabTSPW({ attribute, value, weight, changeValues }) {
   const { attributes: options } = useAttributesContext();
 
   const onAttributeChange = value => changeValues({ attribute: value });
-  const onWeightChange = event => changeValues({ weight: parseFloat(event.target.value) });
+  const onWeightChange = event => {
+    let w = event.target.value;
+    w = w.replace(',', '.');
+    changeValues({ weight: w });
+  };
   const onPivotChange = value => changeValues({ pivot: value });
 
   return (

@@ -78,12 +78,12 @@ function buildDecisionTreeUpdate(
         console.log(result);
         break;
       case 'TSPW':
-        console.log('w', weight);
+        console.log('w', Number.parseFloat(weight));
 
         result = tspwisChange(
           changedAttribute1,
           changedAttribute2,
-          weight,
+          Number.parseFloat(weight),
           trainingSet,
           categoryAttr,
           builder.allClasses

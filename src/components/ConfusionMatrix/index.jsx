@@ -61,8 +61,8 @@ function ConfusionMatrix({ tree, onChange, data, allClasses, categoryAttr, disab
           //for (let index = 100; index < 102; index++) {
           prediction = predict(tree, data[index]);
           clazz = data[index][categoryAttr];
-
-          if (prediction === clazz) {
+          console.log('class: ' + clazz + ':', prediction);
+          if (prediction == clazz) {
             CM[allClasses.indexOf(clazz)][allClasses.indexOf(clazz)]++;
           } else {
             CM[allClasses.indexOf(clazz)][allClasses.indexOf(prediction)]++;

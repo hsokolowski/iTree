@@ -20,6 +20,7 @@ function Configurator({ onChange, attribute, pivot, weight }) {
 
   useEffect(() => {
     onChange({ ...state });
+
     console.log('Zmienił się stan ###########');
   }, [state]);
 

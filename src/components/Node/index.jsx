@@ -62,6 +62,8 @@ const Node = props => {
       oldAlgorithm: options.oldAlgorithm,
     };
 
+    options.weight = Number.parseFloat(options.weight);
+
     const changeOptions = {
       isChanged: true,
       changedAttribute1: options.attribute || node.attr2,
