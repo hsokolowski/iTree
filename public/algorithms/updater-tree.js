@@ -44,11 +44,13 @@ function buildDecisionTreeUpdate(
   var notMatch;
   var result;
   var L_weight;
+  let bestTests = [];
 
   if (isChanged) {
     //var maxDif, attribute1, attribute2, match, notMatch, L_weight, predicateName, predicate;
     console.log('@ ISCHANGE');
     var expr = oldAlgorithm[0];
+    bestTests = oldTree.tests;
     switch (expr) {
       case 'C45':
         var initialEntropy = entropy(trainingSet, categoryAttr);
@@ -134,7 +136,7 @@ function buildDecisionTreeUpdate(
       };
     } else {
       console.log('# IS UPDATE - NODE');
-
+      bestTests = oldTree.tests;
       if (oldTree?.weight) {
         console.log('# IS UPDATE - NODE - TSP W', oldTree?.weight);
         result = tspwisChange(
@@ -223,6 +225,7 @@ function buildDecisionTreeUpdate(
     notMatchedCount: notMatch?.length ? notMatch.length : 0,
     nodeSet: trainingSet,
     weight: weightFixed,
+    tests: bestTests,
   };
 }
 

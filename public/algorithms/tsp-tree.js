@@ -39,6 +39,8 @@ function buildDecisionTreeTSP(
   /** @type {string | number} */
   var _quality = 0;
 
+  let bestTests = [];
+
   // LEAF
   if (!isUpdate && (maxTreeDepth === 0 || trainingSet?.length <= minItemsCount)) {
     console.log('LEAF Minimal node size', minItemsCount + 'trainingSet?.length ' + trainingSet?.length);
@@ -167,6 +169,7 @@ function buildDecisionTreeTSP(
         trainingSet2: trainingSet,
       };
     } else {
+      bestTests = oldTree.tests;
       for (let element of trainingSet) {
         const attribute = element[categoryAttr];
 
@@ -290,6 +293,15 @@ function buildDecisionTreeTSP(
             attribute2 = attr2;
             match = leftList;
             notMatch = rightList;
+
+            let test = {
+              maxDif: currentDif,
+              attribute1: attr1,
+              attribute2: attr2,
+              match: leftList,
+              notMatch: rightList,
+            };
+            bestTests.push(test);
           }
         }
       }
@@ -321,6 +333,8 @@ function buildDecisionTreeTSP(
       trainingSet2: trainingSet,
     };
   }
+
+  bestTests = bestTests.sort(({ maxDif: a }, { maxDif: b }) => b - a);
 
   builder.maxTreeDepth = maxTreeDepth - 1;
   // builder.trainingSet = match;
@@ -354,6 +368,7 @@ function buildDecisionTreeTSP(
     matchedCount: match.length,
     notMatchedCount: notMatch.length,
     nodeSet: trainingSet,
+    tests: bestTests,
   };
 }
 

@@ -29,6 +29,7 @@ const Node = props => {
     pivot,
     nodeSet,
     weight,
+    tests,
   } = node;
 
   const onNodeClicked = e => {
@@ -160,6 +161,7 @@ const Node = props => {
               nodeSet={nodeSet}
               weight={weight}
               isNotModify={isNotModify}
+              bestTests={tests}
             >
               <Node
                 node={match}

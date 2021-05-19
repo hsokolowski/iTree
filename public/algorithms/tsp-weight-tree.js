@@ -37,6 +37,8 @@ function buildDecisionTreeTSPW(
   /** @type {string | number} */
   var _quality = 0;
 
+  let bestTests = [];
+
   // LEAF
   if (maxTreeDepth === 0 || trainingSet.length <= minItemsCount) {
     //console.log('Liść maxTreeDepth:', maxTreeDepth, ' Ilość el:', trainingSet.length, '<=', minItemsCount);
@@ -223,6 +225,16 @@ function buildDecisionTreeTSPW(
             match = leftList;
             notMatch = rightList;
             L_weight = weight;
+
+            let test = {
+              maxDif: currentDif,
+              attribute1: attr1,
+              attribute2: attr2,
+              match: leftList,
+              notMatch: rightList,
+              L_weight: weight,
+            };
+            bestTests.push(test);
           }
         }
       }
@@ -270,6 +282,9 @@ function buildDecisionTreeTSPW(
       trainingSet2: trainingSet,
     };
   }
+
+  bestTests = bestTests.sort(({ maxDif: a }, { maxDif: b }) => b - a);
+
   //console.log('-----------Podział-----------');
   builder.maxTreeDepth = maxTreeDepth - 1;
   builder.trainingSet = match;
@@ -288,6 +303,7 @@ function buildDecisionTreeTSPW(
     notMatchedCount: notMatch.length,
     nodeSet: match.concat(notMatch),
     weight: L_weight,
+    tests: bestTests,
   };
 }
 

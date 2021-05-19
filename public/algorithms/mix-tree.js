@@ -99,7 +99,7 @@ function buildDecisionTreeMix(_builder) {
     }
   }
   //console.log(lowest);
-  const { maxDif, match, notMatch, attribute1, attribute2, direction, L_weight } = lowest;
+  const { maxDif, match, notMatch, attribute1, attribute2, direction, L_weight, tests } = lowest;
 
   // LEAF
   if (!maxDif) {
@@ -161,6 +161,7 @@ function buildDecisionTreeMix(_builder) {
     notMatchedCount: notMatch.length,
     nodeSet: match.concat(notMatch),
     weight: L_weight ? L_weight.toFixed(3) : null,
+    tests: tests,
   };
 }
 
@@ -214,6 +215,7 @@ context.onmessage = function (event) {
 };
 
 function TSPDif(allClasses, attributes, trainingSet, categoryAttr) {
+  let bestTests = [];
   var maxDif = 0;
   var direction = '<';
   /** @type {string | number} */ var attribute1 = -1;
@@ -280,14 +282,28 @@ function TSPDif(allClasses, attributes, trainingSet, categoryAttr) {
           attribute2 = attr2;
           match = leftList;
           notMatch = rightList;
+
+          let test = {
+            maxDif: currentDif,
+            attribute1: attr1,
+            attribute2: attr2,
+            match: leftList,
+            notMatch: rightList,
+          };
+          bestTests.push(test);
         }
       }
     }
   }
-  return { maxDif, attribute1, attribute2, match, notMatch, direction };
+
+  bestTests = bestTests.sort(({ maxDif: a }, { maxDif: b }) => b - a);
+  console.log(bestTests);
+
+  return { maxDif, attribute1, attribute2, match, notMatch, direction, tests: bestTests };
 }
 
 function TSPWDif(allClasses, attributes, trainingSet, categoryAttr) {
+  let bestTests = [];
   var right = 0,
     left = 0,
     sum1 = 0,
@@ -357,15 +373,29 @@ function TSPWDif(allClasses, attributes, trainingSet, categoryAttr) {
           match = leftList;
           notMatch = rightList;
           L_weight = weight;
+
+          let test = {
+            maxDif: currentDif,
+            attribute1: attr1,
+            attribute2: attr2,
+            match: leftList,
+            notMatch: rightList,
+            L_weight: weight,
+          };
+          bestTests.push(test);
         }
       }
     }
 
-    return { maxDif, attribute1, attribute2, match, notMatch, direction, L_weight };
+    bestTests = bestTests.sort(({ maxDif: a }, { maxDif: b }) => b - a);
+    console.log(bestTests);
+
+    return { maxDif, attribute1, attribute2, match, notMatch, direction, L_weight, tests: bestTests };
   }
 }
 
 function C45Dif(trainingSet, categoryAttr, ignoredAttributes) {
+  let bestTests = [];
   var alreadyChecked = {};
 
   var bestSplit = { gain: 0 };
@@ -444,9 +474,22 @@ function C45Dif(trainingSet, categoryAttr, ignoredAttributes) {
         bestSplit.attribute = attr;
         bestSplit.pivot = pivot;
         bestSplit.gain = currGain;
+
+        let test = {
+          maxDif: bestSplit.gain,
+          attribute1: bestSplit.attribute,
+          attribute2: bestSplit.pivot,
+          match: bestSplit.match,
+          notMatch: bestSplit.notMatch,
+          direction: bestSplit.predicateName,
+        };
+        bestTests.push(test);
       }
     }
   }
+
+  bestTests = bestTests.sort(({ maxDif: a }, { maxDif: b }) => b - a);
+  console.log(bestTests);
 
   return {
     maxDif: bestSplit.gain,
@@ -455,6 +498,7 @@ function C45Dif(trainingSet, categoryAttr, ignoredAttributes) {
     match: bestSplit.match,
     notMatch: bestSplit.notMatch,
     direction: bestSplit.predicateName,
+    tests: bestTests,
   };
 }
 
@@ -533,3 +577,18 @@ var predicates = {
     return a >= b;
   },
 };
+
+function dynamicSort(property) {
+  var sortOrder = 1;
+  if (property[0] === '-') {
+    sortOrder = -1;
+    property = property.substr(1);
+  }
+  return function (a, b) {
+    /* next line works with strings and numbers,
+     * and you may want to customize it to your needs
+     */
+    var result = a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
+    return result * sortOrder;
+  };
+}

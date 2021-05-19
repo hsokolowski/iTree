@@ -29,6 +29,7 @@ function Joint({
   onChange,
   nodeSet,
   isNotModify,
+  bestTests,
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [size, setSize] = useState('lg');
@@ -120,6 +121,7 @@ function Joint({
         onClose={onClose}
         onOpen={onOpen}
         weight={weight}
+        bestTests={bestTests}
       />
       {children}
     </Box>

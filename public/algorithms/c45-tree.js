@@ -37,6 +37,8 @@ function buildDecisionTreeC45(
     isUpdate,
   } = builder;
 
+  let bestTests = [];
+
   //console.log('old Treee', oldTree, 'isUpdate', isUpdate, 'isChange', isChanged, trainingSet);
 
   if (!isUpdate && (maxTreeDepth === 0 || trainingSet?.length <= minItemsCount)) {
@@ -175,10 +177,10 @@ function buildDecisionTreeC45(
         trainingSet2: trainingSet,
       };
     } else {
+      bestTests = oldTree.tests;
       //console.log('# IS UPDATE - NODE');
       let attr = oldTree.attr2;
       pivot = oldTree.pivot;
-
       if (!isNaN(pivot)) {
         pivot = parseFloat(pivot);
       }
@@ -290,6 +292,16 @@ function buildDecisionTreeC45(
           bestSplit.attribute = attr;
           bestSplit.pivot = pivot;
           bestSplit.gain = currGain;
+
+          let test = {
+            maxDif: bestSplit.gain,
+            attribute1: bestSplit.attribute,
+            attribute2: bestSplit.pivot,
+            match: bestSplit.match,
+            notMatch: bestSplit.notMatch,
+            direction: bestSplit.predicateName,
+          };
+          bestTests.push(test);
         }
       }
     }
@@ -298,6 +310,8 @@ function buildDecisionTreeC45(
   if (!bestSplit.gain && !isUpdate) {
     return MakeLeaf(trainingSet, categoryAttr);
   }
+
+  bestTests = bestTests.sort(({ maxDif: a }, { maxDif: b }) => b - a);
 
   // building subtrees
   builder.maxTreeDepth = maxTreeDepth - 1;
@@ -331,6 +345,7 @@ function buildDecisionTreeC45(
     //     ? bestSplit.match?.concat(bestSplit.notMatch)
     //     : [],
     nodeSet: trainingSet,
+    tests: bestTests,
   };
 }
 
@@ -465,6 +480,8 @@ function MakeLeaf(trainingSet, categoryAttr) {
     trainingSet2: trainingSet,
   };
 }
+
+function findBestTests() {}
 
 /** @type {Worker} */
 // @ts-ignore
