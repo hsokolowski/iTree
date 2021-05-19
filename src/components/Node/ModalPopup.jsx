@@ -44,7 +44,7 @@ function ModalPopup({
   };
 
   return (
-    <Modal onClose={onClose} size="lg" isOpen={isOpen} blockScrollOnMount={false}>
+    <Modal onClose={onClose} size="xl" isOpen={isOpen} blockScrollOnMount={false}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
