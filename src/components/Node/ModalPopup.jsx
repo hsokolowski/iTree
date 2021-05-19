@@ -74,8 +74,8 @@ function ModalPopup({
                     <Code children={'Attr1: ' + x.attribute1} />
                     <Code children={'Attr2: ' + x.attribute2} />
                     {x.L_weight ? <Code children={'Weight: ' + x.L_weight.toFixed(3)} /> : <></>}
-                    <Code children={'Match size: ' + x.match.length} />
-                    <Code children={'NotMatch size:' + x.notMatch.length} />
+                    <Code children={'Matched: ' + x.match.length} />
+                    <Code children={'NotMatched: ' + x.notMatch.length} />
                   </Stack>
                 </Tag>
               ))}
