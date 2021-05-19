@@ -71,9 +71,22 @@ function ModalPopup({
                   {i + 1}.
                   <Stack direction="row">
                     <Code children={'Gain: ' + x.maxDif.toFixed(3)} />
-                    <Code children={'Attr1: ' + x.attribute1} />
-                    <Code children={'Attr2: ' + x.attribute2} />
-                    {x.L_weight ? <Code children={'Weight: ' + x.L_weight.toFixed(3)} /> : <></>}
+                    <Code
+                      children={'Attr1: ' + x.attribute1}
+                      colorScheme={state.attribute == x.attribute1 ? 'green' : 'gray'}
+                    />
+                    <Code
+                      children={'Attr2: ' + x.attribute2}
+                      colorScheme={state.pivot == x.attribute2 ? 'green' : 'gray'}
+                    />
+                    {x.L_weight ? (
+                      <Code
+                        children={'Weight: ' + x.L_weight.toFixed(3)}
+                        colorScheme={state.weight == x.L_weight.toFixed(3) ? 'green' : 'gray'}
+                      />
+                    ) : (
+                      <></>
+                    )}
                     <Code children={'Matched: ' + x.match.length} />
                     <Code children={'NotMatched: ' + x.notMatch.length} />
                   </Stack>
