@@ -102,7 +102,7 @@ function Leaf({ category, matchedCount, notMatchedCount, quality, requestLeafUnf
           )}
         </Box>
         <Box fontWeight="700" fontSize={30}>
-          {quality}%
+          {isNaN(quality) ? '0.00' : quality}%
         </Box>
         {/* <Box fontWeight="700" lineHeight="tight" isTruncated>
           %<Box position="absolute" right={3} bottom={2} fontSize={30}></Box>

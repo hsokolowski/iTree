@@ -7,15 +7,21 @@ export function predict(tree, item) {
       // only leafs contains predicted category
       return tree.category;
     }
-
+    // console.log(
+    //   tree.predicateName,
+    //   tree.predicateName === '>=',
+    //   tree.predicateName === '==',
+    //   tree.predicateName === '<'
+    // );
     if (tree.predicateName === '>=' || tree.predicateName === '==') {
       attr1 = tree.attr2;
       value = item[attr1];
-      pivot = tree.pivot;
+      pivot = parseFloat(tree.pivot);
       predicate = predicates[tree.predicateName];
       match = predicate(value, pivot);
 
-      //console.log('predict - c45', match);
+      console.log(value, pivot);
+      console.log('predict - c45', match);
     }
     if (tree.predicateName === '<') {
       attr1 = tree.attr2;
@@ -26,10 +32,11 @@ export function predict(tree, item) {
       predicate = predicates[tree.predicateName];
       match = predicate(value, pivot);
 
-      //console.log('predict - tsp', match);
+      console.log(value, pivot);
+      console.log('predict - tsp', match);
     }
+    //console.log(tree.weight);
     if (tree.weight) {
-      //console.log(tree.weight);
       attr1 = tree.attr2;
       attr2 = tree.pivot;
       value = parseFloat(item[attr1]);

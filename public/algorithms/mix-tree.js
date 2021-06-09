@@ -103,11 +103,11 @@ function buildDecisionTreeMix(_builder) {
 
   // LEAF
   if (!maxDif) {
-    //console.log('Liść bo maxDif:', maxDif);
+    console.log('Liść bo maxDif:', maxDif);
     let _category = mostFrequentValue(trainingSet, categoryAttr);
     let _positiveCounter = 0;
     for (let element of trainingSet) {
-      if (element[categoryAttr] === _category) _positiveCounter++;
+      if (element[categoryAttr] == _category) _positiveCounter++;
     }
     let _negativeCounter = trainingSet.length - _positiveCounter;
     _quality = _positiveCounter / trainingSet.length;
@@ -206,7 +206,7 @@ function mostFrequentValue(items, attr) {
 // @ts-ignore
 const context = self; //eslint-disable-line
 context.onmessage = function (event) {
-  console.log('received message', event);
+  //console.log('received message', event);
   const {
     data: { _builder, isChanged = false, changedAttribute1 = null, changedAttribute2 = null },
   } = event;
@@ -236,12 +236,12 @@ function TSPDif(allClasses, attributes, trainingSet, categoryAttr) {
         leftList = [];
         rightList = [];
         classMatrix = [new Array(allClasses.length).fill(0), new Array(allClasses.length).fill(0)];
-
+        //if (attr1 == '211699_x_at' && attr2 == '202388_at') console.log(trainingSet);
         // division
         for (let element of trainingSet) {
           const attribute = element[categoryAttr];
 
-          if (element[attr1] < element[attr2]) {
+          if (parseFloat(element[attr1]) < parseFloat(element[attr2])) {
             leftList.push(element);
             classMatrix[0][allClasses.indexOf(attribute)]++;
           } else {
@@ -267,13 +267,13 @@ function TSPDif(allClasses, attributes, trainingSet, categoryAttr) {
         // var currentDif =
         //   (right / trainingSet.length) * (1 - rankR) + (left / trainingSet.length) * (1 - rankL);
 
-        let matchEntropy = entropy(rightList, categoryAttr);
-        let notMatchEntropy = entropy(leftList, categoryAttr);
-
+        let matchEntropy = entropy(leftList, categoryAttr);
+        let notMatchEntropy = entropy(rightList, categoryAttr);
+        //if (attr1 == '211699_x_at' && attr2 == '202388_at') console.log(leftList, rightList);
         // calculating informational gain
         let newEntropy = 0;
-        newEntropy += matchEntropy * rightList.length;
-        newEntropy += notMatchEntropy * leftList.length;
+        newEntropy += matchEntropy * leftList.length;
+        newEntropy += notMatchEntropy * rightList.length;
         newEntropy /= trainingSet.length;
         let currentDif = initialEntropy - newEntropy;
         if (currentDif > maxDif) {
@@ -297,7 +297,7 @@ function TSPDif(allClasses, attributes, trainingSet, categoryAttr) {
   }
 
   bestTests = bestTests.sort(({ maxDif: a }, { maxDif: b }) => b - a);
-  console.log(bestTests);
+  //console.log(bestTests);
 
   return { maxDif, attribute1, attribute2, match, notMatch, direction, tests: bestTests };
 }
@@ -346,7 +346,7 @@ function TSPWDif(allClasses, attributes, trainingSet, categoryAttr) {
         // division
         for (let element of trainingSet) {
           const attribute = element[categoryAttr];
-          if (element[attr1] < weight * element[attr2]) {
+          if (parseFloat(element[attr1]) < weight * parseFloat(element[attr2])) {
             left++;
             leftList.push(element);
             classMatrix[0][allClasses.indexOf(attribute)]++;
@@ -357,13 +357,13 @@ function TSPWDif(allClasses, attributes, trainingSet, categoryAttr) {
           }
         }
 
-        let matchEntropy = entropy(rightList, categoryAttr);
-        let notMatchEntropy = entropy(leftList, categoryAttr);
+        let matchEntropy = entropy(leftList, categoryAttr);
+        let notMatchEntropy = entropy(rightList, categoryAttr);
 
         // calculating informational gain
         let newEntropy = 0;
-        newEntropy += matchEntropy * rightList.length;
-        newEntropy += notMatchEntropy * leftList.length;
+        newEntropy += matchEntropy * leftList.length;
+        newEntropy += notMatchEntropy * rightList.length;
         newEntropy /= trainingSet.length;
         let currentDif = initialEntropy - newEntropy;
         if (currentDif > maxDif) {
@@ -388,7 +388,7 @@ function TSPWDif(allClasses, attributes, trainingSet, categoryAttr) {
     }
 
     bestTests = bestTests.sort(({ maxDif: a }, { maxDif: b }) => b - a);
-    console.log(bestTests);
+    //console.log(bestTests);
 
     return { maxDif, attribute1, attribute2, match, notMatch, direction, L_weight, tests: bestTests };
   }
@@ -416,7 +416,7 @@ function C45Dif(trainingSet, categoryAttr, ignoredAttributes) {
 
     // iterating over all attributes of item
     for (var attr in item) {
-      //if(ignoredAttributes[attr]===true) console.log("równe")
+      //if(ignoredAttributes[attr]===true)//console.log("równe")
       if (attr === categoryAttr || ignoredAttributes.includes(attr)) {
         //if ((attr === categoryAttr) || ignore===attr) {
         continue;
@@ -489,7 +489,7 @@ function C45Dif(trainingSet, categoryAttr, ignoredAttributes) {
   }
 
   bestTests = bestTests.sort(({ maxDif: a }, { maxDif: b }) => b - a);
-  console.log(bestTests);
+  //console.log(bestTests);
 
   return {
     maxDif: bestSplit.gain,

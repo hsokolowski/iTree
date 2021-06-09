@@ -243,7 +243,7 @@ function buildDecisionTreeTSP(
           for (let element of trainingSet) {
             const attribute = element[categoryAttr];
 
-            if (element[attr1] < element[attr2]) {
+            if (parseFloat(element[attr1]) < parseFloat(element[attr2])) {
               left++;
               leftList.push(element);
               classMatrix[0][builder.allClasses.indexOf(attribute)]++;
@@ -278,13 +278,13 @@ function buildDecisionTreeTSP(
           //   //podzial = classMatrix;
           // }
 
-          let matchEntropy = entropy(rightList, categoryAttr);
-          let notMatchEntropy = entropy(leftList, categoryAttr);
+          let matchEntropy = entropy(leftList, categoryAttr);
+          let notMatchEntropy = entropy(rightList, categoryAttr);
 
           // calculating informational gain
           let newEntropy = 0;
-          newEntropy += matchEntropy * rightList.length;
-          newEntropy += notMatchEntropy * leftList.length;
+          newEntropy += matchEntropy * leftList.length;
+          newEntropy += notMatchEntropy * rightList.length;
           newEntropy /= trainingSet.length;
           let currentDif = initialEntropy - newEntropy;
           if (currentDif > maxDif) {

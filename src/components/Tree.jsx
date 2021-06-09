@@ -101,13 +101,13 @@ const Tree = ({ options, headers }) => {
       setSecondRoot(tmpRoot);
     } else {
       rebuildTestTree(tmpRoot, testSet, options.categoryAttr);
-      console.log(tmpRoot);
+      //console.log(tmpRoot);
       setSecondRoot(tmpRoot);
     }
   }
 
   function handleShowTestTree(e) {
-    console.log(e);
+    //console.log(e);
     setShowTestTree(e.target.checked);
     updateTestTree(root);
   }
