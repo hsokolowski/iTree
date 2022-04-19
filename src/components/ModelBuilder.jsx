@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Tree from './Tree';
 import { shuffleAndChunkArray, mergeChunksWithoutChosen } from '../utils/cross-valid';
 import { useLoadingContext } from '../contexts/LoadingContext';
@@ -29,7 +29,8 @@ function ModelBuilder({ builder, headers, fold = 10 }) {
 
   const [mainDataset, setMainDataset] = useState(builder.trainingSet);
   const [chunks, setChunks] = useState([]);
-  const [treeModels, setTreeModels] = useState([]);
+  const [builtChunks, setBuiltChunks] = useState({});
+  const treeModels = useMemo(() => Object.values(builtChunks), [builtChunks]);
 
   useEffect(() => {
     console.log('MODEl BUIDLER');
@@ -41,16 +42,19 @@ function ModelBuilder({ builder, headers, fold = 10 }) {
     let buildedModels = [];
     let tmpBuilder = JSON.parse(JSON.stringify(builder));
 
-    chunks.forEach((x, i) => {
-      tmpBuilder.trainingSet = mergeChunksWithoutChosen(chunks, i);
+    setBuiltChunks(() => ({}));
+    chunks.forEach((_x, i) => {
+      const chunkBuilder = { ...tmpBuilder, trainingSet: mergeChunksWithoutChosen(chunks, i) };
       console.log('CHUNK', i);
-      executeAlgorithm(tmpBuilder)
+      executeAlgorithm(chunkBuilder)
         .then(value => {
           // if (terminated) {
           //   return;
           // }
-          buildedModels.push(value);
-          setTreeModels(buildedModels);
+          setBuiltChunks(prevState => ({
+            ...prevState,
+            [i]: value,
+          }));
         })
         .catch(e => console.error(e))
         .finally(() => {
@@ -58,24 +62,6 @@ function ModelBuilder({ builder, headers, fold = 10 }) {
           // terminated = true;
         });
     });
-    Promise.A;
-    for (let i = 0; i < fold; i++) {
-      tmpBuilder.trainingSet = mergeChunksWithoutChosen(chunks, i);
-      console.log('CHUNK', i);
-      executeAlgorithm(tmpBuilder)
-        .then(value => {
-          // if (terminated) {
-          //   return;
-          // }
-          buildedModels.push(value);
-          setTreeModels(buildedModels);
-        })
-        .catch(e => console.error(e))
-        .finally(() => {
-          // if (!terminated) setIsLoading(false);
-          // terminated = true;
-        });
-    }
 
     console.log(chunks);
     console.log(buildedModels);
