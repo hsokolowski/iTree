@@ -50,6 +50,7 @@ function ConfusionMatrix({ tree, onChange, data, allClasses, categoryAttr, disab
   }
 
   useEffect(() => {
+    console.log('Confusion Matrix', data.length);
     try {
       //console.log('use effect confusion matrix');
       let CM = buildArray(allClasses.length);
@@ -101,7 +102,7 @@ function ConfusionMatrix({ tree, onChange, data, allClasses, categoryAttr, disab
         size="sm"
         disabled={disabled}
       >
-        Confusion Matrix
+        Confusion Matrix [{accuracy}%]
       </Button>
 
       <Modal onClose={onClose} size={'xl'} isOpen={isOpen} blockScrollOnMount={false}>

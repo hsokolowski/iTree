@@ -7,9 +7,9 @@ const workersMap = {
 };
 
 export function executeAlgorithm(options, changeOptions = {}) {
-  console.log(changeOptions);
+  //console.log(changeOptions);
   return new Promise((resolve, reject) => {
-    console.time(options.algorithm);
+    //console.time(options.algorithm);
     let worker;
     if (options.algorithm.length > 1) {
       console.log('mix');

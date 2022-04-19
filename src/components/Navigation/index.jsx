@@ -12,6 +12,7 @@ import { DrawerMemo } from './DrawerRoll';
 import { useLoadingContext } from '../../contexts/LoadingContext';
 import { useAttributesContext } from '../../contexts/AttributesContext';
 import { useBuilderConfigContext } from '../../contexts/BuilderConfigContext';
+import { shuffleAndChunkArray } from '../../utils/cross-valid';
 
 /**
  * @typedef {import('../../utils/decision-tree.js').DecisionTreeBuilder} DecisionTreeBuilder
@@ -64,10 +65,11 @@ function Navigation({ onPrepareConfig, setHeaders }) {
   function handleGetAllAttributes({ allAttributes, data }) {
     setDecisionAttribute(null);
     setIgnoredAttributes([]);
-    console.log(allAttributes, data);
+    //console.log(allAttributes, data);
     setAllAttributes(allAttributes);
     onAttributesChange(allAttributes);
     setDataSet(data);
+    shuffleAndChunkArray(data);
   }
   /**
    * @returns {DecisionTreeBuilder}

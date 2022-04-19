@@ -20,8 +20,8 @@ export function predict(tree, item) {
       predicate = predicates[tree.predicateName];
       match = predicate(value, pivot);
 
-      console.log(value, pivot);
-      console.log('predict - c45', match);
+      //console.log(value, pivot);
+      //console.log('predict - c45', match);
     }
     if (tree.predicateName === '<') {
       attr1 = tree.attr2;
@@ -32,8 +32,8 @@ export function predict(tree, item) {
       predicate = predicates[tree.predicateName];
       match = predicate(value, pivot);
 
-      console.log(value, pivot);
-      console.log('predict - tsp', match);
+      //console.log(value, pivot);
+      //console.log('predict - tsp', match);
     }
     //console.log(tree.weight);
     if (tree.weight) {

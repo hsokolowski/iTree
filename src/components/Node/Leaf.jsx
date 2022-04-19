@@ -67,32 +67,32 @@ function Leaf({ category, matchedCount, notMatchedCount, quality, requestLeafUnf
             <div></div>
           ) : (
             <Menu closeOnSelect closeOnBlur isLazy>
-              <Tooltip hasArrow label="Unfold to node" bg="yellow.500" placement="right">
-                <MenuButton
-                  fontSize="sm"
-                  w={20}
-                  h={6}
-                  as={Button}
-                  rightIcon={<ChevronDownIcon />}
-                  //bg={'#009c72'}
-                  // _hover={{
-                  //   bg: '#00402f',
-                  // }}
-                  // _active={{
-                  //   bg: '#00402f',
-                  // }}
-                  bg={'#1560ab'}
-                  _hover={{
-                    bg: '#005069',
-                  }}
-                  _active={{
-                    bg: '#005069',
-                  }}
-                  color={'white'}
-                >
-                  Unfold
-                </MenuButton>
-              </Tooltip>
+              {/* <Tooltip hasArrow label="Unfold to node" bg="yellow.500" placement="right"> */}
+              <MenuButton
+                fontSize="sm"
+                w={20}
+                h={6}
+                as={Button}
+                rightIcon={<ChevronDownIcon />}
+                //bg={'#009c72'}
+                // _hover={{
+                //   bg: '#00402f',
+                // }}
+                // _active={{
+                //   bg: '#00402f',
+                // }}
+                bg={'#1560ab'}
+                _hover={{
+                  bg: '#005069',
+                }}
+                _active={{
+                  bg: '#005069',
+                }}
+                color={'white'}
+              >
+                Unfold
+              </MenuButton>
+              {/* </Tooltip> */}
               <MenuList>
                 <MenuItem onClick={() => requestLeafUnfold(['c45'])}>C 4.5</MenuItem>
                 <MenuItem onClick={() => requestLeafUnfold(['tsp'])}>TSP</MenuItem>

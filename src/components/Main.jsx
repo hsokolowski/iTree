@@ -5,6 +5,7 @@ import Navigation from './Navigation';
 import { AttributesProvider } from '../contexts/AttributesContext';
 import { BuilderConfigProvider } from '../contexts/BuilderConfigContext';
 import { TestTreeProvider } from '../contexts/TestTreeContext';
+import ModelBuilder from './ModelBuilder';
 
 function Main() {
   const [builder, setBuilder] = useState({});
@@ -32,8 +33,11 @@ function Main() {
           <div id="main" className="main">
             <Navigation onPrepareConfig={StartDrawing} setHeaders={onSetHeaders} />
             {/* <Button onClick={start}>Drzewo</Button> */}
-            <br></br>
-            <div>{isReady ? <Tree options={builder} headers={headers} /> : <div>Deploy your set</div>}</div>
+            <div>
+              {isReady ? <ModelBuilder builder={builder} headers={headers} /> : <div>Deploy your set</div>}
+            </div>
+            {/* <br></br>
+            <div>{isReady ? <Tree options={builder} headers={headers} /> : <div>Deploy your set</div>}</div> */}
           </div>
         </TestTreeProvider>
       </AttributesProvider>
