@@ -5,6 +5,7 @@ import { useLoadingContext } from '../contexts/LoadingContext';
 import { executeAlgorithm } from '../utils/algorithm-executor';
 import ConfusionMatrix from './ConfusionMatrix';
 import CrossValidator from './Crossvalidator/Crossvalidator';
+import { Progress } from '@chakra-ui/react';
 
 /**
  *
@@ -20,13 +21,14 @@ import CrossValidator from './Crossvalidator/Crossvalidator';
  * @param {string} props.builder.algorithm
  * @param {Boolean} props.headers
  * @param {Boolean} props.isReady
- * @param {Number} props.fold
+ * @param {string} props.fold
 
  * @returns
  */
-function ModelBuilder({ builder, headers, fold = 10 }) {
+function ModelBuilder({ builder, headers, fold }) {
   const { isLoading, setIsLoading } = useLoadingContext();
 
+  const [progress, setProgress] = useState(0);
   const [mainDataset, setMainDataset] = useState(builder.trainingSet);
   const [chunks, setChunks] = useState([]);
   const [builtChunks, setBuiltChunks] = useState({});
@@ -36,16 +38,22 @@ function ModelBuilder({ builder, headers, fold = 10 }) {
     console.log('MODEl BUIDLER');
     setIsLoading(true);
 
-    let chunks = shuffleAndChunkArray(builder.trainingSet);
+    let step = Math.ceil(100 / parseInt(fold));
+    let prog = 0;
+    setProgress(prog);
+
+    let chunks = shuffleAndChunkArray(builder.trainingSet, parseInt(fold));
     setChunks(chunks);
 
     let buildedModels = [];
     let tmpBuilder = JSON.parse(JSON.stringify(builder));
 
     setBuiltChunks(() => ({}));
+
     chunks.forEach((_x, i) => {
       const chunkBuilder = { ...tmpBuilder, trainingSet: mergeChunksWithoutChosen(chunks, i) };
       console.log('CHUNK', i);
+
       executeAlgorithm(chunkBuilder)
         .then(value => {
           // if (terminated) {
@@ -55,6 +63,9 @@ function ModelBuilder({ builder, headers, fold = 10 }) {
             ...prevState,
             [i]: value,
           }));
+
+          prog += step;
+          setProgress(prog);
         })
         .catch(e => console.error(e))
         .finally(() => {
@@ -65,19 +76,28 @@ function ModelBuilder({ builder, headers, fold = 10 }) {
 
     console.log(chunks);
     console.log(buildedModels);
-    setIsLoading(false);
     // return () => {
     //   if (terminated) {
     //     return;
     //   }
     //   terminated = true;
     // };
-  }, [builder, setIsLoading]);
+  }, [builder, fold, setIsLoading]);
+
+  useEffect(() => {
+    if (Object.keys(builtChunks).length === parseInt(fold)) {
+      console.log('END BUILD MODELS', builtChunks);
+      setIsLoading(false);
+      return;
+    }
+  }, [fold, setIsLoading, builtChunks]);
 
   return (
     <div id="model-builder" className="main">
       <div>
-        do nowego komponentu to dać
+        <Progress hasStripe value={progress} />
+      </div>
+      <div>
         <CrossValidator builder={builder} chunks={chunks} treeModels={treeModels} />
         {/* <Tree options={builder} headers={headers} /> */}
       </div>

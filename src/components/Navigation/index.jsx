@@ -18,7 +18,7 @@ import { shuffleAndChunkArray } from '../../utils/cross-valid';
  * @typedef {import('../../utils/decision-tree.js').DecisionTreeBuilder} DecisionTreeBuilder
  */
 
-function Navigation({ onPrepareConfig, setHeaders }) {
+function Navigation({ onPrepareConfig, setHeaders, onCrossValidation }) {
   const { setBuilderConfig } = useBuilderConfigContext();
   const { isOpen, onToggle } = useDisclosure({ defaultIsOpen: true });
   const [dataSet, setDataSet] = useState(null);
@@ -32,6 +32,8 @@ function Navigation({ onPrepareConfig, setHeaders }) {
   const [allClazz, setAllClasses] = useState([]);
   const [config, setConfig] = useState({});
   const [isHeaders, setIsHeaders] = useState(true);
+  const [isCrossValid, setIsCrossValid] = useState(true);
+  const [folds, setFolds] = useState(10);
   const { attributes: options, onAttributesChange } = useAttributesContext();
   //const { attributes: ignoredAttributes, onIgnoredChange } = useIgnoredContext();
   const { isLoading } = useLoadingContext();
@@ -57,6 +59,10 @@ function Navigation({ onPrepareConfig, setHeaders }) {
   function handleSetMaxDepth(value) {
     //console.log(value);
     setMaxDepth(value);
+  }
+  function handleSetFolds(value) {
+    //console.log(value);
+    setFolds(value);
   }
   /**
    * @param {Object<Array,Array>} allAttributes
@@ -89,6 +95,11 @@ function Navigation({ onPrepareConfig, setHeaders }) {
   }
 
   function handleDrawTree() {
+    //
+    if (isCrossValid) {
+      onCrossValidation(folds);
+    }
+
     const config = prepareConfig();
     setConfig(config);
     onPrepareConfig(config);
@@ -105,6 +116,10 @@ function Navigation({ onPrepareConfig, setHeaders }) {
     setHeaders(e.target.checked);
   }
 
+  function handleCrossValid(e) {
+    setIsCrossValid(e.target.checked);
+  }
+
   return (
     <Box
       boxShadow="lg"
@@ -118,6 +133,30 @@ function Navigation({ onPrepareConfig, setHeaders }) {
     >
       <Collapse in={isOpen} animateOpacity style={{ overflow: 'visible' }}>
         <Wrap spacing={2} align="center" alignContent="center" justify="center" px={2} py={3} zIndex={2}>
+          <WrapItem border={'1px solid black'} borderRadius={'5px'} padding={2}>
+            <FormControl id="cross-validation-input" width="auto">
+              <FormHelperText mb={2} mt={0}>
+                Run with Cross-validation?
+              </FormHelperText>
+              <Box flexDirection={'row'} display={'flex'} justifyContent={'space-around'}>
+                <Checkbox
+                  size="sm"
+                  colorScheme="linkedin"
+                  defaultIsChecked={isCrossValid}
+                  onChange={e => handleCrossValid(e)}
+                >
+                  CV
+                </Checkbox>
+                <FormControlNumberInput
+                  htmlId="foldCount"
+                  label="Set folds"
+                  defaultValue={folds}
+                  min={1}
+                  onChange={handleSetFolds}
+                />
+              </Box>
+            </FormControl>
+          </WrapItem>
           <WrapItem>
             <FormControl id="deploySet" width="auto">
               <FormHelperText mb={2} mt={0}>

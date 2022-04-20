@@ -14,7 +14,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { predict } from '../../utils/predict';
-import TableComponent from './Table';
+import TableComponent from '../ConfusionMatrix/Table';
 
 /**
  * @param {Object} props
@@ -23,9 +23,9 @@ import TableComponent from './Table';
  * @param {Object[]} props.data
  * @param {string[]} props.allClasses
  * @param {string} props.categoryAttr
- * @param {boolean} props.disabled
+ * @param {string} props.type
  */
-function ConfusionMatrix({ tree, onChange, data, allClasses, categoryAttr, disabled }) {
+function SmallConfusionMatrix({ tree, onChange, data, allClasses, categoryAttr, type }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [confusionMatrix, setConfusionMatrix] = useState([]);
   const [accuracy, setAccuracy] = useState(0);
@@ -43,27 +43,20 @@ function ConfusionMatrix({ tree, onChange, data, allClasses, categoryAttr, disab
         }
       }
       let acc = (goodTargets / allTargets) * 100;
-      //console.log(acc);
       return acc;
     }
     return 0;
   }
 
   useEffect(() => {
-    //console.log('Confusion Matrix', data.length);
     try {
-      //console.log('use effect confusion matrix');
       let CM = buildArray(allClasses.length);
-      //data = [data[34]];
 
-      if (!disabled && tree !== null && data !== null) {
+      if (tree !== null && data !== null) {
         let prediction, clazz;
-        //console.log(data);
         for (let index = 0; index < data.length; index++) {
-          //for (let index = 100; index < 102; index++) {
           prediction = predict(tree, data[index]);
           clazz = data[index][categoryAttr];
-          //console.log('class: ' + clazz + ':', prediction, prediction == clazz, prediction === clazz);
           if (prediction == clazz) {
             CM[allClasses.indexOf(clazz)][allClasses.indexOf(clazz)]++;
           } else {
@@ -78,7 +71,7 @@ function ConfusionMatrix({ tree, onChange, data, allClasses, categoryAttr, disab
     } catch (error) {
       console.log(error);
     }
-  }, [tree, disabled, allClasses, categoryAttr, data, onChange]);
+  }, [tree, allClasses, categoryAttr, data, onChange]);
 
   function buildArray(lenght) {
     let arr = [];
@@ -99,10 +92,11 @@ function ConfusionMatrix({ tree, onChange, data, allClasses, categoryAttr, disab
         color="#black"
         _hover={{ bg: '#aaa' }}
         onClick={onOpen}
-        size="sm"
-        disabled={disabled}
+        width={100}
+        height={25}
+        fontSize={10}
       >
-        Confusion Matrix
+        {type} [{accuracy.toFixed(0)}%]
       </Button>
 
       <Modal onClose={onClose} size={'xl'} isOpen={isOpen} blockScrollOnMount={false}>
@@ -122,4 +116,4 @@ function ConfusionMatrix({ tree, onChange, data, allClasses, categoryAttr, disab
   );
 }
 
-export default ConfusionMatrix;
+export default SmallConfusionMatrix;

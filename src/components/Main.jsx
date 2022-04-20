@@ -10,6 +10,7 @@ import ModelBuilder from './ModelBuilder';
 function Main() {
   const [builder, setBuilder] = useState({});
   const [isReady, setIsReady] = useState(false);
+  const [folds, setFolds] = useState(0);
   const [headers, setHeaders] = useState(true);
 
   useEffect(() => {
@@ -26,15 +27,39 @@ function Main() {
     setHeaders(value);
   }
 
+  function handleFolds(value) {
+    console.log(value);
+    setFolds(value);
+  }
+
   return (
     <BuilderConfigProvider>
       <AttributesProvider>
         <TestTreeProvider>
           <div id="main" className="main">
-            <Navigation onPrepareConfig={StartDrawing} setHeaders={onSetHeaders} />
+            <Navigation
+              onPrepareConfig={StartDrawing}
+              setHeaders={onSetHeaders}
+              onCrossValidation={handleFolds}
+            />
             {/* <Button onClick={start}>Drzewo</Button> */}
             <div>
-              {isReady ? <ModelBuilder builder={builder} headers={headers} /> : <div>Deploy your set</div>}
+              {isReady ? (
+                folds != 0 ? (
+                  <div>
+                    ModelBuidler
+                    <ModelBuilder builder={builder} headers={headers} fold={folds} />
+                  </div>
+                ) : (
+                  <div>Tree</div>
+                )
+              ) : (
+                <div>Deploy your set</div>
+              )}
+            </div>
+
+            <div>
+              {/* {isReady ? <ModelBuilder builder={builder} headers={headers} /> : <div>Deploy your set</div>} */}
             </div>
             {/* <br></br>
             <div>{isReady ? <Tree options={builder} headers={headers} /> : <div>Deploy your set</div>}</div> */}
