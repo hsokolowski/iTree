@@ -51,7 +51,7 @@ function Main() {
                     <ModelBuilder builder={builder} headers={headers} fold={folds} />
                   </div>
                 ) : (
-                  <div>Tree</div>
+                  <Tree options={builder} headers={headers} />
                 )
               ) : (
                 <div>Deploy your set</div>

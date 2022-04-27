@@ -96,6 +96,7 @@ function Navigation({ onPrepareConfig, setHeaders, onCrossValidation }) {
 
   function handleDrawTree() {
     //
+    onCrossValidation(0);
     if (isCrossValid) {
       onCrossValidation(folds);
     }
