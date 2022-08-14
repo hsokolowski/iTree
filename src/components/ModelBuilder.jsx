@@ -63,7 +63,7 @@ function ModelBuilder({ builder, headers, fold }) {
             ...prevState,
             [i]: value,
           }));
-
+          console.log('Set next step');
           prog += step;
           setProgress(prog);
         })

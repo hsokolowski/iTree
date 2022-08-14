@@ -15,9 +15,9 @@ function App() {
       <CSSReset />
       <LoadingProvider>
         <div id="app" className="App">
-          <Login>
-            <Main></Main>
-          </Login>
+          <Main></Main>
+          {/* <Login>
+          </Login> */}
         </div>
       </LoadingProvider>
     </ChakraProvider>

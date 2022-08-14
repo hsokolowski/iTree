@@ -26,7 +26,7 @@ import TreePrinter from '../TreePrinter';
  * @returns
  */
 function CrossValidator({ builder, chunks, treeModels }) {
-  const [allAccuracy, setAllAccuracy] = useState({});
+  const [allAccuracy, setAllAccuracy] = useState([]);
   const AllAccuracyObject = useMemo(() => Object.values(allAccuracy), [allAccuracy]);
 
   const [selectedTree, setSelectedTree] = useState(null);
@@ -34,10 +34,16 @@ function CrossValidator({ builder, chunks, treeModels }) {
   const [acc, setAcc] = useState({});
 
   function updateAccuracy(e, i) {
+    console.log('Accuracy');
+    console.log(e, i);
+    if (allAccuracy.length != chunks.length) {
+      //setAllAccuracy([...allAccuracy, e]);
+    }
     // setAllAccuracy(prevState => ({
     //   ...prevState,
     //   [i]: e,
     // }));
+    console.log(allAccuracy);
   }
 
   // useEffect(() => {
@@ -87,14 +93,19 @@ function CrossValidator({ builder, chunks, treeModels }) {
             chunks={chunks}
             item={x}
             index={i}
-            onGetResults={e => updateAccuracy(e, i)}
+            onGetResults={updateAccuracy}
             onSelectedTree={selectTree}
           />
         ))}
       </SimpleGrid>
       <div>
-        <p>Training accuracy:{}</p>
-        <p>Test accuracy:</p>
+        <p>
+          Training accuracy:{' '}
+          {allAccuracy?.reduce((partialSum, a) => partialSum + a.training, 0) / allAccuracy.length}
+        </p>
+        <p>
+          Test accuracy: {allAccuracy?.reduce((partialSum, a) => partialSum + a.test, 0) / allAccuracy.length}
+        </p>
       </div>
       <div>
         <p>Tree {selectedIndex + 1}</p>
@@ -137,8 +148,12 @@ function CrossValidator({ builder, chunks, treeModels }) {
 export default CrossValidator;
 
 function SampleTreeItem({ builder, chunks, item, index, onGetResults, onSelectedTree }) {
-  const [trainAcc, setTrainAcc] = useState(0);
-  const [testAcc, setTestAcc] = useState(0);
+  const [trainAcc, setTrainAcc] = useState(null);
+  const [testAcc, setTestAcc] = useState(null);
+  const [acc, setAcc] = useState({
+    training: null,
+    test: null,
+  });
 
   function clickSelectTree(tree, index) {
     onSelectedTree(tree, index);
@@ -146,18 +161,20 @@ function SampleTreeItem({ builder, chunks, item, index, onGetResults, onSelected
 
   function getTreningAccuracy(value) {
     setTrainAcc(value);
+    //onGetResults({ ...acc, training: value });
   }
 
   function getTestAccuracy(value) {
     setTestAcc(value);
+    //onGetResults({ ...acc, test: value });
   }
 
   useEffect(() => {
-    onGetResults({
-      training: trainAcc,
-      test: testAcc,
-    });
-  }, [onGetResults, testAcc, trainAcc]);
+    // console.log('usseeffececct', acc);
+    // if (acc.training != null && acc.test != null) {
+    //   onGetResults(acc);
+    // }
+  }, [acc, onGetResults]);
 
   return (
     <Box
@@ -167,9 +184,8 @@ function SampleTreeItem({ builder, chunks, item, index, onGetResults, onSelected
       height={55}
       border={'1px solid black'}
       borderRadius={5}
-      className="sampleTreeItem"
     >
-      <p style={{ textAlign: 'left' }} onClick={e => clickSelectTree(item, index)}>
+      <p className="sampleTreeItem" style={{ textAlign: 'left' }} onClick={e => clickSelectTree(item, index)}>
         <b>Tree {index + 1}</b>
       </p>
       <SimpleGrid columns={2} spacing={1}>
