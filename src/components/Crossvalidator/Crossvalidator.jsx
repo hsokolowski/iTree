@@ -1,5 +1,6 @@
 import { Box, SimpleGrid, Stack, StackDivider } from '@chakra-ui/react';
 import React, { useState, useMemo } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { mergeChunksWithoutChosen } from '../../utils/cross-valid';
 import ConfusionMatrix from '../ConfusionMatrix';
 import SmallConfusionMatrix from './SmallConfusionMatrix';
@@ -23,28 +24,30 @@ import TreePrinter from '../TreePrinter';
  * @param {Array} props.chunks
  * @param {Object} props.treeModels
 
- * @returns
+ * @return
  */
 function CrossValidator({ builder, chunks, treeModels }) {
-  const [allAccuracy, setAllAccuracy] = useState([]);
-  const AllAccuracyObject = useMemo(() => Object.values(allAccuracy), [allAccuracy]);
+  const [allAccuracy, setAllAccuracy] = useState({});
 
   const [selectedTree, setSelectedTree] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [acc, setAcc] = useState({});
 
-  function updateAccuracy(e, i) {
-    console.log('Accuracy');
-    console.log(e, i);
-    if (allAccuracy.length != chunks.length) {
-      //setAllAccuracy([...allAccuracy, e]);
+  useEffect(() => {
+    console.log(JSON.parse(JSON.stringify(allAccuracy)));
+  }, [allAccuracy]);
+
+  function updateAccuracy({ train, test, index }) {
+    if (allAccuracy[index]?.train === train && allAccuracy[index]?.test === test) {
+      return;
     }
-    // setAllAccuracy(prevState => ({
-    //   ...prevState,
-    //   [i]: e,
-    // }));
-    console.log(allAccuracy);
+    setAllAccuracy(m => ({ ...m, [index]: { train, test } }));
   }
+
+  const [trainAcc, testAcc] = useMemo(() => {
+    const items = Object.values(allAccuracy);
+    const avg = key => items.reduce((acc, x) => acc + x[key], 0) / items.length;
+    return [avg('train'), avg('test')];
+  }, [allAccuracy]);
 
   // useEffect(() => {
   //   function getAccuracy() {
@@ -88,7 +91,7 @@ function CrossValidator({ builder, chunks, treeModels }) {
       >
         {treeModels.map((x, i) => (
           <SampleTreeItem
-            key={Math.random() + i}
+            key={uuidv4()}
             builder={builder}
             chunks={chunks}
             item={x}
@@ -99,13 +102,8 @@ function CrossValidator({ builder, chunks, treeModels }) {
         ))}
       </SimpleGrid>
       <div>
-        <p>
-          Training accuracy:{' '}
-          {allAccuracy?.reduce((partialSum, a) => partialSum + a.training, 0) / allAccuracy.length}
-        </p>
-        <p>
-          Test accuracy: {allAccuracy?.reduce((partialSum, a) => partialSum + a.test, 0) / allAccuracy.length}
-        </p>
+        <p>Training accuracy: {trainAcc}</p>
+        <p>Test accuracy: {testAcc}</p>
       </div>
       <div>
         <p>Tree {selectedIndex + 1}</p>
@@ -118,7 +116,7 @@ function CrossValidator({ builder, chunks, treeModels }) {
       </div>
       {/* <div>
         {treeModels.map((x, i) => (
-          <p key={Math.random() + 5}>
+          <p key={uuidv4()}>
             Tree {i}{' '}
             <ConfusionMatrix
               tree={x}
@@ -150,14 +148,22 @@ export default CrossValidator;
 function SampleTreeItem({ builder, chunks, item, index, onGetResults, onSelectedTree }) {
   const [trainAcc, setTrainAcc] = useState(null);
   const [testAcc, setTestAcc] = useState(null);
-  const [acc, setAcc] = useState({
-    training: null,
-    test: null,
-  });
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    setData(mergeChunksWithoutChosen(chunks, index));
+  }, []);
 
   function clickSelectTree(tree, index) {
     onSelectedTree(tree, index);
   }
+
+  useEffect(() => {
+    if (trainAcc === null || testAcc === null) {
+      return;
+    }
+    onGetResults({ train: trainAcc, test: testAcc, index });
+  }, [trainAcc, testAcc]);
 
   function getTreningAccuracy(value) {
     setTrainAcc(value);
@@ -169,34 +175,22 @@ function SampleTreeItem({ builder, chunks, item, index, onGetResults, onSelected
     //onGetResults({ ...acc, test: value });
   }
 
-  useEffect(() => {
-    // console.log('usseeffececct', acc);
-    // if (acc.training != null && acc.test != null) {
-    //   onGetResults(acc);
-    // }
-  }, [acc, onGetResults]);
-
   return (
-    <Box
-      key={Math.random() + 5}
-      padding={1}
-      width={220}
-      height={55}
-      border={'1px solid black'}
-      borderRadius={5}
-    >
+    <Box key={uuidv4()} padding={1} width={220} height={55} border={'1px solid black'} borderRadius={5}>
       <p className="sampleTreeItem" style={{ textAlign: 'left' }} onClick={e => clickSelectTree(item, index)}>
         <b>Tree {index + 1}</b>
       </p>
       <SimpleGrid columns={2} spacing={1}>
-        <SmallConfusionMatrix
-          tree={item}
-          data={mergeChunksWithoutChosen(chunks, index)}
-          allClasses={builder.allClasses}
-          categoryAttr={builder.categoryAttr}
-          onChange={getTreningAccuracy}
-          type={'Trening'}
-        />
+        {data && (
+          <SmallConfusionMatrix
+            tree={item}
+            data={data}
+            allClasses={builder.allClasses}
+            categoryAttr={builder.categoryAttr}
+            onChange={getTreningAccuracy}
+            type={'Trening'}
+          />
+        )}
         <SmallConfusionMatrix
           tree={item}
           data={chunks[index]}

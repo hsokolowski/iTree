@@ -17,6 +17,7 @@ import {
   Tooltip,
   useDisclosure,
 } from '@chakra-ui/react';
+import { v4 as uuidv4 } from 'uuid';
 import { CgDatabase } from 'react-icons/cg';
 import { AiOutlineArrowDown, AiOutlineArrowUp } from 'react-icons/ai';
 import DataViewerTable from './DataViewerTable';
@@ -49,7 +50,7 @@ function DataViewer({ node, side, onChange, hide }) {
   }
 
   const NodeCountClass = Object.entries(nodeCountness).map(v => (
-    <Tag key={Math.random() + 10} ml={3} colorScheme="blackAlpha">
+    <Tag key={uuidv4()} ml={3} colorScheme="blackAlpha">
       {v[0]} ({v[1]})
     </Tag>
   ));

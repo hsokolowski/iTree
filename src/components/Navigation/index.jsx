@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import '../../css/main.scss';
 import '../../css/inputs.scss';
 import { Checkbox, Collapse, FormHelperText, Icon, useDisclosure, Wrap, WrapItem } from '@chakra-ui/react';
@@ -36,6 +36,7 @@ function Navigation({ onPrepareConfig, setHeaders, onCrossValidation }) {
   const [folds, setFolds] = useState(10);
   const { attributes: options, onAttributesChange } = useAttributesContext();
   //const { attributes: ignoredAttributes, onIgnoredChange } = useIgnoredContext();
+  const optionsViewModel = useMemo(() => options.map(model => ({ ...model, key: model.value })), [options]);
   const { isLoading } = useLoadingContext();
 
   function handleSelectDecision(value) {
@@ -196,7 +197,7 @@ function Navigation({ onPrepareConfig, setHeaders, onCrossValidation }) {
                   placeholder="Select algorithm"
                   onChange={handleSetAlgorithm}
                   value={algorithm}
-                  options={['c45', 'tsp', 'tspw'].map(v => ({ value: v, name: v.toUpperCase() }))}
+                  options={['c45', 'tsp', 'tspw'].map(v => ({ value: v, name: v.toUpperCase(), key: v }))}
                   multiple={true}
                   closeOnSelect={false}
                 />
@@ -216,7 +217,7 @@ function Navigation({ onPrepareConfig, setHeaders, onCrossValidation }) {
                 <SearchBar
                   placeholder="Select decision attribute"
                   onChange={handleSelectDecision}
-                  options={options}
+                  options={optionsViewModel}
                   multiple={false}
                   closeOnSelect={true}
                   value={decisionAttribute}
@@ -237,7 +238,7 @@ function Navigation({ onPrepareConfig, setHeaders, onCrossValidation }) {
                 <SearchBar
                   placeholder="Select ignore attributes"
                   onChange={handleSelectIgnore}
-                  options={options}
+                  options={optionsViewModel}
                   multiple={true}
                   closeOnSelect={false}
                   value={ignoredAttributes}

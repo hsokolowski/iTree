@@ -13,6 +13,7 @@ import {
   ModalFooter,
   useDisclosure,
 } from '@chakra-ui/react';
+import { v4 as uuidv4 } from 'uuid';
 import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption } from '@chakra-ui/react';
 import { predict } from '../../utils/predict';
 
@@ -34,7 +35,7 @@ function TableComponent({ confusionMatrix, headers }) {
           <Th></Th>
           <Th></Th>
           {headers.map(x => (
-            <Th key={Math.random() + 5}>{x}</Th>
+            <Th key={uuidv4()}>{x}</Th>
           ))}
         </Tr>
       </Thead>
@@ -42,7 +43,7 @@ function TableComponent({ confusionMatrix, headers }) {
         {confusionMatrix.map((x, idx) => {
           console.log(x, idx);
           return (
-            <Tr key={Math.random() + 51}>
+            <Tr key={uuidv4()}>
               {idx === 0 ? (
                 <Th
                   rowSpan={confusionMatrix.length}
@@ -60,7 +61,7 @@ function TableComponent({ confusionMatrix, headers }) {
               )}
               <Th>{headers[idx]}</Th>
               {x.map(y => (
-                <Td key={Math.random() + 511}>{y}</Td>
+                <Td key={uuidv4()}>{y}</Td>
               ))}
             </Tr>
           );
