@@ -32,7 +32,7 @@ function Navigation({ onPrepareConfig, setHeaders, onCrossValidation }) {
   const [allClazz, setAllClasses] = useState([]);
   const [config, setConfig] = useState({});
   const [isHeaders, setIsHeaders] = useState(true);
-  const [isCrossValid, setIsCrossValid] = useState(true);
+  const [isCrossValid, setIsCrossValid] = useState(false);
   const [folds, setFolds] = useState(10);
   const { attributes: options, onAttributesChange } = useAttributesContext();
   //const { attributes: ignoredAttributes, onIgnoredChange } = useIgnoredContext();
@@ -135,7 +135,7 @@ function Navigation({ onPrepareConfig, setHeaders, onCrossValidation }) {
     >
       <Collapse in={isOpen} animateOpacity style={{ overflow: 'visible' }}>
         <Wrap spacing={2} align="center" alignContent="center" justify="center" px={2} py={3} zIndex={2}>
-          <WrapItem border={'1px solid black'} borderRadius={'5px'} padding={2}>
+          {/* <WrapItem border={'1px solid black'} borderRadius={'5px'} padding={2}>
             <FormControl id="cross-validation-input" width="auto">
               <FormHelperText mb={2} mt={0}>
                 Run with Cross-validation?
@@ -158,7 +158,7 @@ function Navigation({ onPrepareConfig, setHeaders, onCrossValidation }) {
                 />
               </Box>
             </FormControl>
-          </WrapItem>
+          </WrapItem> */}
           <WrapItem>
             <FormControl id="deploySet" width="auto">
               <FormHelperText mb={2} mt={0}>
