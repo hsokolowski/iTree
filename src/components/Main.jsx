@@ -6,6 +6,7 @@ import { AttributesProvider } from '../contexts/AttributesContext';
 import { BuilderConfigProvider } from '../contexts/BuilderConfigContext';
 import { TestTreeProvider } from '../contexts/TestTreeContext';
 import ModelBuilder from './ModelBuilder';
+import { Footer } from './Footer';
 
 function Main() {
   const [builder, setBuilder] = useState({});
@@ -42,6 +43,7 @@ function Main() {
               setHeaders={onSetHeaders}
               onCrossValidation={handleFolds}
             />
+            <Footer />
             {/* <Button onClick={start}>Drzewo</Button> */}
             <div>
               {isReady ? (
