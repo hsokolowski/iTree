@@ -70,7 +70,7 @@ function Leaf({ category, matchedCount, notMatchedCount, quality, requestLeafUnf
               {/* <Tooltip hasArrow label="Unfold to node" bg="yellow.500" placement="right"> */}
               <MenuButton
                 fontSize="sm"
-                w={20}
+                w={100}
                 h={6}
                 as={Button}
                 rightIcon={<ChevronDownIcon />}
@@ -90,7 +90,7 @@ function Leaf({ category, matchedCount, notMatchedCount, quality, requestLeafUnf
                 }}
                 color={'white'}
               >
-                Unfold
+                Unfold all
               </MenuButton>
               {/* </Tooltip> */}
               <MenuList>

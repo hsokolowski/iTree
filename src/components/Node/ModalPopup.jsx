@@ -87,8 +87,8 @@ function ModalPopup({
                     ) : (
                       <></>
                     )}
-                    <Code children={'Matched: ' + x.match.length} />
-                    <Code children={'NotMatched: ' + x.notMatch.length} />
+                    <Code children={'Good: ' + x.match.length} />
+                    <Code children={'Bad: ' + x.notMatch.length} />
                   </Stack>
                 </Tag>
               ))}
