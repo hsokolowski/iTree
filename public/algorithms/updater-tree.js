@@ -48,7 +48,7 @@ function buildDecisionTreeUpdate(
 
   if (isChanged) {
     //var maxDif, attribute1, attribute2, match, notMatch, L_weight, predicateName, predicate;
-    console.log('@ ISCHANGE');
+    console.log('@ ISCHANGE _ HUBERT');
     var expr = oldAlgorithm[0];
     bestTests = oldTree.tests;
     switch (expr) {
@@ -60,8 +60,8 @@ function buildDecisionTreeUpdate(
         match = result.match;
         notMatch = result.notMatch;
         predicate = result.predicateName;
-        console.log('@ ISCHANGE - c45');
-        console.log(result);
+        console.log('@ ISCHANGE - c45 - HUBERT');
+        console.log(result, changedAttribute1, changedAttribute2);
         break;
       case 'TSP':
         console.log('t');
@@ -432,7 +432,7 @@ function tspisChange(changedAttribute1, changedAttribute2, trainingSet, category
   for (let element of trainingSet) {
     const attribute = element[categoryAttr];
 
-    if (element[changedAttribute1] < element[changedAttribute2]) {
+    if (parseFloat(element[changedAttribute1]) < parseFloat(element[changedAttribute2])) {
       left++;
       leftList.push(element);
       classMatrix[0][allClasses.indexOf(attribute)]++;
@@ -486,7 +486,7 @@ function tspwisChange(changedAttribute1, changedAttribute2, weight, trainingSet,
   for (let element of trainingSet) {
     const attribute = element[categoryAttr];
 
-    if (element[changedAttribute1] < weight * element[changedAttribute2]) {
+    if (parseFloat(element[changedAttribute1]) < weight * parseFloat(element[changedAttribute2])) {
       left++;
       leftList.push(element);
       classMatrix[0][allClasses.indexOf(attribute)]++;

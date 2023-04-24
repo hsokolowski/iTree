@@ -7,6 +7,7 @@ import { BuilderConfigProvider } from '../contexts/BuilderConfigContext';
 import { TestTreeProvider } from '../contexts/TestTreeContext';
 import ModelBuilder from './ModelBuilder';
 import { Footer } from './Footer';
+import { Readme } from './Readme';
 
 function Main() {
   const [builder, setBuilder] = useState({});
@@ -56,7 +57,10 @@ function Main() {
                   <Tree options={builder} headers={headers} />
                 )
               ) : (
-                <div>Deploy your set</div>
+                <div>
+                  Deploy your set
+                  <Readme />
+                </div>
               )}
             </div>
 
