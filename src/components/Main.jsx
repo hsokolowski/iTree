@@ -58,7 +58,7 @@ function Main() {
                 )
               ) : (
                 <div>
-                  Deploy your set
+                  {/* Deploy your set */}
                   <Readme />
                 </div>
               )}
