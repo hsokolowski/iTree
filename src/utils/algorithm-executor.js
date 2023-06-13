@@ -9,14 +9,14 @@ const workersMap = {
 export function executeAlgorithm(options, changeOptions = {}) {
   //console.log(changeOptions);
   return new Promise((resolve, reject) => {
-    //console.time(options.algorithm);
-    let worker;
-    if (options.algorithm.length > 1) {
-      console.log('mix');
-      worker = new Worker(`algorithms/${workersMap.mix}-tree.js`);
-    } else {
-      worker = new Worker(`algorithms/${workersMap[options.algorithm[0]]}-tree.js`);
-    }
+    console.time('options.unfold.Once', options.unfoldOnce);
+    let worker = new Worker(`algorithms/${workersMap.mix}-tree.js`);
+    // if (options.algorithm.length > 1) {
+    //   console.log('mix');
+    //   worker = new Worker(`algorithms/${workersMap.mix}-tree.js`);
+    // } else {
+    //   worker = new Worker(`algorithms/${workersMap[options.algorithm[0]]}-tree.js`);
+    // }
     worker.onmessage = ({ data }) => {
       console.log('got a result', data);
       resolve(data);

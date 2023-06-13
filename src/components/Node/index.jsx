@@ -108,12 +108,13 @@ const Node = props => {
     props.requestChildChange(foldResult);
   };
 
-  const unfoldLeaf = algorithm => {
+  const unfoldLeaf = (algorithm, unfoldOnce = false) => {
     setLoading(true);
     executeAlgorithm({
       ...builderConfig,
       trainingSet: node.trainingSet2,
       algorithm,
+      unfoldOnce,
     })
       .then(value => {
         setNode(value);

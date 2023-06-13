@@ -11,6 +11,7 @@
  * @property {number} maxTreeDepth
  * @property {Array<string>} ignoredAttributes
  * @property {string} algorithm
+ * @property {boolean} unfoldOnce
  */
 
 /**
@@ -28,6 +29,8 @@ function buildDecisionTreeMix(_builder) {
     maxTreeDepth,
     ignoredAttributes,
     algorithm,
+    unfoldOnce = false,
+    runOnce = false,
     allClasses,
   } = builder;
 
@@ -123,7 +126,7 @@ function buildDecisionTreeMix(_builder) {
   }
 
   //LEAF
-  if (match.length === 0 || notMatch.length === 0) {
+  if (match.length === 0 || notMatch.length === 0 || runOnce) {
     //console.log('Liść bo Lewa/Prawa wynosi 0');
     let _category = mostFrequentValue(trainingSet, categoryAttr);
     let _positiveCounter = 0;
@@ -141,6 +144,12 @@ function buildDecisionTreeMix(_builder) {
       notMatchedCount: _negativeCounter,
       trainingSet2: trainingSet,
     };
+  }
+
+  if (unfoldOnce) {
+    console.log(unfoldOnce, unfoldOnce === false);
+    console.log('Match/NotMatch');
+    builder.runOnce = true;
   }
 
   builder.maxTreeDepth = maxTreeDepth - 1;

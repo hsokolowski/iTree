@@ -62,43 +62,76 @@ function Leaf({ category, matchedCount, notMatchedCount, quality, requestLeafUnf
         flexWrap="wrap-reverse"
         alignItems="flex-end"
       >
-        <Box boxShadow="md">
+        <Box>
           {isNotModify ? (
             <div></div>
           ) : (
-            <Menu closeOnSelect closeOnBlur isLazy>
-              {/* <Tooltip hasArrow label="Unfold to node" bg="yellow.500" placement="right"> */}
-              <MenuButton
-                fontSize="sm"
-                w={100}
-                h={6}
-                as={Button}
-                rightIcon={<ChevronDownIcon />}
-                //bg={'#009c72'}
-                // _hover={{
-                //   bg: '#00402f',
-                // }}
-                // _active={{
-                //   bg: '#00402f',
-                // }}
-                bg={'#1560ab'}
-                _hover={{
-                  bg: '#005069',
-                }}
-                _active={{
-                  bg: '#005069',
-                }}
-                color={'white'}
-              >
-                Unfold all
-              </MenuButton>
-              {/* </Tooltip> */}
-              <MenuList>
-                <MenuItem onClick={() => requestLeafUnfold(['c45'])}>C 4.5</MenuItem>
-                <MenuItem onClick={() => requestLeafUnfold(['tsp'])}>TSP</MenuItem>
-                <MenuItem onClick={() => requestLeafUnfold(['tspw'])}>TSP Weight</MenuItem>
-              </MenuList>
-            </Menu>
+            <Box display={'flex'} flexDirection={'column'}>
+              <Menu closeOnSelect closeOnBlur isLazy>
+                <MenuButton
+                  fontSize="sm"
+                  w={110}
+                  h={6}
+                  as={Button}
+                  rightIcon={<ChevronDownIcon />}
+                  bg={'#1560ab'}
+                  _hover={{
+                    bg: '#005069',
+                  }}
+                  _active={{
+                    bg: '#005069',
+                  }}
+                  color={'white'}
+                  marginBottom={1}
+                  textAlign={'left'}
+                  paddingLeft={'13px'}
+                >
+                  Unfold once
+                </MenuButton>
+                {/* </Tooltip> */}
+                <MenuList>
+                  <MenuItem onClick={() => requestLeafUnfold(['c45'], true)}>C 4.5</MenuItem>
+                  <MenuItem onClick={() => requestLeafUnfold(['tsp'], true)}>TSP</MenuItem>
+                  <MenuItem onClick={() => requestLeafUnfold(['tspw'], true)}>TSP Weight</MenuItem>
+                </MenuList>
+              </Menu>
+              <Menu closeOnSelect closeOnBlur isLazy>
+                {/* <Tooltip hasArrow label="Unfold to node" bg="yellow.500" placement="right"> */}
+                <MenuButton
+                  fontSize="sm"
+                  w={110}
+                  h={6}
+                  as={Button}
+                  rightIcon={<ChevronDownIcon />}
+                  paddingLeft={1}
+                  paddingRight={1}
+                  textAlign={'left'}
+                  //bg={'#009c72'}
+                  // _hover={{
+                  //   bg: '#00402f',
+                  // }}
+                  // _active={{
+                  //   bg: '#00402f',
+                  // }}
+                  bg={'#1560ab'}
+                  _hover={{
+                    bg: '#005069',
+                  }}
+                  _active={{
+                    bg: '#005069',
+                  }}
+                  color={'white'}
+                >
+                  Unfold all
+                </MenuButton>
+                {/* </Tooltip> */}
+                <MenuList>
+                  <MenuItem onClick={() => requestLeafUnfold(['c45'])}>C 4.5</MenuItem>
+                  <MenuItem onClick={() => requestLeafUnfold(['tsp'])}>TSP</MenuItem>
+                  <MenuItem onClick={() => requestLeafUnfold(['tspw'])}>TSP Weight</MenuItem>
+                </MenuList>
+              </Menu>
+            </Box>
           )}
         </Box>
         <Box fontWeight="700" fontSize={30}>
