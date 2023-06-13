@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
   Button,
+  Checkbox,
   Code,
   Kbd,
   Modal,
@@ -28,12 +29,20 @@ function ModalPopup({
   bestTests,
 }) {
   const [state, setState] = useState({});
+  const [clear, setClear] = useState(false);
+  const handleClearPivot = value => {
+    console.log(value.target.checked);
+    setClear(value.target.checked);
+  };
   const handleOnChange = value => {
     console.log(value);
     setState(value);
   };
   const handleConfirm = () => {
     onClose();
+    if (clear) {
+      onChange({ ...state, isUpdate: false, pivot: 'clear' });
+    }
     onChange({ ...state, isUpdate: false });
   };
   const handleUpdate = () => {
@@ -53,6 +62,10 @@ function ModalPopup({
         <ModalCloseButton />
         <ModalBody>
           <Configurator onChange={handleOnChange} attribute={attr2} pivot={pivot} weight={weight} />
+          <Checkbox float={'right'} onChange={handleClearPivot}>
+            Clear second parameter
+          </Checkbox>
+          <br />
           {!bestTests || bestTests.length === 0 ? (
             <></>
           ) : (

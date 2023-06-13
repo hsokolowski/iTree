@@ -79,7 +79,7 @@ function buildDecisionTreeTSP(
   //#########################
   //#     force changes     #
   //#########################
-  if (isChanged) {
+  if (isChanged && changedAttribute2 != 'clear') {
     // if (isCalulate) {
     // division
     for (let element of trainingSet) {

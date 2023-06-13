@@ -104,7 +104,7 @@ function buildDecisionTreeTSPW(
   //#########################
   //#     force changes     #
   //#########################
-  if (isChanged) {
+  if (isChanged && changedAttribute2 != 'clear') {
     // division
     for (let element of trainingSet) {
       const attribute = element[categoryAttr];

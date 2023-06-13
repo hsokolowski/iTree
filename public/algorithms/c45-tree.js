@@ -71,8 +71,8 @@ function buildDecisionTreeC45(
   var notMatchEntropy;
   var newEntropy;
   var currGain;
-
-  if (isChanged) {
+  console.log(isChanged, changedAttribute2);
+  if (isChanged && changedAttribute2 != 'clear') {
     let attr = changedAttribute1;
 
     // let the value of current attribute be the pivot
@@ -82,7 +82,7 @@ function buildDecisionTreeC45(
     if (!isNaN(pivot)) {
       pivot = parseFloat(pivot);
     }
-
+    console.log('nie clear', pivot);
     // pick the predicate
     // depending on the type of the attribute value
     // var predicateName;
@@ -306,7 +306,7 @@ function buildDecisionTreeC45(
       }
     }
   }
-  //console.log('bestSplit.gain', bestSplit.gain);
+  console.log('po wszytskim');
   if (!bestSplit.gain && !isUpdate) {
     return MakeLeaf(trainingSet, categoryAttr);
   }
@@ -315,7 +315,7 @@ function buildDecisionTreeC45(
 
   // building subtrees
   builder.maxTreeDepth = maxTreeDepth - 1;
-  //console.log('BestSpLIT', bestSplit);
+  //console.log('po wszytskim-match');
   var matchSubTree = buildDecisionTreeC45({
     ...builder,
     trainingSet: bestSplit.match?.length ? bestSplit.match : [],
@@ -323,7 +323,7 @@ function buildDecisionTreeC45(
     isUpdate: isUpdate,
     oldTree: oldTree?.match,
   });
-
+  //console.log('po wszytskim-notmatch');
   var notMatchSubTree = buildDecisionTreeC45({
     ...builder,
     trainingSet: bestSplit.notMatch?.length ? bestSplit.notMatch : [],
