@@ -312,7 +312,7 @@ function buildDecisionTreeC45(
   }
 
   bestTests = bestTests.sort(({ maxDif: a }, { maxDif: b }) => b - a);
-
+  console.log(bestTests);
   // building subtrees
   builder.maxTreeDepth = maxTreeDepth - 1;
   //console.log('po wszytskim-match');

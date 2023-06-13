@@ -226,6 +226,7 @@ function buildDecisionTreeTSPW(
               attribute2: attr2,
               match: leftList,
               notMatch: rightList,
+              direction: '<',
               L_weight: weight,
             };
             bestTests.push(test);

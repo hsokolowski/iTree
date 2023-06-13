@@ -300,6 +300,7 @@ function buildDecisionTreeTSP(
               attribute2: attr2,
               match: leftList,
               notMatch: rightList,
+              direction: '<',
             };
             bestTests.push(test);
           }

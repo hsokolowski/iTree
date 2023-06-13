@@ -88,10 +88,7 @@ function ModalPopup({
                       children={'Attr1: ' + x.attribute1}
                       colorScheme={state.attribute == x.attribute1 ? 'green' : 'gray'}
                     />
-                    <Code
-                      children={'Attr2: ' + x.attribute2}
-                      colorScheme={state.pivot == x.attribute2 ? 'green' : 'gray'}
-                    />
+                    <Code children={x.direction} />
                     {x.L_weight ? (
                       <Code
                         children={'Weight: ' + x.L_weight.toFixed(3)}
@@ -100,6 +97,11 @@ function ModalPopup({
                     ) : (
                       <></>
                     )}
+                    <Code
+                      children={'Attr2: ' + x.attribute2}
+                      colorScheme={state.pivot == x.attribute2 ? 'green' : 'gray'}
+                    />
+
                     <Code children={'Good: ' + x.match.length} />
                     <Code children={'Bad: ' + x.notMatch.length} />
                   </Stack>
