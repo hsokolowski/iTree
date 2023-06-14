@@ -42,8 +42,9 @@ function ModalPopup({
     onClose();
     if (clear) {
       onChange({ ...state, isUpdate: false, pivot: 'clear' });
+    } else {
+      onChange({ ...state, isUpdate: false });
     }
-    onChange({ ...state, isUpdate: false });
   };
   const handleUpdate = () => {
     onClose();

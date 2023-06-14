@@ -79,61 +79,121 @@ function buildDecisionTreeTSP(
   //#########################
   //#     force changes     #
   //#########################
-  if (isChanged && changedAttribute2 != 'clear') {
-    // if (isCalulate) {
-    // division
-    for (let element of trainingSet) {
-      const attribute = element[categoryAttr];
+  if (isChanged) {
+    console.log(changedAttribute2);
+    if (changedAttribute2 === 'clear') {
+      for (let j = 0; j < attributes.length; j++) {
+        changedAttribute2 = attributes[j];
 
-      if (element[changedAttribute1] < element[changedAttribute2]) {
-        left++;
-        leftList.push(element);
-        classMatrix[0][builder.allClasses.indexOf(attribute)]++;
-      } else {
-        right++;
-        rightList.push(element);
-        classMatrix[1][builder.allClasses.indexOf(attribute)]++;
+        if (changedAttribute1 !== changedAttribute2) {
+          right = left = 0;
+          leftList = [];
+          rightList = [];
+          classMatrix = [
+            new Array(builder.allClasses.length).fill(0),
+            new Array(builder.allClasses.length).fill(0),
+          ];
+
+          // division
+          for (let element of trainingSet) {
+            const attribute = element[categoryAttr];
+
+            if (parseFloat(element[changedAttribute1]) < parseFloat(element[changedAttribute2])) {
+              left++;
+              leftList.push(element);
+              classMatrix[0][builder.allClasses.indexOf(attribute)]++;
+            } else {
+              right++;
+              rightList.push(element);
+              classMatrix[1][builder.allClasses.indexOf(attribute)]++;
+            }
+          }
+
+          let matchEntropy = entropy(leftList, categoryAttr);
+          let notMatchEntropy = entropy(rightList, categoryAttr);
+
+          // calculating informational gain
+          let newEntropy = 0;
+          newEntropy += matchEntropy * leftList.length;
+          newEntropy += notMatchEntropy * rightList.length;
+          newEntropy /= trainingSet.length;
+          let currentDif = initialEntropy - newEntropy;
+          if (currentDif > maxDif) {
+            //console.log('wchodzi');
+            maxDif = currentDif;
+            attribute1 = changedAttribute1;
+            attribute2 = changedAttribute2;
+            match = leftList;
+            notMatch = rightList;
+
+            let test = {
+              maxDif: currentDif,
+              attribute1: changedAttribute1,
+              attribute2: changedAttribute2,
+              match: leftList,
+              notMatch: rightList,
+              direction: '<',
+            };
+            bestTests.push(test);
+          }
+        }
       }
+    } else {
+      // if (isCalulate) {
+      // division
+      for (let element of trainingSet) {
+        const attribute = element[categoryAttr];
+
+        if (element[changedAttribute1] < element[changedAttribute2]) {
+          left++;
+          leftList.push(element);
+          classMatrix[0][builder.allClasses.indexOf(attribute)]++;
+        } else {
+          right++;
+          rightList.push(element);
+          classMatrix[1][builder.allClasses.indexOf(attribute)]++;
+        }
+      }
+
+      // // probability
+      // probR = 0;
+      // probL = 0;
+      // rankL = 0;
+      // rankR = 0;
+      // for (let k = 0; k < builder.allClasses.length; k++) {
+      //   probL = left === 0 ? 0 : classMatrix[0][k] / left;
+      //   probR = right === 0 ? 0 : classMatrix[1][k] / right;
+
+      //   rankL += probL * probL;
+      //   rankR += probR * probR;
+      // }
+
+      // // setting new values
+      // currentDif = (right / trainingSet.length) * (1 - rankR) + (left / trainingSet.length) * (1 - rankL);
+
+      // maxDif = currentDif;
+      // attribute1 = changedAttribute1;
+      // attribute2 = changedAttribute2;
+      // match = leftList;
+      // notMatch = rightList;
+      //podzial = classMatrix;
+
+      let matchEntropy = entropy(rightList, categoryAttr);
+      let notMatchEntropy = entropy(leftList, categoryAttr);
+
+      // calculating informational gain
+      let newEntropy = 0;
+      newEntropy += matchEntropy * rightList.length;
+      newEntropy += notMatchEntropy * leftList.length;
+      newEntropy /= trainingSet.length;
+      let currentDif = initialEntropy - newEntropy;
+
+      maxDif = currentDif;
+      attribute1 = changedAttribute1;
+      attribute2 = changedAttribute2;
+      match = leftList;
+      notMatch = rightList;
     }
-
-    // // probability
-    // probR = 0;
-    // probL = 0;
-    // rankL = 0;
-    // rankR = 0;
-    // for (let k = 0; k < builder.allClasses.length; k++) {
-    //   probL = left === 0 ? 0 : classMatrix[0][k] / left;
-    //   probR = right === 0 ? 0 : classMatrix[1][k] / right;
-
-    //   rankL += probL * probL;
-    //   rankR += probR * probR;
-    // }
-
-    // // setting new values
-    // currentDif = (right / trainingSet.length) * (1 - rankR) + (left / trainingSet.length) * (1 - rankL);
-
-    // maxDif = currentDif;
-    // attribute1 = changedAttribute1;
-    // attribute2 = changedAttribute2;
-    // match = leftList;
-    // notMatch = rightList;
-    //podzial = classMatrix;
-
-    let matchEntropy = entropy(rightList, categoryAttr);
-    let notMatchEntropy = entropy(leftList, categoryAttr);
-
-    // calculating informational gain
-    let newEntropy = 0;
-    newEntropy += matchEntropy * rightList.length;
-    newEntropy += notMatchEntropy * leftList.length;
-    newEntropy /= trainingSet.length;
-    let currentDif = initialEntropy - newEntropy;
-
-    maxDif = currentDif;
-    attribute1 = changedAttribute1;
-    attribute2 = changedAttribute2;
-    match = leftList;
-    notMatch = rightList;
 
     isChanged = false;
   } else if (isUpdate && !isChanged) {
@@ -343,7 +403,7 @@ function buildDecisionTreeTSP(
   console.log('-----------PODZIAł -----------------');
   // builder.trainingSet = notMatch;
   // var notMatchSubTree = buildDecisionTreeTSP(builder);
-
+  console.log(changedAttribute2);
   var matchSubTree = buildDecisionTreeTSP({
     ...builder,
     trainingSet: match?.length ? match : [],
@@ -351,7 +411,7 @@ function buildDecisionTreeTSP(
     isUpdate: isUpdate,
     oldTree: oldTree?.match,
   });
-
+  console.log(changedAttribute2);
   var notMatchSubTree = buildDecisionTreeTSP({
     ...builder,
     trainingSet: notMatch?.length ? notMatch : [],
@@ -359,7 +419,7 @@ function buildDecisionTreeTSP(
     isUpdate: isUpdate,
     oldTree: oldTree?.notMatch,
   });
-
+  console.log('po obli');
   return {
     attr2: attribute1,
     pivot: attribute2,
@@ -462,6 +522,7 @@ context.onmessage = function (event) {
   const {
     data: { _builder, isChanged = false, changedAttribute1 = null, changedAttribute2 = null },
   } = event;
+  console.log('worker tsp');
   const result = buildDecisionTreeTSP(_builder, isChanged, changedAttribute1, changedAttribute2);
   context.postMessage(result);
 };

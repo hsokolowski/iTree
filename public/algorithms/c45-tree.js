@@ -72,75 +72,129 @@ function buildDecisionTreeC45(
   var newEntropy;
   var currGain;
   console.log(isChanged, changedAttribute2);
-  if (isChanged && changedAttribute2 != 'clear') {
+  if (isChanged) {
     let attr = changedAttribute1;
 
     // let the value of current attribute be the pivot
     pivot = changedAttribute2;
 
-    //console.log(attr +" "+ pivot)
-    if (!isNaN(pivot)) {
-      pivot = parseFloat(pivot);
-    }
-    console.log('nie clear', pivot);
-    // pick the predicate
-    // depending on the type of the attribute value
-    // var predicateName;
-    if (typeof pivot == 'number') {
-      predicateName = '>=';
+    if (pivot === 'clear') {
+      for (var i = trainingSet.length - 1; i >= 0; i--) {
+        var item = trainingSet[i];
+        // let the value of current attribute be the pivot
+        pivot = item[attr];
+        if (!isNaN(pivot)) {
+          pivot = parseFloat(pivot);
+        }
+        // pick the predicate
+        // depending on the type of the attribute value
+        if (typeof pivot == 'number') {
+          predicateName = '>=';
+        } else {
+          // there is no sense to compare non-numeric attributes
+          // so we will check only equality of such attributes
+          predicateName = '==';
+        }
+
+        predicate = predicates[predicateName];
+
+        // splitting training set by given 'attribute-predicate-value'
+        currSplit = split(trainingSet, attr, predicate, pivot);
+        // calculating entropy of subsets
+        matchEntropy = entropy(currSplit.match, categoryAttr);
+        notMatchEntropy = entropy(currSplit.notMatch, categoryAttr);
+        // calculating informational gain
+        newEntropy = 0;
+        newEntropy += matchEntropy * currSplit.match.length;
+        newEntropy += notMatchEntropy * currSplit.notMatch.length;
+        newEntropy /= trainingSet.length;
+        currGain = initialEntropy - newEntropy;
+        if (currGain > bestSplit.gain) {
+          // remember pairs 'attribute-predicate-value'
+          // which provides informational gain
+          bestSplit = currSplit;
+          bestSplit.predicateName = predicateName;
+          bestSplit.predicate = predicate;
+          bestSplit.attribute = attr;
+          bestSplit.pivot = pivot;
+          bestSplit.gain = currGain;
+
+          let test = {
+            maxDif: bestSplit.gain,
+            attribute1: bestSplit.attribute,
+            attribute2: bestSplit.pivot,
+            match: bestSplit.match,
+            notMatch: bestSplit.notMatch,
+            direction: bestSplit.predicateName,
+          };
+          bestTests.push(test);
+        }
+      }
+      console.log('najlepszy ' + pivot);
     } else {
-      // there is no sense to compare non-numeric attributes
-      // so we will check only equality of such attributes
-      predicateName = '==';
-    }
+      if (!isNaN(pivot)) {
+        pivot = parseFloat(pivot);
+      }
+      console.log('nie clear', pivot);
+      // pick the predicate
+      // depending on the type of the attribute value
+      // var predicateName;
+      if (typeof pivot == 'number') {
+        predicateName = '>=';
+      } else {
+        // there is no sense to compare non-numeric attributes
+        // so we will check only equality of such attributes
+        predicateName = '==';
+      }
 
-    attrPredPivot = attr + predicateName + pivot;
-    if (alreadyChecked[attrPredPivot]) {
-      // skip such pairs of 'attribute-predicate-pivot',
-      // which been already checked
-      //continue;
-    }
-    alreadyChecked[attrPredPivot] = true;
+      attrPredPivot = attr + predicateName + pivot;
+      if (alreadyChecked[attrPredPivot]) {
+        // skip such pairs of 'attribute-predicate-pivot',
+        // which been already checked
+        //continue;
+      }
+      alreadyChecked[attrPredPivot] = true;
 
-    predicate = predicates[predicateName];
+      predicate = predicates[predicateName];
 
-    // splitting training set by given 'attribute-predicate-value'
-    currSplit = split(trainingSet, attr, predicate, pivot);
-    // console.log(currSplit.match);
-    // console.log(currSplit.notMatch);
+      // splitting training set by given 'attribute-predicate-value'
+      currSplit = split(trainingSet, attr, predicate, pivot);
+      // console.log(currSplit.match);
+      // console.log(currSplit.notMatch);
 
-    // calculating entropy of subsets
-    matchEntropy = entropy(currSplit.match, categoryAttr);
-    notMatchEntropy = entropy(currSplit.notMatch, categoryAttr);
+      // calculating entropy of subsets
+      matchEntropy = entropy(currSplit.match, categoryAttr);
+      notMatchEntropy = entropy(currSplit.notMatch, categoryAttr);
 
-    // calculating informational gain
-    newEntropy = 0;
-    newEntropy += matchEntropy * currSplit.match.length;
-    newEntropy += notMatchEntropy * currSplit.notMatch.length;
-    newEntropy /= trainingSet.length;
-    currGain = initialEntropy - newEntropy;
-    //console.log('IS CHAANGED CURRENT GAIN ' + currGain);
-    if (currGain > bestSplit.gain) {
-      // remember pairs 'attribute-predicate-value'
-      // which provides informational gain
-      bestSplit = currSplit;
-      bestSplit.predicateName = predicateName;
-      bestSplit.predicate = predicate;
-      bestSplit.attribute = attr;
-      bestSplit.pivot = pivot;
-      bestSplit.gain = currGain;
-      //console.log('@ IS CHANGE ', bestSplit);
-    }
-    if (!currGain) {
-      // remember pairs 'attribute-predicate-value'
-      // which provides informational gain
-      bestSplit = currSplit;
-      bestSplit.predicateName = predicateName;
-      bestSplit.predicate = predicate;
-      bestSplit.attribute = attr;
-      bestSplit.pivot = pivot;
-      bestSplit.gain = currGain;
-      //console.log('@ IS CHANGE ', bestSplit);
+      // calculating informational gain
+      newEntropy = 0;
+      newEntropy += matchEntropy * currSplit.match.length;
+      newEntropy += notMatchEntropy * currSplit.notMatch.length;
+      newEntropy /= trainingSet.length;
+      currGain = initialEntropy - newEntropy;
+      //console.log('IS CHAANGED CURRENT GAIN ' + currGain);
+      if (currGain > bestSplit.gain) {
+        // remember pairs 'attribute-predicate-value'
+        // which provides informational gain
+        bestSplit = currSplit;
+        bestSplit.predicateName = predicateName;
+        bestSplit.predicate = predicate;
+        bestSplit.attribute = attr;
+        bestSplit.pivot = pivot;
+        bestSplit.gain = currGain;
+        //console.log('@ IS CHANGE ', bestSplit);
+      }
+      if (!currGain) {
+        // remember pairs 'attribute-predicate-value'
+        // which provides informational gain
+        bestSplit = currSplit;
+        bestSplit.predicateName = predicateName;
+        bestSplit.predicate = predicate;
+        bestSplit.attribute = attr;
+        bestSplit.pivot = pivot;
+        bestSplit.gain = currGain;
+        //console.log('@ IS CHANGE ', bestSplit);
+      }
     }
 
     isChanged = false;
