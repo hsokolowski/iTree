@@ -51,22 +51,22 @@ const Tree = ({ options, headers }) => {
   const [showTestTree, setShowTestTree] = useState(false);
   const { isLoading, setIsLoading } = useLoadingContext();
 
-  const updateTestTree = useCallback(
-    newRoot => {
-      console.log(options.categoryAttr);
-      let tmpRoot = JSON.parse(JSON.stringify(newRoot));
-      if (testSet == null) {
-        rebuildTestTree(tmpRoot, options.trainingSet, options.categoryAttr);
-        console.log(tmpRoot);
-        setSecondRoot(tmpRoot);
-      } else {
-        rebuildTestTree(tmpRoot, testSet, options.categoryAttr);
-        //console.log(tmpRoot);
-        setSecondRoot(tmpRoot);
-      }
-    },
-    [options.categoryAttr, options.trainingSet, testSet]
-  );
+  // const updateTestTree = useCallback(
+  //   newRoot => {
+  //     console.log(options.categoryAttr);
+  //     let tmpRoot = JSON.parse(JSON.stringify(newRoot));
+  //     if (testSet == null) {
+  //       rebuildTestTree(tmpRoot, options.trainingSet, options.categoryAttr);
+  //       console.log(tmpRoot);
+  //       setSecondRoot(tmpRoot);
+  //     } else {
+  //       rebuildTestTree(tmpRoot, testSet, options.categoryAttr);
+  //       //console.log(tmpRoot);
+  //       setSecondRoot(tmpRoot);
+  //     }
+  //   },
+  //   [options.categoryAttr, options.trainingSet, testSet]
+  // );
 
   useEffect(() => {
     setRoot(null);
@@ -92,7 +92,7 @@ const Tree = ({ options, headers }) => {
       }
       terminated = true;
     };
-  }, [options, setIsLoading, updateTestTree]);
+  }, [options, setIsLoading]);
 
   useEffect(() => {
     if (root !== null) {
@@ -109,19 +109,19 @@ const Tree = ({ options, headers }) => {
     setTestSet(data);
   }
 
-  // function updateTestTree(newRoot) {
-  //   console.log(options.categoryAttr);
-  //   let tmpRoot = JSON.parse(JSON.stringify(newRoot));
-  //   if (testSet == null) {
-  //     rebuildTestTree(tmpRoot, options.trainingSet, options.categoryAttr);
-  //     console.log(tmpRoot);
-  //     setSecondRoot(tmpRoot);
-  //   } else {
-  //     rebuildTestTree(tmpRoot, testSet, options.categoryAttr);
-  //     //console.log(tmpRoot);
-  //     setSecondRoot(tmpRoot);
-  //   }
-  // }
+  function updateTestTree(newRoot) {
+    console.log(options.categoryAttr);
+    let tmpRoot = JSON.parse(JSON.stringify(newRoot));
+    if (testSet == null) {
+      rebuildTestTree(tmpRoot, options.trainingSet, options.categoryAttr);
+      console.log(tmpRoot);
+      setSecondRoot(tmpRoot);
+    } else {
+      rebuildTestTree(tmpRoot, testSet, options.categoryAttr);
+      //console.log(tmpRoot);
+      setSecondRoot(tmpRoot);
+    }
+  }
 
   function handleShowTestTree(e) {
     //console.log(e);
