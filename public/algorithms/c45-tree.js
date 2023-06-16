@@ -35,6 +35,8 @@ function buildDecisionTreeC45(
     ignoredAttributes,
     oldTree,
     isUpdate,
+    unfoldOnce = false,
+    runOnce = false,
   } = builder;
 
   let bestTests = [];
@@ -367,6 +369,34 @@ function buildDecisionTreeC45(
 
   bestTests = bestTests.sort(({ maxDif: a }, { maxDif: b }) => b - a);
   console.log(bestTests);
+
+  //LEAF
+  if (runOnce) {
+    //console.log('Liść bo Lewa/Prawa wynosi 0');
+    let _category = mostFrequentValue(trainingSet, categoryAttr);
+    let _positiveCounter = 0;
+    for (let element of trainingSet) {
+      if (element[categoryAttr] === _category) _positiveCounter++;
+    }
+    let _negativeCounter = trainingSet.length - _positiveCounter;
+    _quality = _positiveCounter / trainingSet.length;
+    _quality = _quality * 100;
+
+    return {
+      category: _category,
+      quality: _quality.toFixed(2),
+      matchedCount: _positiveCounter,
+      notMatchedCount: _negativeCounter,
+      trainingSet2: trainingSet,
+    };
+  }
+
+  if (unfoldOnce) {
+    console.log(unfoldOnce, unfoldOnce === false);
+    console.log('Match/NotMatch');
+    builder.runOnce = true;
+  }
+
   // building subtrees
   builder.maxTreeDepth = maxTreeDepth - 1;
   //console.log('po wszytskim-match');

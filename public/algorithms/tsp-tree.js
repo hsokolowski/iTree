@@ -33,6 +33,8 @@ function buildDecisionTreeTSP(
     maxTreeDepth,
     ignoredAttributes,
     oldTree,
+    unfoldOnce = false,
+    runOnce = false,
     isUpdate,
   } = builder;
 
@@ -396,6 +398,33 @@ function buildDecisionTreeTSP(
   }
 
   bestTests = bestTests.sort(({ maxDif: a }, { maxDif: b }) => b - a);
+
+  //LEAF
+  if (match.length === 0 || notMatch.length === 0 || runOnce) {
+    //console.log('Liść bo Lewa/Prawa wynosi 0');
+    let _category = mostFrequentValue(trainingSet, categoryAttr);
+    let _positiveCounter = 0;
+    for (let element of trainingSet) {
+      if (element[categoryAttr] === _category) _positiveCounter++;
+    }
+    let _negativeCounter = trainingSet.length - _positiveCounter;
+    _quality = _positiveCounter / trainingSet.length;
+    _quality = _quality * 100;
+
+    return {
+      category: _category,
+      quality: _quality.toFixed(2),
+      matchedCount: _positiveCounter,
+      notMatchedCount: _negativeCounter,
+      trainingSet2: trainingSet,
+    };
+  }
+
+  if (unfoldOnce) {
+    console.log(unfoldOnce, unfoldOnce === false);
+    console.log('Match/NotMatch');
+    builder.runOnce = true;
+  }
 
   builder.maxTreeDepth = maxTreeDepth - 1;
   // builder.trainingSet = match;
