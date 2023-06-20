@@ -103,8 +103,8 @@ function ModalPopup({
                       colorScheme={state.pivot == x.attribute2 ? 'green' : 'gray'}
                     />
 
-                    <Code children={'Good: ' + x.match.length} />
-                    <Code children={'Bad: ' + x.notMatch.length} />
+                    <Code children={'Left: ' + x.match.length} />
+                    <Code children={'Right: ' + x.notMatch.length} />
                   </Stack>
                 </Tag>
               ))}

@@ -63,12 +63,12 @@ var predicates = {
     return a === b;
   },
   '>=': function (a, b) {
-    return a >= b;
+    return parseFloat(a) >= parseFloat(b);
   },
   '<': function (a, b) {
-    return a < b;
+    return parseFloat(a) < parseFloat(b);
   },
   w: function (a, b, w) {
-    return a < w * b;
+    return parseFloat(a) < parseFloat(w) * parseFloat(b);
   },
 };
