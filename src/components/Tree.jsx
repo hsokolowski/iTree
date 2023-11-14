@@ -187,7 +187,7 @@ const Tree = ({ options, headers }) => {
           <Box>
             <ButtonGroup size="sm" isAttached>
               <Button mr="-px" disabled>
-                Joints: {sizeTree.joints}
+                Nodes: {sizeTree.joints}
               </Button>
               <Button mr="-px" disabled>
                 Leafs: {sizeTree.leafs}
