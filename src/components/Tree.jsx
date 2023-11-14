@@ -171,7 +171,7 @@ const Tree = ({ options, headers }) => {
           </Box>
         </Stack>
         <Stack spacing={2} direction="row">
-          <Box>
+          {/* <Box>
             <Button
               leftIcon={<GrTechnology />}
               bg={'#ddd'}
@@ -182,8 +182,8 @@ const Tree = ({ options, headers }) => {
             >
               Log tree
             </Button>
-            {/* tree size */}
           </Box>
+          */}
           <Box>
             <ButtonGroup size="sm" isAttached>
               <Button mr="-px" disabled>
