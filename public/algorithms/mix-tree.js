@@ -98,7 +98,7 @@ function buildDecisionTreeMix(_builder) {
   for (var alg of arrayOfTests) {
     tmp = alg.maxDif;
     //console.log(tmp);
-    top5Tests = top5Tests.concat(alg.tests);
+    top5Tests = top5Tests.concat(alg.tests.slice(0, 2));
     if (tmp > min) {
       lowest = alg;
       min = tmp;
@@ -341,66 +341,64 @@ function TSPWDif(allClasses, attributes, trainingSet, categoryAttr) {
     for (let j = i + 1; j < attributes.length; j++) {
       attr2 = attributes[j];
       if (attr1 !== attr2) {
-        right = left = sum1 = sum2 = weight = 0;
-        leftList = [];
-        rightList = [];
-        classMatrix = [new Array(allClasses.length).fill(0), new Array(allClasses.length).fill(0)];
-
         for (let index = 0; index < trainingSet.length; index++) {
           const element = trainingSet[index];
-          if (!isNaN(element[attr1]) && !isNaN(element[attr2])) {
-            sum1 += parseFloat(element[attr1]);
-            sum2 += parseFloat(element[attr2]);
+
+          if (!isNaN(element[attr1]) && !isNaN(element[attr2]) && element[attr2] != 0) {
+            weight = parseFloat(element[attr1]) / parseFloat(element[attr2]);
+          } else continue;
+
+          right = left = sum1 = sum2 = 0;
+          leftList = [];
+          rightList = [];
+          classMatrix = [new Array(allClasses.length).fill(0), new Array(allClasses.length).fill(0)];
+
+          // division
+          for (let element of trainingSet) {
+            const attribute = element[categoryAttr];
+            if (parseFloat(element[attr1]) < weight * parseFloat(element[attr2])) {
+              left++;
+              leftList.push(element);
+              classMatrix[0][allClasses.indexOf(attribute)]++;
+            } else {
+              right++;
+              rightList.push(element);
+              classMatrix[1][allClasses.indexOf(attribute)]++;
+            }
           }
-        }
-        sum1 /= trainingSet.length;
-        sum2 /= trainingSet.length;
-        weight = sum1 / sum2;
-        if (attr1 == 'IF4B' && attr2 == 'HIG1A') {
-          console.log(weight, attr1, attr2);
-        }
 
-        // division
-        for (let element of trainingSet) {
-          const attribute = element[categoryAttr];
-          if (parseFloat(element[attr1]) < weight * parseFloat(element[attr2])) {
-            left++;
-            leftList.push(element);
-            classMatrix[0][allClasses.indexOf(attribute)]++;
-          } else {
-            right++;
-            rightList.push(element);
-            classMatrix[1][allClasses.indexOf(attribute)]++;
+          if (attr1 == 'IF4B' && attr2 == 'HIG1A') {
+            console.log(weight, attr1, attr2);
           }
-        }
 
-        let matchEntropy = entropy(leftList, categoryAttr);
-        let notMatchEntropy = entropy(rightList, categoryAttr);
+          let matchEntropy = entropy(leftList, categoryAttr);
+          let notMatchEntropy = entropy(rightList, categoryAttr);
 
-        // calculating informational gain
-        let newEntropy = 0;
-        newEntropy += matchEntropy * leftList.length;
-        newEntropy += notMatchEntropy * rightList.length;
-        newEntropy /= trainingSet.length;
-        let currentDif = initialEntropy - newEntropy;
-        if (currentDif > maxDif) {
-          maxDif = currentDif;
-          attribute1 = attr1;
-          attribute2 = attr2;
-          match = leftList;
-          notMatch = rightList;
-          L_weight = weight;
+          // calculating informational gain
+          let newEntropy = 0;
+          newEntropy += matchEntropy * leftList.length;
+          newEntropy += notMatchEntropy * rightList.length;
+          newEntropy /= trainingSet.length;
+          let currentDif = initialEntropy - newEntropy;
+          if (currentDif > maxDif) {
+            maxDif = currentDif;
+            attribute1 = attr1;
+            attribute2 = attr2;
+            match = leftList;
+            notMatch = rightList;
+            L_weight = weight;
 
-          let test = {
-            maxDif: currentDif,
-            attribute1: attr1,
-            attribute2: attr2,
-            match: leftList,
-            notMatch: rightList,
-            direction: '<',
-            L_weight: weight,
-          };
-          bestTests.push(test);
+            let test = {
+              maxDif: currentDif,
+              attribute1: attr1,
+              attribute2: attr2,
+              match: leftList,
+              notMatch: rightList,
+              direction: '<',
+              L_weight: weight,
+            };
+            bestTests.push(test);
+          }
         }
       }
     }

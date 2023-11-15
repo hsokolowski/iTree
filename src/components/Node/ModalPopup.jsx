@@ -72,7 +72,7 @@ function ModalPopup({
           ) : (
             <>
               Best Tests:
-              {bestTests.slice(0, 5).map((x, i) => (
+              {bestTests.slice(0, 6).map((x, i) => (
                 <Tag
                   size="md"
                   variant={
