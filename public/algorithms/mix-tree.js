@@ -82,6 +82,7 @@ function buildDecisionTreeMix(_builder) {
   var attributes = builder.allAttributes.filter(el => el !== categoryAttr && !ignoredAttributes.includes(el));
 
   var arrayOfTests = [];
+  //console.log(algorithm, algorithm.includes('c45'), algorithm.includes('tsp'), algorithm.includes('tspw'));
 
   if (algorithm.includes('c45')) arrayOfTests.push(C45Dif(trainingSet, categoryAttr, ignoredAttributes));
   if (algorithm.includes('tsp')) arrayOfTests.push(TSPDif(allClasses, attributes, trainingSet, categoryAttr));
@@ -93,14 +94,17 @@ function buildDecisionTreeMix(_builder) {
   var lowest;
   var tmp;
   var min = 0;
+  var top5Tests = [];
   for (var alg of arrayOfTests) {
     tmp = alg.maxDif;
     //console.log(tmp);
+    top5Tests = top5Tests.concat(alg.tests);
     if (tmp > min) {
       lowest = alg;
       min = tmp;
     }
   }
+  top5Tests = top5Tests.sort(({ maxDif: a }, { maxDif: b }) => b - a);
   //console.log(lowest);
   const { maxDif, match, notMatch, attribute1, attribute2, direction, L_weight, tests } = lowest;
   //console.log(tests);
@@ -170,7 +174,7 @@ function buildDecisionTreeMix(_builder) {
     notMatchedCount: notMatch.length,
     nodeSet: match.concat(notMatch),
     weight: L_weight ? L_weight.toFixed(3) : null,
-    tests: tests,
+    tests: top5Tests,
   };
 }
 
