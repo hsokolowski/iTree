@@ -103,7 +103,7 @@ function buildDecisionTreeMix(_builder) {
   }
   //console.log(lowest);
   const { maxDif, match, notMatch, attribute1, attribute2, direction, L_weight, tests } = lowest;
-  console.log(tests);
+  //console.log(tests);
   // LEAF
   if (!maxDif) {
     console.log('Liść bo maxDif:', maxDif);
@@ -352,6 +352,9 @@ function TSPWDif(allClasses, attributes, trainingSet, categoryAttr) {
         sum1 /= trainingSet.length;
         sum2 /= trainingSet.length;
         weight = sum1 / sum2;
+        if (attr1 == 'IF4B' && attr2 == 'HIG1A') {
+          console.log(weight, attr1, attr2);
+        }
 
         // division
         for (let element of trainingSet) {
@@ -400,9 +403,8 @@ function TSPWDif(allClasses, attributes, trainingSet, categoryAttr) {
 
     bestTests = bestTests.sort(({ maxDif: a }, { maxDif: b }) => b - a);
     //console.log(bestTests);
-
-    return { maxDif, attribute1, attribute2, match, notMatch, direction, L_weight, tests: bestTests };
   }
+  return { maxDif, attribute1, attribute2, match, notMatch, direction, L_weight, tests: bestTests };
 }
 
 function C45Dif(trainingSet, categoryAttr, ignoredAttributes) {

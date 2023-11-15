@@ -231,6 +231,16 @@ function buildDecisionTreeTSPW(
       match = leftList;
       notMatch = rightList;
       L_weight = weight;
+      let test = {
+        maxDif: currentDif,
+        attribute1: changedAttribute1,
+        attribute2: changedAttribute2,
+        match: leftList,
+        notMatch: rightList,
+        direction: '<',
+        L_weight: weight,
+      };
+      bestTests.push(test);
     }
   } else {
     let attr1, attr2;
