@@ -98,7 +98,6 @@ function buildDecisionTreeMix(_builder) {
   for (var alg of arrayOfTests) {
     tmp = alg.maxDif;
     //console.log(alg.tests);
-    debugger;
     //take unique
     var pairs = {};
     var output = alg.tests.filter(function (item) {

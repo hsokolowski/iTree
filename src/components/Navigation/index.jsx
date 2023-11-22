@@ -233,7 +233,7 @@ function Navigation({ onPrepareConfig, setHeaders, onCrossValidation }) {
               <FormHelperText mb={2} mt={0}>
                 Ignored attrs.
               </FormHelperText>
-              <Box>
+              <Box width={300}>
                 {/* <FormLabel fontSize={['md', 'md', 'xs', 'sm', 'md']}>Ignore attributes</FormLabel> */}
                 <SearchBar
                   placeholder="Select ignore attributes"

@@ -30,12 +30,6 @@ function ModalPopup({
 }) {
   const [state, setState] = useState({});
   const [clear, setClear] = useState(false);
-  const [uniqueTags, setUnique] = useState(bestTests);
-
-  useEffect(() => {
-    const unique = bestTests;
-  });
-
   const handleClearPivot = value => {
     console.log(value.target.checked);
     setClear(value.target.checked);
