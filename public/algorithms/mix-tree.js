@@ -97,8 +97,20 @@ function buildDecisionTreeMix(_builder) {
   var top5Tests = [];
   for (var alg of arrayOfTests) {
     tmp = alg.maxDif;
-    //console.log(tmp);
-    top5Tests = top5Tests.concat(alg.tests.slice(0, 2));
+    //console.log(alg.tests);
+    debugger;
+    //take unique
+    var pairs = {};
+    var output = alg.tests.filter(function (item) {
+      if (pairs[item.attribute1] == item.attribute2 || pairs[item.attribute2] == item.attribute1) {
+        return false;
+      }
+      pairs[item.attribute1] = item.attribute2;
+      return true;
+    });
+    //console.log(pairs);
+    //console.log(output);
+    top5Tests = top5Tests.concat(output.slice(0, 2));
     if (tmp > min) {
       lowest = alg;
       min = tmp;
@@ -367,9 +379,9 @@ function TSPWDif(allClasses, attributes, trainingSet, categoryAttr) {
             }
           }
 
-          if (attr1 == 'IF4B' && attr2 == 'HIG1A') {
-            console.log(weight, attr1, attr2);
-          }
+          // if (attr1 == 'IF4B' && attr2 == 'HIG1A') {
+          //   console.log(weight, attr1, attr2);
+          // }
 
           let matchEntropy = entropy(leftList, categoryAttr);
           let notMatchEntropy = entropy(rightList, categoryAttr);

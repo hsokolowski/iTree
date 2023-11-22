@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   Checkbox,
@@ -30,6 +30,12 @@ function ModalPopup({
 }) {
   const [state, setState] = useState({});
   const [clear, setClear] = useState(false);
+  const [uniqueTags, setUnique] = useState(bestTests);
+
+  useEffect(() => {
+    const unique = bestTests;
+  });
+
   const handleClearPivot = value => {
     console.log(value.target.checked);
     setClear(value.target.checked);
@@ -72,42 +78,46 @@ function ModalPopup({
           ) : (
             <>
               Best Tests:
-              {bestTests.slice(0, 6).map((x, i) => (
-                <Tag
-                  size="md"
-                  variant={
-                    state.attribute == x.attribute1 && state.pivot == x.attribute2 ? 'subtle' : 'outline'
-                  }
-                  colorScheme="blue"
-                  p={3}
-                  mb={2}
-                >
-                  {i + 1}.
-                  <Stack direction="row">
-                    <Code children={'Gain: ' + x.maxDif.toFixed(3)} />
-                    <Code
-                      children={'Attr1: ' + x.attribute1}
-                      colorScheme={state.attribute == x.attribute1 ? 'green' : 'gray'}
-                    />
-                    <Code children={x.direction} />
-                    {x.L_weight ? (
+              {bestTests
+                // .sort(({ maxDif: a }, { maxDif: b }) => b - a)
+                // .filter()
+                .slice(0, 6)
+                .map((x, i) => (
+                  <Tag
+                    size="md"
+                    variant={
+                      state.attribute == x.attribute1 && state.pivot == x.attribute2 ? 'subtle' : 'outline'
+                    }
+                    colorScheme="blue"
+                    p={3}
+                    mb={2}
+                  >
+                    {i + 1}.
+                    <Stack direction="row">
+                      <Code children={'Gain: ' + x.maxDif.toFixed(3)} />
                       <Code
-                        children={'Weight: ' + x.L_weight.toFixed(3)}
-                        colorScheme={state.weight == x.L_weight.toFixed(3) ? 'green' : 'gray'}
+                        children={'Attr1: ' + x.attribute1}
+                        colorScheme={state.attribute == x.attribute1 ? 'green' : 'gray'}
                       />
-                    ) : (
-                      <></>
-                    )}
-                    <Code
-                      children={'Attr2: ' + x.attribute2}
-                      colorScheme={state.pivot == x.attribute2 ? 'green' : 'gray'}
-                    />
+                      <Code children={x.direction} />
+                      {x.L_weight ? (
+                        <Code
+                          children={'Weight: ' + x.L_weight.toFixed(3)}
+                          colorScheme={state.weight == x.L_weight.toFixed(3) ? 'green' : 'gray'}
+                        />
+                      ) : (
+                        <></>
+                      )}
+                      <Code
+                        children={'Attr2: ' + x.attribute2}
+                        colorScheme={state.pivot == x.attribute2 ? 'green' : 'gray'}
+                      />
 
-                    <Code children={'Left: ' + x.match.length} />
-                    <Code children={'Right: ' + x.notMatch.length} />
-                  </Stack>
-                </Tag>
-              ))}
+                      <Code children={'Left: ' + x.match.length} />
+                      <Code children={'Right: ' + x.notMatch.length} />
+                    </Stack>
+                  </Tag>
+                ))}
             </>
           )}
         </ModalBody>
