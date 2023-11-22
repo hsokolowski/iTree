@@ -208,7 +208,7 @@ function Navigation({ onPrepareConfig, setHeaders, onCrossValidation }) {
             </FormControl>
           </WrapItem>
           <WrapItem>
-            <FormControl id="decisionAttr" width="auto" zIndex={2} w={130}>
+            <FormControl id="decisionAttr" width="auto" zIndex={2} w={250}>
               <FormHelperText mb={2} mt={0}>
                 Decision attr.
               </FormHelperText>
@@ -229,11 +229,11 @@ function Navigation({ onPrepareConfig, setHeaders, onCrossValidation }) {
             </FormControl>
           </WrapItem>
           <WrapItem>
-            <FormControl id="ignoreAttr" width="auto">
+            <FormControl id="ignoreAttr" w={250}>
               <FormHelperText mb={2} mt={0}>
                 Ignored attrs.
               </FormHelperText>
-              <Box width={300}>
+              <Box>
                 {/* <FormLabel fontSize={['md', 'md', 'xs', 'sm', 'md']}>Ignore attributes</FormLabel> */}
                 <SearchBar
                   placeholder="Select ignore attributes"
