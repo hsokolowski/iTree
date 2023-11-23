@@ -36,7 +36,7 @@ function buildDecisionTreeMix(_builder) {
 
   /** @type {string | number} */
   var _quality = 0;
-
+  console.log(maxTreeDepth);
   // LEAF
   if (maxTreeDepth === 0 || trainingSet.length <= minItemsCount) {
     //console.log('Liść bo maxTreeDepth:', maxTreeDepth, ' Ilość elementów:', trainingSet.length);
@@ -99,17 +99,17 @@ function buildDecisionTreeMix(_builder) {
     tmp = alg.maxDif;
     //console.log(alg.tests);
     //take unique
-    var pairs = {};
-    var output = alg.tests.filter(function (item) {
-      if (pairs[item.attribute1] == item.attribute2 || pairs[item.attribute2] == item.attribute1) {
-        return false;
-      }
-      pairs[item.attribute1] = item.attribute2;
-      return true;
-    });
+    // var pairs = {};
+    // var output = alg.tests.filter(function (item) {
+    //   if (pairs[item.attribute1] == item.attribute2 || pairs[item.attribute2] == item.attribute1) {
+    //     return false;
+    //   }
+    //   pairs[item.attribute1] = item.attribute2;
+    //   return true;
+    // });
     //console.log(pairs);
     //console.log(output);
-    top5Tests = top5Tests.concat(output.slice(0, 2));
+    top5Tests = top5Tests.concat(alg.tests.slice(0, 2));
     if (tmp > min) {
       lowest = alg;
       min = tmp;
@@ -329,96 +329,189 @@ function TSPDif(allClasses, attributes, trainingSet, categoryAttr) {
 
 function TSPWDif(allClasses, attributes, trainingSet, categoryAttr) {
   let bestTests = [];
-  var right = 0,
-    left = 0,
-    sum1 = 0,
-    sum2 = 0,
-    L_weight = 0,
-    weight = 0,
-    direction = '<';
   var maxDif = 0;
-  /** @type {string | number} */ var attribute1 = -1;
-  /** @type {string | number} */ var attribute2 = -1;
-  var leftList = [],
-    rightList = [],
-    classMatrix = [new Array(allClasses.length).fill(0), new Array(allClasses.length).fill(0)],
-    match = [],
+  var attribute1 = -1;
+  var attribute2 = -1;
+  var match = [],
     notMatch = [];
   var initialEntropy = entropy(trainingSet, categoryAttr);
 
-  let attr1, attr2;
+  // Function to find candidate thresholds
+  function findCandidateThresholds(attr1, attr2) {
+    let sortedByRatio = [...trainingSet].sort((a, b) => {
+      let ratioA = parseFloat(a[attr1]) / parseFloat(a[attr2]);
+      let ratioB = parseFloat(b[attr1]) / parseFloat(b[attr2]);
+      return ratioA - ratioB;
+    });
+
+    let candidates = [];
+    for (let i = 0; i < sortedByRatio.length - 1; i++) {
+      if (sortedByRatio[i][categoryAttr] !== sortedByRatio[i + 1][categoryAttr]) {
+        let threshold =
+          (parseFloat(sortedByRatio[i][attr1]) / parseFloat(sortedByRatio[i][attr2]) +
+            parseFloat(sortedByRatio[i + 1][attr1]) / parseFloat(sortedByRatio[i + 1][attr2])) /
+          2;
+        candidates.push(threshold);
+      }
+    }
+    return candidates;
+  }
+
   for (let i = 0; i < attributes.length; i++) {
-    attr1 = attributes[i];
     for (let j = i + 1; j < attributes.length; j++) {
-      attr2 = attributes[j];
-      if (attr1 !== attr2) {
-        for (let index = 0; index < trainingSet.length; index++) {
-          const element = trainingSet[index];
+      let attr1 = attributes[i];
+      let attr2 = attributes[j];
+      let candidateThresholds = findCandidateThresholds(attr1, attr2);
 
-          if (!isNaN(element[attr1]) && !isNaN(element[attr2]) && element[attr2] != 0) {
-            weight = parseFloat(element[attr1]) / parseFloat(element[attr2]);
-          } else continue;
+      for (let weight of candidateThresholds) {
+        let leftList = [];
+        let rightList = [];
+        let classMatrix = [new Array(allClasses.length).fill(0), new Array(allClasses.length).fill(0)];
 
-          right = left = sum1 = sum2 = 0;
-          leftList = [];
-          rightList = [];
-          classMatrix = [new Array(allClasses.length).fill(0), new Array(allClasses.length).fill(0)];
-
-          // division
-          for (let element of trainingSet) {
-            const attribute = element[categoryAttr];
-            if (parseFloat(element[attr1]) < weight * parseFloat(element[attr2])) {
-              left++;
-              leftList.push(element);
-              classMatrix[0][allClasses.indexOf(attribute)]++;
-            } else {
-              right++;
-              rightList.push(element);
-              classMatrix[1][allClasses.indexOf(attribute)]++;
-            }
+        // Division
+        for (let element of trainingSet) {
+          const attribute = element[categoryAttr];
+          if (parseFloat(element[attr1]) / parseFloat(element[attr2]) < weight) {
+            leftList.push(element);
+            classMatrix[0][allClasses.indexOf(attribute)]++;
+          } else {
+            rightList.push(element);
+            classMatrix[1][allClasses.indexOf(attribute)]++;
           }
+        }
 
-          // if (attr1 == 'IF4B' && attr2 == 'HIG1A') {
-          //   console.log(weight, attr1, attr2);
-          // }
+        let matchEntropy = entropy(leftList, categoryAttr);
+        let notMatchEntropy = entropy(rightList, categoryAttr);
 
-          let matchEntropy = entropy(leftList, categoryAttr);
-          let notMatchEntropy = entropy(rightList, categoryAttr);
+        // Calculating informational gain
+        let newEntropy =
+          (matchEntropy * leftList.length + notMatchEntropy * rightList.length) / trainingSet.length;
+        let currentDif = initialEntropy - newEntropy;
+        if (currentDif > maxDif) {
+          maxDif = currentDif;
+          attribute1 = attr1;
+          attribute2 = attr2;
+          match = leftList;
+          notMatch = rightList;
 
-          // calculating informational gain
-          let newEntropy = 0;
-          newEntropy += matchEntropy * leftList.length;
-          newEntropy += notMatchEntropy * rightList.length;
-          newEntropy /= trainingSet.length;
-          let currentDif = initialEntropy - newEntropy;
-          if (currentDif > maxDif) {
-            maxDif = currentDif;
-            attribute1 = attr1;
-            attribute2 = attr2;
-            match = leftList;
-            notMatch = rightList;
-            L_weight = weight;
-
-            let test = {
-              maxDif: currentDif,
-              attribute1: attr1,
-              attribute2: attr2,
-              match: leftList,
-              notMatch: rightList,
-              direction: '<',
-              L_weight: weight,
-            };
-            bestTests.push(test);
-          }
+          bestTests.push({
+            maxDif: currentDif,
+            attribute1: attr1,
+            attribute2: attr2,
+            match: leftList,
+            notMatch: rightList,
+            direction: '<',
+            L_weight: weight,
+          });
         }
       }
     }
-
-    bestTests = bestTests.sort(({ maxDif: a }, { maxDif: b }) => b - a);
-    //console.log(bestTests);
   }
-  return { maxDif, attribute1, attribute2, match, notMatch, direction, L_weight, tests: bestTests };
+
+  bestTests.sort((a, b) => b.maxDif - a.maxDif);
+  return {
+    maxDif,
+    attribute1,
+    attribute2,
+    match,
+    notMatch,
+    direction: '<',
+    L_weight: bestTests[0]?.L_weight,
+    tests: bestTests,
+  };
 }
+
+// function TSPWDif(allClasses, attributes, trainingSet, categoryAttr) {
+//   let bestTests = [];
+//   var right = 0,
+//     left = 0,
+//     sum1 = 0,
+//     sum2 = 0,
+//     L_weight = 0,
+//     weight = 0,
+//     direction = '<';
+//   var maxDif = 0;
+//   /** @type {string | number} */ var attribute1 = -1;
+//   /** @type {string | number} */ var attribute2 = -1;
+//   var leftList = [],
+//     rightList = [],
+//     classMatrix = [new Array(allClasses.length).fill(0), new Array(allClasses.length).fill(0)],
+//     match = [],
+//     notMatch = [];
+//   var initialEntropy = entropy(trainingSet, categoryAttr);
+
+//   let attr1, attr2;
+//   for (let i = 0; i < attributes.length; i++) {
+//     attr1 = attributes[i];
+//     for (let j = i + 1; j < attributes.length; j++) {
+//       attr2 = attributes[j];
+//       if (attr1 !== attr2) {
+//         for (let index = 0; index < trainingSet.length; index++) {
+//           const element = trainingSet[index];
+
+//           if (!isNaN(element[attr1]) && !isNaN(element[attr2]) && element[attr2] != 0) {
+//             weight = parseFloat(element[attr1]) / parseFloat(element[attr2]);
+//           } else continue;
+
+//           right = left = sum1 = sum2 = 0;
+//           leftList = [];
+//           rightList = [];
+//           classMatrix = [new Array(allClasses.length).fill(0), new Array(allClasses.length).fill(0)];
+
+//           // division
+//           for (let element of trainingSet) {
+//             const attribute = element[categoryAttr];
+//             if (parseFloat(element[attr1]) < weight * parseFloat(element[attr2])) {
+//               left++;
+//               leftList.push(element);
+//               classMatrix[0][allClasses.indexOf(attribute)]++;
+//             } else {
+//               right++;
+//               rightList.push(element);
+//               classMatrix[1][allClasses.indexOf(attribute)]++;
+//             }
+//           }
+
+//           // if (attr1 == 'IF4B' && attr2 == 'HIG1A') {
+//           //   console.log(weight, attr1, attr2);
+//           // }
+
+//           let matchEntropy = entropy(leftList, categoryAttr);
+//           let notMatchEntropy = entropy(rightList, categoryAttr);
+
+//           // calculating informational gain
+//           let newEntropy = 0;
+//           newEntropy += matchEntropy * leftList.length;
+//           newEntropy += notMatchEntropy * rightList.length;
+//           newEntropy /= trainingSet.length;
+//           let currentDif = initialEntropy - newEntropy;
+//           if (currentDif > maxDif) {
+//             maxDif = currentDif;
+//             attribute1 = attr1;
+//             attribute2 = attr2;
+//             match = leftList;
+//             notMatch = rightList;
+//             L_weight = weight;
+
+//             let test = {
+//               maxDif: currentDif,
+//               attribute1: attr1,
+//               attribute2: attr2,
+//               match: leftList,
+//               notMatch: rightList,
+//               direction: '<',
+//               L_weight: weight,
+//             };
+//             bestTests.push(test);
+//           }
+//         }
+//       }
+//     }
+//   }
+//   bestTests = bestTests.sort(({ maxDif: a }, { maxDif: b }) => b - a);
+//   console.log('TSPW MaxDif: ', maxDif);
+//   return { maxDif, attribute1, attribute2, match, notMatch, direction, L_weight, tests: bestTests };
+// }
 
 function C45Dif(trainingSet, categoryAttr, ignoredAttributes) {
   let bestTests = [];
