@@ -1,7 +1,16 @@
 import React, { useMemo, useState } from 'react';
 import '../../css/main.scss';
 import '../../css/inputs.scss';
-import { Checkbox, Collapse, FormHelperText, Icon, useDisclosure, Wrap, WrapItem } from '@chakra-ui/react';
+import {
+  Checkbox,
+  Collapse,
+  FormHelperText,
+  Icon,
+  useDisclosure,
+  Wrap,
+  WrapItem,
+  useToast,
+} from '@chakra-ui/react';
 import { GiLightningTree } from 'react-icons/gi';
 import { Button, Stack, FormControl, FormLabel, Box } from '@chakra-ui/react';
 import FileReader from '../FileReader';
@@ -38,6 +47,7 @@ function Navigation({ onPrepareConfig, setHeaders, onCrossValidation }) {
   //const { attributes: ignoredAttributes, onIgnoredChange } = useIgnoredContext();
   const optionsViewModel = useMemo(() => options.map(model => ({ ...model, key: model.value })), [options]);
   const { isLoading } = useLoadingContext();
+  const toast = useToast();
 
   function handleSelectDecision(value) {
     //console.log(value);
@@ -110,6 +120,16 @@ function Navigation({ onPrepareConfig, setHeaders, onCrossValidation }) {
 
   function handleSetAlgorithm(value) {
     console.log(value);
+
+    if (value.includes('tspw')) {
+      toast({
+        title: 'TSPW has been chosen',
+        description: 'This can significantly extend the tree generation time',
+        status: 'warning',
+        duration: 4000,
+        isClosable: true,
+      });
+    }
     setAlgorithm(value);
   }
 

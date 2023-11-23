@@ -99,17 +99,17 @@ function buildDecisionTreeMix(_builder) {
     tmp = alg.maxDif;
     //console.log(alg.tests);
     //take unique
-    // var pairs = {};
-    // var output = alg.tests.filter(function (item) {
-    //   if (pairs[item.attribute1] == item.attribute2 || pairs[item.attribute2] == item.attribute1) {
-    //     return false;
-    //   }
-    //   pairs[item.attribute1] = item.attribute2;
-    //   return true;
-    // });
+    var pairs = {};
+    var output = alg.tests.filter(function (item) {
+      if (pairs[item.attribute1] == item.attribute2 || pairs[item.attribute2] == item.attribute1) {
+        return false;
+      }
+      pairs[item.attribute1] = item.attribute2;
+      return true;
+    });
     //console.log(pairs);
     //console.log(output);
-    top5Tests = top5Tests.concat(alg.tests.slice(0, 2));
+    top5Tests = top5Tests.concat(output.slice(0, 2));
     if (tmp > min) {
       lowest = alg;
       min = tmp;
