@@ -1,70 +1,100 @@
-# Getting Started with Create React App
+# ITree: Interactive Decision-Making with Classification Trees
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Introduction
 
-## Available Scripts
+ITree is an innovative web tool designed to facilitate interactive decision-making using classification trees. This intuitive platform supports manual, semi-automatic, and automatic induction of decision trees, catering to both educational and professional needs in the biomedical field. ITree stands out with its ability to allow users to manually modify tree structures, apply various splitting algorithms, and instantly view the impact of these changes on prediction models and testing datasets. Whether you're a researcher, educator, or someone passionate about decision tree induction, ITree offers a versatile, user-driven experience. The full working application can be accessed and tested at [https://itree.wi.pb.edu.pl](https://itree.wi.pb.edu.pl).
 
-In the project directory, you can run:
+## Table of Contents
 
-### `npm start`
+1. [Introduction](#introduction)
+2. [Installation and Setup](#installation-and-setup)
+3. [Usage](#usage)
+4. [Technical Details](#technical-details)
+5. [Contributing](#contributing)
+6. [Authors and Acknowledgment](#authors-and-acknowledgment)
+7. [License](#license)
+8. [References and Links](#references-and-links)
+9. [Appendix/FAQ](#appendixfaq)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Installation and Setup
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### Prerequisites
 
-### `npm test`
+Before installing ITree, ensure you have the following prerequisites installed:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- [Node.js](https://nodejs.org/en/download/)
+- npm (comes with Node.js)
 
-### `npm run build`
+### Installation Steps
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. **Clone the Repository**
+2. **Navigate to the Project Directory**
+3. **Install Dependencies**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Starting the App
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- To run the app in the development mode, use:
+- Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-### `npm run eject`
+## Usage
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+ITree is an interactive web-based platform that facilitates the induction and manipulation of decision trees using a user-provided dataset. Here's how to harness the full potential of ITree's features:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Initial Configuration
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- **File Upload**: Start by uploading your dataset in a CSV format.
+- **Algorithm Selection**: Choose from algorithms like C4.5, TSP, or WTSP for node splitting.
+- **Decision Attribute Configuration**: Select the attribute that will be used for classification.
+- **Parameter Settings**: Configure essential settings such as minimum node size, maximum tree depth, and entropy threshold.
+- **Draw Tree**: With your settings in place, click 'Draw' to generate your initial decision tree.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Interactive Decision Tree Viewer
 
-## Learn More
+- **Training and Testing Data View**: The main view displays the decision tree generated from your training set. You can upload a testing set to evaluate the prediction model's performance.
+- **Tree Node Interaction**: Click on any node to fold or unfold branches, allowing for manual pruning or expansion.
+- **Statistics and Metrics**: View real-time updates on accuracy and confusion matrix as you interact with the tree.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Manual Adjustments and Tests
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- **Node Modification**: Directly adjust the splits in your decision tree by selecting nodes and choosing alternative split strategies.
+- **Test Selection**: For each node, you can pick among different tests, like C4.5, TSP, or WTSP, to determine how to best split your data.
 
-### Code Splitting
+### Real-time Data Analysis
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- **Confusion Matrix**: Access the confusion matrix from the interface to understand the accuracy of your tree.
+- **Data Viewer**: Inspect the distribution of your data and the classification results within the nodes of your decision tree.
 
-### Analyzing the Bundle Size
+### Experimentation and Learning
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- **Interactive Learning**: ITree serves as an educational tool, allowing users to experiment with different decision tree configurations and learn about their effects on data classification.
 
-### Making a Progressive Web App
+## Technical Details
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Code Organization
 
-### Advanced Configuration
+- The ITree codebase is structured to facilitate easy navigation and understanding. Key components are organized in separate directories.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### Available Scripts
 
-### Deployment
+- **`npm start`**: Runs the app in development mode. Access it at [http://localhost:3000](http://localhost:3000).
+- **`npm test`**: Launches the test runner in interactive watch mode.
+- **`npm run build`**: Builds the app for production to the `build` folder. It optimizes the build for performance.
+- **`npm run eject`**: Removes the single build dependency from your project, copying all configuration files and transitive dependencies into your project.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### Dependencies
 
-### `npm run build` fails to minify
+- ITree utilizes several key libraries and frameworks, including React. The detailed list of dependencies can be found in the `package.json` file.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Contributing
+
+We warmly welcome contributions to the ITree project. Whether it's feature requests, bug reports, or code contributions, here's how you can contribute:
+
+### Guidelines
+
+- **Reporting Issues**: Please use the GitHub issue tracker to report bugs or suggest features.
+- **Submitting Pull Requests**: For code contributions, please fork the repository and use a new branch for your work. Pull requests are eagerly awaited.
+
+### Contact Info
+
+- For major changes or discussions in context of research/development please contact [m.czajkowski@pb.edu.pl](mailto:m.czajkowski@pb.edu.pl).
+- For major changes or discussions in context of software please contact [hubert.sokool@gmail.com ](mailto:hubert.sokool@gmail.com) to align with the project's goals and standards.
