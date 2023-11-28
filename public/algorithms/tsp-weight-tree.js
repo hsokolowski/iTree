@@ -111,67 +111,69 @@ function buildDecisionTreeTSPW(
         changedAttribute2 = attributes[j];
 
         if (changedAttribute1 !== changedAttribute2) {
+          right = left = 0;
+          leftList = [];
+          rightList = [];
+          classMatrix = [
+            new Array(builder.allClasses.length).fill(0),
+            new Array(builder.allClasses.length).fill(0),
+          ];
+
           for (let index = 0; index < trainingSet.length; index++) {
             const element = trainingSet[index];
 
-            if (
-              !isNaN(element[changedAttribute1]) &&
-              !isNaN(element[changedAttribute2]) &&
-              element[changedAttribute2] != 0
-            ) {
-              weight = parseFloat(element[changedAttribute1]) / parseFloat(element[changedAttribute2]);
-            } else continue;
-
-            right = left = 0;
-            leftList = [];
-            rightList = [];
-            classMatrix = [
-              new Array(builder.allClasses.length).fill(0),
-              new Array(builder.allClasses.length).fill(0),
-            ];
-            // division
-            for (let element of trainingSet) {
-              const attribute = element[categoryAttr];
-
-              if (parseFloat(element[changedAttribute1]) < weight * parseFloat(element[changedAttribute2])) {
-                left++;
-                leftList.push(element);
-                classMatrix[0][builder.allClasses.indexOf(attribute)]++;
-              } else {
-                right++;
-                rightList.push(element);
-                classMatrix[1][builder.allClasses.indexOf(attribute)]++;
-              }
+            if (!isNaN(element[changedAttribute1]) && !isNaN(element[changedAttribute2])) {
+              sum1 += parseFloat(element[changedAttribute1]);
+              sum2 += parseFloat(element[changedAttribute2]);
             }
+          }
 
-            let matchEntropy = entropy(leftList, categoryAttr);
-            let notMatchEntropy = entropy(rightList, categoryAttr);
+          sum1 /= trainingSet.length;
+          sum2 /= trainingSet.length;
+          weight = sum1 / sum2;
 
-            // calculating informational gain
-            let newEntropy = 0;
-            newEntropy += matchEntropy * leftList.length;
-            newEntropy += notMatchEntropy * rightList.length;
-            newEntropy /= trainingSet.length;
-            let currentDif = initialEntropy - newEntropy;
-            if (currentDif > maxDif) {
-              maxDif = currentDif;
-              attribute1 = changedAttribute1;
-              attribute2 = changedAttribute2;
-              match = leftList;
-              notMatch = rightList;
-              L_weight = weight;
+          // division
+          for (let element of trainingSet) {
+            const attribute = element[categoryAttr];
 
-              let test = {
-                maxDif: currentDif,
-                attribute1: changedAttribute1,
-                attribute2: changedAttribute2,
-                match: leftList,
-                notMatch: rightList,
-                direction: '<',
-                L_weight: weight,
-              };
-              bestTests.push(test);
+            if (parseFloat(element[changedAttribute1]) < weight * parseFloat(element[changedAttribute2])) {
+              left++;
+              leftList.push(element);
+              classMatrix[0][builder.allClasses.indexOf(attribute)]++;
+            } else {
+              right++;
+              rightList.push(element);
+              classMatrix[1][builder.allClasses.indexOf(attribute)]++;
             }
+          }
+
+          let matchEntropy = entropy(leftList, categoryAttr);
+          let notMatchEntropy = entropy(rightList, categoryAttr);
+
+          // calculating informational gain
+          let newEntropy = 0;
+          newEntropy += matchEntropy * leftList.length;
+          newEntropy += notMatchEntropy * rightList.length;
+          newEntropy /= trainingSet.length;
+          let currentDif = initialEntropy - newEntropy;
+          if (currentDif > maxDif) {
+            maxDif = currentDif;
+            attribute1 = changedAttribute1;
+            attribute2 = changedAttribute2;
+            match = leftList;
+            notMatch = rightList;
+            L_weight = weight;
+
+            let test = {
+              maxDif: currentDif,
+              attribute1: changedAttribute1,
+              attribute2: changedAttribute2,
+              match: leftList,
+              notMatch: rightList,
+              direction: '<',
+              L_weight: weight,
+            };
+            bestTests.push(test);
           }
         }
       }
