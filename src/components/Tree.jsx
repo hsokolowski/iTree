@@ -72,6 +72,7 @@ const Tree = ({ options, headers }) => {
     setRoot(null);
     setIsLoading(true);
     setTestSet(null);
+    setShowTestTree(false);
     let terminated = false;
     executeAlgorithm(options)
       .then(value => {

@@ -18,6 +18,7 @@ import {
   Tag,
   Center,
   Badge,
+  OrderedList,
 } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import { FaGithub } from 'react-icons/fa';
@@ -157,13 +158,32 @@ export const Readme = () => (
           specific proteins like IL-1Beta (IL1B), TNF-Alpha (TNFA), PGC-1Alpha (PGC1A), FOX01, and COX6C play
           a crucial role in diabetes classification.
         </Box>
+        <Box marginTop={5}>
+          Steps: <br />
+          <OrderedList ml={'2em'} p={2}>
+            <ListItem>Download and upload training set</ListItem>
+            <ListItem>Choose algorithm/s, you can take all if You want</ListItem>
+            <ListItem>Set Decision attribute (for examples it will be - Class)</ListItem>
+            <ListItem>
+              Ignored attributes are optional but You can choose as many as You need and if You know that some
+              of them may disturb the classification, such as ID this is a good place to mark it
+            </ListItem>
+            <ListItem>
+              Minimal node size tells us about the border up to which the division continues
+            </ListItem>
+            <ListItem>Max tree depth determite the maximum level the tree will have</ListItem>
+            <ListItem>Entropy threshold is for sensitivity of the division</ListItem>
+            <ListItem>Click Draw and wait for the result</ListItem>
+            <ListItem>
+              When You will see the generated tree You can start modifying and analysing outcome
+            </ListItem>
+            <ListItem>Use Upload test set button to compare result with your set</ListItem>
+          </OrderedList>
+        </Box>
       </Code>
       <Divider marginBottom={3} />
       <Box display={'flex'} flexDirection={'row'} alignItems={'center'} justifyContent={'space-evenly'}>
-        <Link
-          href="https://github.com/hsokolowski/diabetes-data-sets/blob/main/Diabetes_train.csv"
-          isExternal
-        >
+        <Link href="/sets/Diabetes_train.csv" isExternal>
           <Tag backgroundColor={'#01C0C0'} _hover={{ bg: ' #2b6cb0', color: 'white' }}>
             Diabetes Training Set
           </Tag>
@@ -171,7 +191,7 @@ export const Readme = () => (
         <Center height="50px">
           <Divider orientation="vertical" borderColor={'gray'} />
         </Center>{' '}
-        <Link href="https://github.com/hsokolowski/diabetes-data-sets/blob/main/Diabetes_test.csv" isExternal>
+        <Link href="/sets/Diabetes_test.csv" isExternal>
           <Tag backgroundColor={'#01C0C0'} _hover={{ bg: ' #2b6cb0', color: 'white' }}>
             Diabetes Test Set
           </Tag>
