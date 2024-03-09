@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ReactFileReader from 'react-file-reader';
-import { Button } from '@chakra-ui/react';
+import { Button, Box } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import { readLocalFile } from '../utils/file-reader';
 import parseCsv from 'csv-parse/lib/sync';
@@ -39,20 +39,51 @@ function FileReader(props) {
     allAttributes = [];
   };
 
+  const handleFilesJson = async files => {
+    const file = await readLocalFile(files[0]);
+    //console.log(file);
+    var data = JSON.parse(file);
+
+    //console.log(data);
+
+    //const data = parseCsv(file,{columns: true, comment: "#",skipEmptyLines: true,})
+    //console.log(data);
+    //allAttributes = Object.keys(data[0]);
+    //props.isJson = true;
+    //props.onChange({ allAttributes, data });
+    //allAttributes = [];
+  };
+
   return (
     <div>
-      <ReactFileReader multipleFiles={false} fileTypes={['.csv']} handleFiles={handleFiles}>
-        <Button
-          leftIcon={<AddIcon />}
-          size="sm"
-          colorScheme="blue"
-          variant="outline"
-          aria-label="Deploy set"
-          w={100}
-        >
-          Deploy
-        </Button>
-      </ReactFileReader>
+      <Box display={'flex'} direction={'row'}>
+        <ReactFileReader multipleFiles={false} fileTypes={['.csv']} handleFiles={handleFiles}>
+          <Button
+            leftIcon={<AddIcon />}
+            size="sm"
+            colorScheme="blue"
+            variant="outline"
+            aria-label="Deploy set"
+            w={90}
+          >
+            CSV
+          </Button>
+        </ReactFileReader>
+
+        <ReactFileReader multipleFiles={false} fileTypes={['.json']} handleFiles={handleFilesJson}>
+          <Button
+            ml={1}
+            leftIcon={<AddIcon />}
+            size="sm"
+            colorScheme="blue"
+            variant="outline"
+            aria-label="Deploy set"
+            w={90}
+          >
+            JSON
+          </Button>
+        </ReactFileReader>
+      </Box>
     </div>
   );
 }

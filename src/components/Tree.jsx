@@ -33,7 +33,7 @@ const logTree = root => console.log('ROOT', root);
  * @param {DecisionTreeBuilder} props.options
  * @param {boolean} props.headers
  */
-const Tree = ({ options, headers }) => {
+const Tree = ({ options, headers, rut = null }) => {
   // const root = useMemo(() => {
   //   //return dt.TSPDecisionTree(options)
   //   var t0 = performance.now();
@@ -44,7 +44,7 @@ const Tree = ({ options, headers }) => {
   // }, [options]);
   const [accuracyTraining, setAccuracyTraining] = useState(0);
   const [accuracyTest, setAccuracyTest] = useState(0);
-  const [root, setRoot] = useState(null);
+  const [root, setRoot] = useState(rut);
   const [secondRoot, setSecondRoot] = useState(null);
   const [sizeTree, setSizeTree] = useState({ joints: 0, leafs: 0 });
   const [testSet, setTestSet] = useState(null);
@@ -69,6 +69,7 @@ const Tree = ({ options, headers }) => {
   // );
 
   useEffect(() => {
+    console.log('USEEFFET ahahaha');
     setRoot(null);
     setIsLoading(true);
     setTestSet(null);
@@ -172,19 +173,28 @@ const Tree = ({ options, headers }) => {
           </Box>
         </Stack>
         <Stack spacing={2} direction="row">
-          {/* <Box>
-            <Button
+          <Box>
+            <a
               leftIcon={<GrTechnology />}
               bg={'#ddd'}
               color="#black"
               _hover={{ bg: '#aaa' }}
               onClick={() => logTree(root)}
               size="sm"
+              href={`data:text/json;charset=utf-8,${encodeURIComponent(
+                JSON.stringify(
+                  root,
+
+                  ['attr2', 'pivot', 'predicateName', 'weight', 'match', 'notMatch', 'category'],
+                  2
+                )
+              )}`}
+              download={'iTree_decisionTree_test_' + new Date().toJSON().slice(0, 10) + '.json'}
             >
               Log tree
-            </Button>
+            </a>
           </Box>
-          */}
+
           <Box>
             <ButtonGroup size="sm" isAttached>
               <Button mr="-px" disabled>
