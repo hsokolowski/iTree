@@ -33,7 +33,7 @@ const logTree = root => console.log('ROOT', root);
  * @param {DecisionTreeBuilder} props.options
  * @param {boolean} props.headers
  */
-const Tree = ({ options, headers, rut = null }) => {
+const Tree = ({ options, headers, jsonTreeFromFile = null }) => {
   // const root = useMemo(() => {
   //   //return dt.TSPDecisionTree(options)
   //   var t0 = performance.now();
@@ -44,7 +44,7 @@ const Tree = ({ options, headers, rut = null }) => {
   // }, [options]);
   const [accuracyTraining, setAccuracyTraining] = useState(0);
   const [accuracyTest, setAccuracyTest] = useState(0);
-  const [root, setRoot] = useState(rut);
+  const [root, setRoot] = useState(null);
   const [secondRoot, setSecondRoot] = useState(null);
   const [sizeTree, setSizeTree] = useState({ joints: 0, leafs: 0 });
   const [testSet, setTestSet] = useState(null);
@@ -69,25 +69,36 @@ const Tree = ({ options, headers, rut = null }) => {
   // );
 
   useEffect(() => {
-    console.log('USEEFFET ahahaha');
+    console.log('Start przed calym wyliczeniem drzewa');
     setRoot(null);
     setIsLoading(true);
     setTestSet(null);
     setShowTestTree(false);
     let terminated = false;
-    executeAlgorithm(options)
-      .then(value => {
-        if (terminated) {
-          return;
-        }
-        setRoot(value);
-        updateTestTree(value);
-      })
-      .catch(e => console.error(e))
-      .finally(() => {
-        if (!terminated) setIsLoading(false);
-        terminated = true;
-      });
+
+    if (Object.keys(jsonTreeFromFile).length != 0) {
+      console.log('drzewo jsonowe');
+      setRoot(jsonTreeFromFile);
+      rebuildTestTree(jsonTreeFromFile, options.trainingSet, options.categoryAttr);
+      updateTestTree(jsonTreeFromFile);
+      setIsLoading(false);
+    } else {
+      console.log('stare wylcizenia');
+      executeAlgorithm(options)
+        .then(value => {
+          if (terminated) {
+            return;
+          }
+          setRoot(value);
+          updateTestTree(value);
+        })
+        .catch(e => console.error(e))
+        .finally(() => {
+          if (!terminated) setIsLoading(false);
+          terminated = true;
+        });
+    }
+
     return () => {
       if (terminated) {
         return;
@@ -112,11 +123,11 @@ const Tree = ({ options, headers, rut = null }) => {
   }
 
   function updateTestTree(newRoot) {
-    console.log(options.categoryAttr);
+    //console.log(options.categoryAttr, newRoot);
     let tmpRoot = JSON.parse(JSON.stringify(newRoot));
     if (testSet == null) {
       rebuildTestTree(tmpRoot, options.trainingSet, options.categoryAttr);
-      console.log(tmpRoot);
+      //console.log(tmpRoot);
       setSecondRoot(tmpRoot);
     } else {
       rebuildTestTree(tmpRoot, testSet, options.categoryAttr);

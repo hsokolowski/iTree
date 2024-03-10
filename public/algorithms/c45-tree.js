@@ -132,12 +132,12 @@ function buildDecisionTreeC45(
           bestTests.push(test);
         }
       }
-      console.log('najlepszy ' + pivot);
+      //console.log('najlepszy ' + pivot);
     } else {
       if (!isNaN(pivot)) {
         pivot = parseFloat(pivot);
       }
-      console.log('nie clear', pivot);
+      //console.log('nie clear', pivot);
       // pick the predicate
       // depending on the type of the attribute value
       // var predicateName;
@@ -362,13 +362,13 @@ function buildDecisionTreeC45(
       }
     }
   }
-  console.log('po wszytskim');
+  //console.log('po wszytskim');
   if (!bestSplit.gain && !isUpdate) {
     return MakeLeaf(trainingSet, categoryAttr);
   }
 
   bestTests = bestTests.sort(({ maxDif: a }, { maxDif: b }) => b - a);
-  console.log(bestTests);
+  //console.log(bestTests);
 
   //LEAF
   if (runOnce) {
@@ -393,7 +393,7 @@ function buildDecisionTreeC45(
 
   if (unfoldOnce) {
     console.log(unfoldOnce, unfoldOnce === false);
-    console.log('Match/NotMatch');
+    //console.log('Match/NotMatch');
     builder.runOnce = true;
   }
 

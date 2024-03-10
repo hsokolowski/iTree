@@ -42,14 +42,29 @@ function FileReader(props) {
   const handleFilesJson = async files => {
     const file = await readLocalFile(files[0]);
     //console.log(file);
-    var data = JSON.parse(file);
 
+    try {
+      var data = JSON.parse(file);
+
+      // var keysToCheck = ['attr2', 'pivot', 'predicateName', 'weight', 'match', 'notMatch', 'category'];
+      // keysToCheck.forEach(key => {
+      //   if (!Object.keys(data).includes(key)) {
+      //     console.log(`${keyToCheck} exists in the JSON object.`);
+      //   }
+      // });
+
+      props.isJson(true);
+      props.jsonTree(data);
+    } catch (e) {
+      props.isJson(false);
+    }
+    //return true;
     //console.log(data);
 
     //const data = parseCsv(file,{columns: true, comment: "#",skipEmptyLines: true,})
     //console.log(data);
     //allAttributes = Object.keys(data[0]);
-    //props.isJson = true;
+
     //props.onChange({ allAttributes, data });
     //allAttributes = [];
   };

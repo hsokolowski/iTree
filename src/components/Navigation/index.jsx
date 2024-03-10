@@ -27,7 +27,7 @@ import { shuffleAndChunkArray } from '../../utils/cross-valid';
  * @typedef {import('../../utils/decision-tree.js').DecisionTreeBuilder} DecisionTreeBuilder
  */
 
-function Navigation({ onPrepareConfig, setHeaders, onCrossValidation }) {
+function Navigation({ onPrepareConfig, setHeaders, onJsonTree }) {
   const { setBuilderConfig } = useBuilderConfigContext();
   const { isOpen, onToggle } = useDisclosure({ defaultIsOpen: true });
   const [dataSet, setDataSet] = useState(null);
@@ -41,6 +41,8 @@ function Navigation({ onPrepareConfig, setHeaders, onCrossValidation }) {
   const [allClazz, setAllClasses] = useState([]);
   const [config, setConfig] = useState({});
   const [isHeaders, setIsHeaders] = useState(true);
+  const [isJson, setIsJson] = useState(false);
+  const [jsonTree, setJsonTree] = useState({});
   const [isCrossValid, setIsCrossValid] = useState(false);
   const [folds, setFolds] = useState(10);
   const { attributes: options, onAttributesChange } = useAttributesContext();
@@ -107,10 +109,10 @@ function Navigation({ onPrepareConfig, setHeaders, onCrossValidation }) {
 
   function handleDrawTree() {
     //
-    onCrossValidation(0);
-    if (isCrossValid) {
-      onCrossValidation(folds);
-    }
+    onJsonTree({ isJson, jsonTree });
+    // if (isCrossValid) {
+    //   onCrossValidation(folds);
+    // }
 
     const config = prepareConfig();
     setConfig(config);
@@ -140,6 +142,16 @@ function Navigation({ onPrepareConfig, setHeaders, onCrossValidation }) {
 
   function handleCrossValid(e) {
     setIsCrossValid(e.target.checked);
+  }
+
+  function handleIsJson(e) {
+    //console.log(e);
+    setIsJson(e);
+  }
+
+  function handleJsonTree(e) {
+    //console.log(e);
+    setJsonTree(e);
   }
 
   return (
@@ -202,7 +214,12 @@ function Navigation({ onPrepareConfig, setHeaders, onCrossValidation }) {
               <Box>
                 {/* <FormLabel fontSize={['md', 'md', 'xs', 'sm', 'md']}>Deploy Set</FormLabel> */}
 
-                <FileReader onChange={handleGetAllAttributes} isHeaders={isHeaders} />
+                <FileReader
+                  onChange={handleGetAllAttributes}
+                  isHeaders={isHeaders}
+                  isJson={handleIsJson}
+                  jsonTree={handleJsonTree}
+                />
               </Box>
             </FormControl>
           </WrapItem>

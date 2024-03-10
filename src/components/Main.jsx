@@ -12,7 +12,7 @@ import { Readme } from './Readme';
 function Main() {
   const [builder, setBuilder] = useState({});
   const [isReady, setIsReady] = useState(false);
-  const [folds, setFolds] = useState(0);
+  const [jsonTree, setJsonTree] = useState(0);
   const [headers, setHeaders] = useState(true);
 
   useEffect(() => {
@@ -29,9 +29,9 @@ function Main() {
     setHeaders(value);
   }
 
-  function handleFolds(value) {
-    console.log(value);
-    setFolds(value);
+  function handleJsonTree({ isJson, jsonTree }) {
+    console.log(jsonTree);
+    setJsonTree(jsonTree);
   }
 
   return (
@@ -42,20 +42,13 @@ function Main() {
             <Navigation
               onPrepareConfig={StartDrawing}
               setHeaders={onSetHeaders}
-              onCrossValidation={handleFolds}
+              onJsonTree={handleJsonTree}
             />
             <Footer />
             {/* <Button onClick={start}>Drzewo</Button> */}
             <div>
               {isReady ? (
-                folds != 0 ? (
-                  <div>
-                    {/* ModelBuidler */}
-                    <ModelBuilder builder={builder} headers={headers} fold={folds} />
-                  </div>
-                ) : (
-                  <Tree options={builder} headers={headers} />
-                )
+                <Tree options={builder} headers={headers} jsonTreeFromFile={jsonTree} />
               ) : (
                 <div>
                   {/* Deploy your set */}

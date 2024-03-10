@@ -90,8 +90,8 @@ const Node = props => {
   };
 
   useEffect(() => {
-    //console.log(category, category ? 'Leaf' : 'Joint');
-  }, [category]);
+    //console.log(node);
+  }, [node]);
 
   const requestChildChangeIfMatchIs = match => newNode => {
     const targetNode = {
