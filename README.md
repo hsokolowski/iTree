@@ -50,12 +50,12 @@ ITree is an interactive web-based platform that facilitates the induction and ma
 
 ### Python script
 
-In example we used well-known iris set, function is based on 'clf' object so here you can assing Your model.
+In example we used well-known iris set, function is based on 'clf' object so here you can assing your model.
 
 When you upload csv file with your data and json file with your skeleton then aplication will show your tree and will spread the samples over the tree.
 
 ```diff
-- **REMINDER**: Please be aware that both files must have the same attribute names. In other way distribution won't work.
+-**REMINDER**: Please be aware that both files must have the same attribute names. In other way distribution won't work.
 ```
 
 ```
