@@ -54,7 +54,9 @@ In example we used well-known iris set, function is based on 'clf' object so her
 
 When you upload csv file with your data and json file with your skeleton then aplication will show your tree and will spread the samples over the tree.
 
-![#f03c15](**REMINDER**: Please be aware that both files must have the same attribute names. In other way distribution won't work.)
+```diff
+- **REMINDER**: Please be aware that both files must have the same attribute names. In other way distribution won't work.
+```
 
 ```
 import matplotlib.pyplot as plt
