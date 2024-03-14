@@ -42,11 +42,69 @@ ITree is an interactive web-based platform that facilitates the induction and ma
 
 ### Initial Configuration
 
-- **File Upload**: Start by uploading your dataset in a CSV format.
+- **File Upload**: Start by uploading your dataset in a CSV format. You can also upload skeleton of decision tree based on our model in JSON. Take a look at script in Python below.
 - **Algorithm Selection**: Choose from algorithms like C4.5, TSP, or WTSP for node splitting.
 - **Decision Attribute Configuration**: Select the attribute that will be used for classification.
 - **Parameter Settings**: Configure essential settings such as minimum node size, maximum tree depth, and entropy threshold.
 - **Draw Tree**: With your settings in place, click 'Draw' to generate your initial decision tree.
+
+### Python script
+
+In example we used well-known iris set, function is based on 'clf' object so here you can assing Your model.
+
+When you upload csv file with your data and json file with your skeleton then aplication will show your tree and will spread the samples over the tree.
+
+![#f03c15](**REMINDER**: Please be aware that both files must have the same attribute names. In other way distribution won't work.)
+
+```
+import matplotlib.pyplot as plt
+from sklearn import tree
+from sklearn.datasets import load_iris
+from sklearn.tree import DecisionTreeClassifier
+import json
+
+# Load data
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+# Create tree model
+clf = DecisionTreeClassifier()
+clf.fit(X, y)
+
+# Function for generating json
+def node_to_dict(node, feature_names, target_names):
+  result = {}
+  # Leaf
+  if clf.tree_.children_left[node] == -1:
+    result['category'] = target_names[clf.tree_.value[node].argmax()]
+  # Node
+  else:
+    feature = feature_names[clf.tree_.feature[node]]
+    threshold = round(clf.tree_.threshold[node], 3)
+    predicate = "==" if isinstance(threshold, str) else ">="
+    weight = clf.tree_.weight[node] if hasattr(clf.tree_, 'weight') else None
+    result = {
+      'attr2': feature,
+      'pivot': threshold,
+      'predicateName': predicate,
+      'weight': weight,
+      'match': node_to_dict(clf.tree_.children_right[node], feature_names, target_names),
+      'notMatch': node_to_dict(clf.tree_.children_left[node], feature_names, target_names)
+    }
+  return result
+
+# Convert root of tree to json
+tree_json = node_to_dict(0, iris.feature_names, iris.target_names)
+
+# Save structure of tree to json file
+with open('decision_tree.json', 'w') as json_file: json.dump(tree_json, json_file, indent=2)
+
+# Show plot with tree
+fig = plt.figure(figsize=(25,20))
+_ = tree.plot_tree(clf, feature_names=iris.feature_names, class_names=iris.target_names, filled=True)
+plt.show()
+```
 
 ### Interactive Decision Tree Viewer
 
