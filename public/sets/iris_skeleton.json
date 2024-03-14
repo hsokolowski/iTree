@@ -1,0 +1,75 @@
+{
+    "attr2": "petal width (cm)",
+    "pivot": 0.8,
+    "predicateName": ">=",
+    "weight": null,
+    "match": {
+        "attr2": "petal width (cm)",
+        "pivot": 1.75,
+        "predicateName": ">=",
+        "weight": null,
+        "match": {
+            "attr2": "petal length (cm)",
+            "pivot": 4.85,
+            "predicateName": ">=",
+            "weight": null,
+            "match": {
+                "category": "virginica"
+            },
+            "notMatch": {
+                "attr2": "sepal length (cm)",
+                "pivot": 5.95,
+                "predicateName": ">=",
+                "weight": null,
+                "match": {
+                    "category": "virginica"
+                },
+                "notMatch": {
+                    "category": "versicolor"
+                }
+            }
+        },
+        "notMatch": {
+            "attr2": "petal length (cm)",
+            "pivot": 4.95,
+            "predicateName": ">=",
+            "weight": null,
+            "match": {
+                "attr2": "petal width (cm)",
+                "pivot": 1.55,
+                "predicateName": ">=",
+                "weight": null,
+                "match": {
+                    "attr2": "sepal length (cm)",
+                    "pivot": 6.95,
+                    "predicateName": ">=",
+                    "weight": null,
+                    "match": {
+                        "category": "virginica"
+                    },
+                    "notMatch": {
+                        "category": "versicolor"
+                    }
+                },
+                "notMatch": {
+                    "category": "virginica"
+                }
+            },
+            "notMatch": {
+                "attr2": "petal width (cm)",
+                "pivot": 1.65,
+                "predicateName": ">=",
+                "weight": null,
+                "match": {
+                    "category": "virginica"
+                },
+                "notMatch": {
+                    "category": "versicolor"
+                }
+            }
+        }
+    },
+    "notMatch": {
+        "category": "setosa"
+    }
+}

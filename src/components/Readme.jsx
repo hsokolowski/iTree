@@ -161,7 +161,7 @@ export const Readme = () => (
         <Box marginTop={5}>
           Steps: <br />
           <OrderedList ml={'2em'} p={2}>
-            <ListItem>Download and upload training set</ListItem>
+            <ListItem>Download and upload training set&sup1;</ListItem>
             <ListItem>Choose algorithm/s, you can take all if You want</ListItem>
             <ListItem>Set Decision attribute (for examples it will be - Class)</ListItem>
             <ListItem>
@@ -179,6 +179,10 @@ export const Readme = () => (
             </ListItem>
             <ListItem>Use Upload test set button to compare result with your set</ListItem>
           </OrderedList>
+          <Box marginTop={2}>
+            Ad. 1) You can upload json skeleton of decision tree based on our model of node and leaf and
+            modify it. For more information, please take a look at <b>PYTHON</b> section below &#x1F61C;
+          </Box>
         </Box>
       </Code>
       <Divider marginBottom={3} />
@@ -221,6 +225,132 @@ export const Readme = () => (
           </Link>{' '}
           page.
         </Text>
+      </Box>
+      <Divider margin={10} />
+      <Box p={4}>
+        <Box border={'1px solid'}>
+          <Heading textAlign={'center'} textTransform={'uppercase'} size="lg" color={'grey'} mt={5}>
+            PYTHON
+          </Heading>
+          <Box m={5} textAlign={'left'}>
+            If You would like to play with own tree which you generated in Python, please use our script to
+            generate json file with a structure of Your decision tree. In example we used well-known iris set,
+            function is based on 'clf' object so here you can assing Your model.
+            <br />
+            <br />
+            When you upload csv file with your data and json file with your skeleton then aplication will show
+            your tree and will spread the samples over the tree.
+            <br />
+            <br /> You can check this feature using our prepared files:
+            <UnorderedList>
+              <Link href="/sets/iris_dataset.csv" isExternal>
+                <ListItem>Iris dataset CSV</ListItem>
+              </Link>
+              <Link href="/sets/iris_skeleton.json" isExternal>
+                <ListItem>Skeleton of tree JSON</ListItem>
+              </Link>
+            </UnorderedList>
+            <Code
+              mt={5}
+              colorScheme="red"
+              children="REMINDER: Please be aware that both files must have the same attribute names. In other way distribution won't work."
+            />
+            <Code w="100%" mt={5}>
+              <Box>
+                <UnorderedList styleType="none">
+                  <ListItem>import matplotlib.pyplot as plt</ListItem>
+                  <ListItem>from sklearn import tree</ListItem>
+                  <ListItem>from sklearn.datasets import load_iris</ListItem>
+                  <ListItem>from sklearn.tree import DecisionTreeClassifier</ListItem>
+                  <ListItem>import json</ListItem>
+                  <ListItem>
+                    <br />
+                  </ListItem>
+                  <ListItem color="grey"># Load data</ListItem>
+                  <ListItem>
+                    iris = load_iris()
+                    <br /> X = iris.data
+                    <br /> y = iris.target
+                  </ListItem>
+                  <ListItem>
+                    <br />
+                  </ListItem>
+                  <ListItem color="grey"># Create tree model</ListItem>
+                  <ListItem>
+                    clf = DecisionTreeClassifier() <br />
+                    clf.fit(X, y) <br />
+                  </ListItem>
+                  <ListItem>
+                    <br />
+                  </ListItem>
+                  <ListItem color="grey"># Function for generating json </ListItem>
+                  <ListItem>
+                    def node_to_dict(node, feature_names, target_names): <br />
+                    <UnorderedList styleType="none">
+                      <ListItem>
+                        result = &#123;&#125; <br />
+                        <ListItem color="grey"># Leaf</ListItem>
+                        if clf.tree_.children_left[node] == -1:
+                        <UnorderedList styleType="none">
+                          <ListItem>
+                            result['category'] = target_names[clf.tree_.value[node].argmax()]
+                          </ListItem>
+                        </UnorderedList>
+                        <ListItem color="grey"># Node</ListItem>
+                        else:
+                        <UnorderedList styleType="none">
+                          <ListItem>feature = feature_names[clf.tree_.feature[node]]</ListItem>
+                          <ListItem>threshold = round(clf.tree_.threshold[node], 3)</ListItem>
+                          <ListItem>predicate = "==" if isinstance(threshold, str) else "&gt;="</ListItem>
+                          <ListItem>
+                            weight = clf.tree_.weight[node] if hasattr(clf.tree_, 'weight') else None
+                          </ListItem>
+                          <ListItem> result = &#123;</ListItem>
+                          <UnorderedList styleType="none">
+                            <ListItem>
+                              'attr2': feature,
+                              <br /> 'pivot': threshold,
+                              <br /> 'predicateName': predicate,
+                              <br /> 'weight': weight,
+                              <br /> 'match': node_to_dict(clf.tree_.children_right[node], feature_names,
+                              target_names),
+                              <br /> 'notMatch': node_to_dict(clf.tree_.children_left[node], feature_names,
+                              target_names)
+                            </ListItem>
+                          </UnorderedList>
+                          <ListItem>&#125;</ListItem>
+                        </UnorderedList>
+                        return result
+                      </ListItem>
+                    </UnorderedList>
+                  </ListItem>
+                  <ListItem>
+                    <br />
+                  </ListItem>
+                  <ListItem color="grey"># Convert root of tree to json</ListItem>
+                  <ListItem>tree_json = node_to_dict(0, iris.feature_names, iris.target_names)</ListItem>
+                  <ListItem>
+                    <br />
+                  </ListItem>
+                  <ListItem color="grey"># Save structure of tree to json file</ListItem>
+                  <ListItem>
+                    with open('decision_tree.json', 'w') as json_file: json.dump(tree_json, json_file,
+                    indent=2)
+                  </ListItem>
+                  <ListItem>
+                    <br />
+                  </ListItem>
+                  <ListItem color="grey"># Show plot with tree</ListItem>
+                  <ListItem>
+                    fig = plt.figure(figsize=(25,20)) <br />_ = tree.plot_tree(clf,
+                    feature_names=iris.feature_names, class_names=iris.target_names, filled=True) <br />{' '}
+                    plt.show()
+                  </ListItem>
+                </UnorderedList>
+              </Box>
+            </Code>
+          </Box>
+        </Box>
       </Box>
     </Box>
 

@@ -186,12 +186,6 @@ const Tree = ({ options, headers, jsonTreeFromFile = null }) => {
         <Stack spacing={2} direction="row">
           <Box>
             <a
-              leftIcon={<GrTechnology />}
-              bg={'#ddd'}
-              color="#black"
-              _hover={{ bg: '#aaa' }}
-              onClick={() => logTree(root)}
-              size="sm"
               href={`data:text/json;charset=utf-8,${encodeURIComponent(
                 JSON.stringify(
                   root,
@@ -202,7 +196,16 @@ const Tree = ({ options, headers, jsonTreeFromFile = null }) => {
               )}`}
               download={'iTree_decisionTree_test_' + new Date().toJSON().slice(0, 10) + '.json'}
             >
-              Log tree
+              <Button
+                leftIcon={<GrTechnology />}
+                bg={'#ddd'}
+                color="#black"
+                _hover={{ bg: '#aaa' }}
+                onClick={() => logTree(root)}
+                size="sm"
+              >
+                Export Tree
+              </Button>
             </a>
           </Box>
 
